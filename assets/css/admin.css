@@ -332,7 +332,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* ===== SIDEBAR ===== */
 .bg-primary-gradient {
-    background: linear-gradient(180deg, #3a5274 0%, #445D84 40%, #4d6890 100%);
+    background: var(--color-primary-dark);
 }
 
 #sidebar {
@@ -347,7 +347,7 @@ input[type="range"]::-webkit-slider-thumb {
     flex-shrink: 0;
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(180deg, var(--color-primary-dark) 0%, var(--color-primary) 40%, #4d6890 100%);
+    background: var(--color-primary-dark);
     color: color-mix(in srgb, var(--color-gray-100), transparent 20%);
     box-shadow: -4px 0 25px rgba(0, 0, 0, 0.15);
     overflow-y: auto;
@@ -417,7 +417,7 @@ input[type="range"]::-webkit-slider-thumb {
     color: white;
 }
 
-.sidebar-link .icon {
+ flex-shrink: 0; width: var(--space-6); height: var(--space-6); }
     flex-shrink: 0;
     width: var(--space-5); /* 20px */
     height: var(--space-5);
@@ -464,7 +464,7 @@ input[type="range"]::-webkit-slider-thumb {
     right: 0;
     height: var(--space-6); /* 24px - minimal safe height */
     z-index: 60;
-    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+    background: var(--color-primary-dark);
     color: white;
     display: flex;
     align-items: center;
@@ -525,7 +525,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Table header */
 table thead {
-    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary), var(--color-primary-light)) !important;
+    background: var(--color-primary-dark);
 }
 
 table thead th {
@@ -585,16 +585,14 @@ table tbody td {
     background-color: color-mix(in srgb, var(--color-gray-100), var(--color-primary-light) 20%);
 }
 
-.table-wrap tbody td .icon {
-    width: var(--space-3); /* 12px */
-    height: var(--space-3); /* 12px */
+ width: var(--space-5); height: var(--space-5); vertical-align: middle; }
+    width: var(--space-5); /* 20px */
+    height: var(--space-5); /* 20px */
     vertical-align: middle;
 }
 
-.table-wrap tbody td button .icon,
-.table-wrap tbody td a .icon {
-    width: var(--space-3);
-    height: var(--space-3);
+ width: var(--space-5); height: var(--space-5); }
+.table-wrap tbody td a .icon{ width: var(--space-5); height: var(--space-5); }
 }
 
 /* Row highlight on hover */
@@ -722,10 +720,8 @@ table tbody td {
     flex-shrink: 0;
 }
 
-.stat-card .stat-icon .icon,
-.stat-card-modern .stat-icon .icon {
-    width: var(--space-6); /* 24px */
-    height: var(--space-6); /* 24px */
+ width: var(--space-8); height: var(--space-8); }
+.stat-card-modern .stat-icon .icon{ width: var(--space-8); height: var(--space-8); } /* 24px */
     color: white;
 }
 
@@ -752,12 +748,12 @@ table tbody td {
 /* Stat card color variants (support both naming systems) */
 .stat-card-primary .stat-icon,
 .stat-blue .stat-icon {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    background: var(--color-primary);
 }
 
 .stat-card-primary .stat-value,
 .stat-blue .stat-value {
-    color: var(--color-primary);
+    color: var(--color-primary-dark);
 }
 
 .stat-card-primary::after,
@@ -774,7 +770,7 @@ table tbody td {
 
 .stat-card-success .stat-icon,
 .stat-green .stat-icon {
-    background: linear-gradient(135deg, var(--color-success), var(--color-success-light));
+    background: var(--color-success);
 }
 
 .stat-card-success .stat-value,
@@ -784,7 +780,7 @@ table tbody td {
 
 .stat-card-warning .stat-icon,
 .stat-warning .stat-icon {
-    background: linear-gradient(135deg, var(--color-warning), var(--color-warning-light));
+    background: var(--color-warning);
 }
 
 .stat-card-warning .stat-value,
@@ -794,7 +790,7 @@ table tbody td {
 
 .stat-card-danger .stat-icon,
 .stat-danger .stat-icon {
-    background: linear-gradient(135deg, var(--color-danger), var(--color-danger-light));
+    background: var(--color-danger);
 }
 
 .stat-card-danger .stat-value,
@@ -803,7 +799,7 @@ table tbody td {
 }
 
 .stat-accent .stat-icon {
-    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    background: var(--color-accent);
 }
 
 .stat-accent .stat-value {
@@ -984,7 +980,7 @@ table tbody td {
     justify-content: space-between;
     padding: var(--space-5) var(--space-6); /* 20px vertical, 24px horizontal */
     border-bottom: 1px solid var(--color-gray-100);
-    background: linear-gradient(to bottom, var(--color-gray-50), var(--color-white));
+    background: var(--color-gray-50);
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0; /* 20px */
 }
 
@@ -1012,33 +1008,39 @@ table tbody td {
 }
 
 .modal-icon.primary {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Modal icon color variants */
+.modal-icon.primary {
+    background: var(--color-primary);
     color: white;
 }
 
 /* Modal icon color variants */
 .modal-icon-primary {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    background: var(--color-primary);
     color: white;
 }
 
 .modal-icon-amber {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: #f59e0b;
     color: white;
 }
 
 .modal-icon-teal {
-    background: linear-gradient(135deg, #14b8a6, #0d9488);
+    background: #14b8a6;
     color: white;
 }
 
 .modal-icon-purple {
-    background: linear-gradient(135deg, #8b5cf6, #d946ef);
+    background: #8b5cf6;
     color: white;
 }
 
 .modal-icon-indigo {
-    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    background: #6366f1;
     color: white;
 }
 
@@ -1197,7 +1199,7 @@ table tbody td {
 
 /* Color variants */
 .btn-primary {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    background: var(--color-primary);
     color: var(--color-primary-dark);
 }
 
@@ -1253,7 +1255,7 @@ table tbody td {
     font-family: var(--font-sans);
     min-height: var(--space-5);
     min-width: var(--space-7);
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    background: var(--color-primary);
     color: var(--color-white);
 }
 
@@ -1305,11 +1307,11 @@ table tbody td {
     align-items: center;
     justify-content: center;
     margin: 0 auto var(--space-6);
-    background: linear-gradient(135deg, var(--color-gray-100), var(--color-gray-200));
+    background: var(--color-gray-100);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.empty-state__icon .icon {
+ width: var(--space-10); height: var(--space-10); }
     width: 3.5rem; /* 56px */
     height: 3.5rem;
     color: var(--color-gray-400);
@@ -1343,12 +1345,7 @@ table tbody td {
 }
 
 .skeleton {
-    background: linear-gradient(
-        90deg,
-        var(--color-gray-200) 25%,
-        var(--color-gray-100) 50%,
-        var(--color-gray-200) 75%
-    );
+    background: var(--color-gray-200);
     background-size: 200% 100%;
     animation: skeletonPulse 1.5s ease-in-out infinite;
     border-radius: var(--radius-md);
@@ -1413,9 +1410,6 @@ table tbody td {
 /* ===== BACKGROUND PATTERN ===== */
 body {
     background-color: var(--color-gray-50);
-    background-image:
-        radial-gradient(at 20% 50%, color-mix(in srgb, var(--color-primary), transparent 3%) 0%, transparent 50%),
-        radial-gradient(at 80% 20%, color-mix(in srgb, var(--color-primary), transparent 4%) 0%, transparent 50%);
 }
 
 /* ===== UTILITY: Opacity backgrounds ===== */
