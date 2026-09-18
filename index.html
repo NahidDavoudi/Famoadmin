@@ -10,11 +10,11 @@
     <meta name="theme-color" content="#445D84">
     <title>پنل مدیریت - آموزشگاه فامو</title>
     <!--<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="../assets/shared/css/output.css">
-    <link rel="stylesheet" href="../assets/shared/css/icons.css">
-    <link rel="stylesheet" href="../assets/pages/admin/css/admin.css">
-    <script src="../assets/shared/js/apexcharts.min.js"></script>
-    <script type="module" src="../assets/pages/admin/js/index.js"></script>
+    <link rel="stylesheet" href="assets/css/output.css">
+    <link rel="stylesheet" href="assets/css/icons.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/apexcharts.min.js"></script>
+    <script type="module" src="assets/js/index.js"></script>
 
 
 </head>
@@ -51,8 +51,11 @@
                     <div class="relative">
                         <input type="password" id="adminPassword" name="password" required
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none focus:border-primary transition pl-12">
-                        <button type="button" id="adminPasswordToggle" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1" onclick="toggleAdminPassword()" title="نمایش رمز عبور">
-                            <img src="../assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5" width="20" height="20">
+                        <button type="button" id="adminPasswordToggle"
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
+                            onclick="toggleAdminPassword()" title="نمایش رمز عبور">
+                            <img src="assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5" width="20"
+                                height="20">
                         </button>
                     </div>
                 </div>
@@ -70,10 +73,13 @@
         <!-- Mobile Header -->
         <header id="mobileHeader">
             <button id="mobileMenuBtn" type="button" aria-label="منو">
-                <svg class="icon w-6 h-6" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-menu"/></svg>
+                <svg class="icon w-6 h-6" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-menu" />
+                </svg>
             </button>
             <h1 class="font-bold" style="font-size: 1.05rem;">پنل مدیریت فامو</h1>
-            <div style="width:2.25rem;height:2.25rem;background:rgba(255,255,255,0.15);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+            <div
+                style="width:2.25rem;height:2.25rem;background:rgba(255,255,255,0.15);border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
                 <span class="font-bold" style="font-size:0.85rem;color:white;">ف</span>
             </div>
         </header>
@@ -94,46 +100,66 @@
             </div>
             <nav class="p-3 flex-1 overflow-y-auto space-y-1">
                 <a href="#" data-page="overview" class="sidebar-link active">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chart-bar"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-chart-bar" />
+                    </svg>
                     <span>داشبورد</span>
                 </a>
                 <a href="#" data-page="students" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-users"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-users" />
+                    </svg>
                     <span>دانش‌آموزان</span>
                 </a>
 
                 <a href="#" data-page="courses" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-book"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-book" />
+                    </svg>
                     <span>دوره‌ها</span>
                 </a>
                 <a href="#" data-page="instructors" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-school"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-school" />
+                    </svg>
                     <span>اساتید</span>
                 </a>
                 <a href="#" data-page="exams" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-clipboard"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-clipboard" />
+                    </svg>
                     <span>نتایج آزمون</span>
                 </a>
                 <a href="#" data-page="exam_entry" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-edit"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-edit" />
+                    </svg>
                     <span>ثبت نتایج</span>
                 </a>
                 <a href="#" data-page="files" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-upload"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-upload" />
+                    </svg>
                     <span>فایل‌های آزمون</span>
                 </a>
                 <a href="#" data-page="supporters" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-headset"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-headset" />
+                    </svg>
                     <span>پشتیبان‌ها</span>
                 </a>
                 <a href="#" data-page="reports" class="sidebar-link">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chart-bar"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-chart-bar" />
+                    </svg>
                     <span>گزارش‌ها</span>
                 </a>
             </nav>
             <div class="p-4 border-t border-white/10">
                 <a href="#" id="logoutBtn" class="sidebar-link hover:bg-red-500/20 text-red-300 hover:text-white">
-                    <svg class="icon w-5" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-logout"/></svg>
+                    <svg class="icon w-5" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-logout" />
+                    </svg>
                     <span>خروج</span>
                 </a>
             </div>
@@ -152,7 +178,9 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div class="stat-card-modern stat-blue">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-users"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-users" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="stat-students" class="stat-value">-</div>
@@ -161,7 +189,9 @@
                         </div>
                         <div class="stat-card-modern stat-accent">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-clipboard"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-clipboard" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="stat-exams" class="stat-value">-</div>
@@ -170,7 +200,9 @@
                         </div>
                         <div class="stat-card-modern stat-danger">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-x" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="stat-noexam" class="stat-value">-</div>
@@ -179,7 +211,9 @@
                         </div>
                         <div class="stat-card-modern stat-warning">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chart-bar"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-chart-bar" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="stat-pending" class="stat-value">-</div>
@@ -190,7 +224,9 @@
 
                     <div class="chart-card">
                         <h2 class="chart-card-title">
-                            <svg class="icon text-primary" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chart-bar"/></svg>
+                            <svg class="icon text-primary" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-chart-bar" />
+                            </svg>
                             میانگین درصد به تفکیک رشته
                         </h2>
                         <div id="avgChart" style="min-height: 280px;"></div>
@@ -203,7 +239,9 @@
                         <h1 class="text-2xl md:text-3xl font-bold text-primary">دانش‌آموزان</h1>
                         <button onclick="showModal('addStudentModal')"
                             class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plus"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
                             <span>افزودن</span>
                         </button>
                     </div>
@@ -225,7 +263,9 @@
                                 class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
                             <button onclick="loadStudents()"
                                 class="bg-primary text-white px-4 py-2.5 rounded-xl hover:bg-[#5a779e] transition font-medium flex items-center justify-center gap-2">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-search" />
+                                </svg>
                                 <span>فیلتر</span>
                             </button>
                         </div>
@@ -258,12 +298,16 @@
                 <div id="page-courses" class="page-content hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-book"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-book" />
+                            </svg>
                             مدیریت دوره‌ها
                         </h1>
                         <button onclick="showModal('addCourseModal')"
                             class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plus"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
                             <span>افزودن دوره</span>
                         </button>
                     </div>
@@ -288,12 +332,16 @@
                 <div id="page-instructors" class="page-content hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-school"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-school" />
+                            </svg>
                             مدیریت اساتید
                         </h1>
                         <button onclick="showModal('addInstructorModal')"
                             class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plus"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
                             <span>افزودن استاد</span>
                         </button>
                     </div>
@@ -318,13 +366,17 @@
                 <div id="page-exams" class="page-content hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h1 id="examsTitle" class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-clipboard"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-clipboard" />
+                            </svg>
                             آزمون‌های برگزار شده
                         </h1>
                         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                             <button id="examsBackBtn" onclick="goBackFromExamDetails()"
                                 class="hidden px-4 py-2 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chevron-left"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-chevron-left" />
+                                </svg>
                                 <span>بازگشت</span>
                             </button>
                             <div class="relative">
@@ -333,7 +385,9 @@
                             </div>
                             <button onclick="clearExamsFilter()"
                                 class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-x" />
+                                </svg>
                                 <span>پاک کردن فیلتر</span>
                             </button>
                         </div>
@@ -356,14 +410,18 @@
                     <div id="examsEmptyState" class="hidden text-center py-16 bg-white rounded-2xl shadow-lg w-full">
                         <div
                             class="bg-gradient-to-br from-gray-100 to-gray-200 w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                            <svg class="icon text-5xl text-gray-400" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-clipboard"/></svg>
+                            <svg class="icon text-5xl text-gray-400" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-clipboard" />
+                            </svg>
                         </div>
                         <h3 class="text-2xl font-bold text-gray-700 mb-3">هنوز آزمونی ثبت نشده</h3>
                         <p class="text-gray-500 mb-6 max-w-md mx-auto">برای ثبت نتایج آزمون از بخش "ثبت نتایج" استفاده
                             کنید</p>
                         <button onclick="navigateTo('exam_entry')"
                             class="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-[#5a779e] text-white px-6 py-3 rounded-xl hover:shadow-lg transition font-medium">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plus"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
                             <span>ثبت اولین آزمون</span>
                         </button>
                     </div>
@@ -371,7 +429,9 @@
                     <!-- Stats Summary -->
                     <div id="examsStats" class="hidden mt-6 bg-white rounded-2xl shadow-lg p-6 w-full">
                         <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
-                            <svg class="icon text-primary" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chart-bar"/></svg>
+                            <svg class="icon text-primary" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-chart-bar" />
+                            </svg>
                             خلاصه آمار
                         </h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
@@ -398,7 +458,9 @@
                 <div id="page-exam_entry" class="page-content hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-edit"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-edit" />
+                            </svg>
                             ثبت نتایج آزمون
                         </h1>
                     </div>
@@ -415,23 +477,27 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block mb-2 font-medium text-gray-700 text-sm">
-                                        <svg class="icon ml-1 text-primary" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-school"/></svg>
+                                        <svg class="icon ml-1 text-primary" aria-hidden="true">
+                                            <use href="assets/icons/sprite.svg#icon-school" />
+                                        </svg>
                                         دانش‌آموز
                                     </label>
                                     <div class="relative">
-                                        <input type="text" id="examStudentSelect" 
-                                            placeholder="نام دانش‌آموز را تایپ کنید..."
-                                            autocomplete="off"
+                                        <input type="text" id="examStudentSelect"
+                                            placeholder="نام دانش‌آموز را تایپ کنید..." autocomplete="off"
                                             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-lg keyboard-focus">
                                         <input type="hidden" id="examStudentId" name="student_id" required>
-                                        <ul id="studentSuggestions" class="hidden absolute z-50 w-full mt-1 bg-white border-2 border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                        <ul id="studentSuggestions"
+                                            class="hidden absolute z-50 w-full mt-1 bg-white border-2 border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
                                             <!-- Suggestions will be populated by JavaScript -->
                                         </ul>
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block mb-2 font-medium text-gray-700 text-sm">
-                                        <svg class="icon ml-1 text-primary" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-calendar"/></svg>
+                                        <svg class="icon ml-1 text-primary" aria-hidden="true">
+                                            <use href="assets/icons/sprite.svg#icon-calendar" />
+                                        </svg>
                                         تاریخ آزمون (شمسی)
                                     </label>
                                     <div id="jalaliDatePicker" class="grid grid-cols-3 gap-2">
@@ -472,7 +538,9 @@
                                 style="background-color: rgba(255,255,255,0.2);"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.3)'"
                                 onmouseout="this.style.backgroundColor='rgba(255,255,255,0.2)'">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plus"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-plus" />
+                                </svg>
                                 <span>افزودن درس</span>
                             </button>
                         </div>
@@ -485,13 +553,17 @@
                                 <div class="mt-6 flex flex-col sm:flex-row gap-3">
                                     <button type="submit"
                                         class="flex-1 bg-gradient-to-r from-primary to-[#5a779e] text-white px-8 py-4 rounded-xl hover:shadow-xl font-bold text-lg transition flex items-center justify-center gap-3">
-                                        <svg class="icon text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-device-floppy"/></svg>
+                                        <svg class="icon text-xl" aria-hidden="true">
+                                            <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                                        </svg>
                                         <span>ثبت نتایج</span>
                                         <kbd class="bg-white/20 px-2 py-1 rounded text-sm">Ctrl+S</kbd>
                                     </button>
                                     <button type="button" onclick="clearExamForm()"
                                         class="px-6 py-4 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition flex items-center justify-center gap-2">
-                                        <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-trash"/></svg>
+                                        <svg class="icon" aria-hidden="true">
+                                            <use href="assets/icons/sprite.svg#icon-trash" />
+                                        </svg>
                                         <span>پاک کردن</span>
                                     </button>
                                 </div>
@@ -502,7 +574,9 @@
                     <!-- Keyboard Shortcuts Help -->
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
                         <h3 class="font-bold text-blue-800 mb-2 flex items-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-settings"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-settings" />
+                            </svg>
                             میانبرهای کیبورد
                         </h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-blue-700">
@@ -520,13 +594,16 @@
                     <!-- Upload Form -->
                     <div class="filter-bar mb-6" style="padding: 1.25rem;">
                         <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-primary">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-upload"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-upload" />
+                            </svg>
                             آپلود فایل آزمون
                         </h2>
                         <form id="uploadForm" enctype="multipart/form-data">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
                                 <div>
-                                    <label class="block mb-1.5 text-sm font-medium text-gray-600">دانش‌آموز (اختیاری)</label>
+                                    <label class="block mb-1.5 text-sm font-medium text-gray-600">دانش‌آموز
+                                        (اختیاری)</label>
                                     <select name="student_id" id="uploadStudentSelect"
                                         class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
                                         <option value="">عمومی / همه</option>
@@ -551,10 +628,13 @@
                             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                                 <button type="submit"
                                     class="w-full sm:w-auto bg-primary text-white px-6 py-2.5 rounded-xl hover:bg-[#5a779e] transition font-medium flex items-center justify-center gap-2">
-                                    <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-upload"/></svg>
+                                    <svg class="icon" aria-hidden="true">
+                                        <use href="assets/icons/sprite.svg#icon-upload" />
+                                    </svg>
                                     <span>آپلود</span>
                                 </button>
-                                <span class="text-gray-400 text-xs">فرمت‌های مجاز: PDF, JPG, PNG, DOC | حداکثر: 10MB</span>
+                                <span class="text-gray-400 text-xs">فرمت‌های مجاز: PDF, JPG, PNG, DOC | حداکثر:
+                                    10MB</span>
                             </div>
                         </form>
                     </div>
@@ -581,12 +661,16 @@
                 <div id="page-supporters" class="page-content hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-headset"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-headset" />
+                            </svg>
                             مدیریت پشتیبان‌ها
                         </h1>
                         <button onclick="showModal('addSupporterModal')"
                             class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-plus"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
                             <span>افزودن پشتیبان</span>
                         </button>
                     </div>
@@ -595,7 +679,9 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                         <div class="stat-card-modern stat-blue">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-headset"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-headset" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="stat-supporters" class="stat-value">-</div>
@@ -604,7 +690,9 @@
                         </div>
                         <div class="stat-card-modern" style="--stat-color: #16a34a;">
                             <div class="stat-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-check" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="stat-supporters-replied" class="stat-value" style="color: #16a34a;">-</div>
@@ -613,7 +701,9 @@
                         </div>
                         <div class="stat-card-modern stat-warning">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-clock"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-clock" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="stat-supporters-pending" class="stat-value">-</div>
@@ -654,7 +744,9 @@
                                 class="flex-1 min-w-0 px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
                             <button onclick="loadReports()"
                                 class="bg-primary text-white px-6 py-2.5 rounded-xl hover:bg-[#5a779e] transition font-medium flex items-center justify-center gap-2">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-search"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-search" />
+                                </svg>
                                 <span>فیلتر</span>
                             </button>
                         </div>
@@ -663,7 +755,9 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                         <div class="stat-card-modern stat-blue">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chart-bar"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-chart-bar" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="report-total" class="stat-value">-</div>
@@ -672,7 +766,9 @@
                         </div>
                         <div class="stat-card-modern stat-warning">
                             <div class="stat-icon">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-clock"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-clock" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="report-pending" class="stat-value">-</div>
@@ -681,7 +777,9 @@
                         </div>
                         <div class="stat-card-modern" style="--stat-color: #16a34a;">
                             <div class="stat-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
-                                <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check"/></svg>
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-check" />
+                                </svg>
                             </div>
                             <div class="stat-info">
                                 <div id="report-replied" class="stat-value" style="color: #16a34a;">-</div>
@@ -692,7 +790,9 @@
 
                     <div class="chart-card">
                         <h2 class="chart-card-title">
-                            <svg class="icon text-primary" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-chart-bar"/></svg>
+                            <svg class="icon text-primary" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-chart-bar" />
+                            </svg>
                             روند روزانه
                         </h2>
                         <div id="reportsChart" style="min-height: 280px;"></div>
@@ -703,13 +803,16 @@
         </main>
     </div>
     <!-- Add Student Modal -->
-    <div id="addStudentModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
+    <div id="addStudentModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-md modal-content">
             <!-- Header -->
             <div class="modal-header">
                 <div class="flex items-center gap-3 flex-1 min-w-0">
                     <div class="modal-icon primary">
-                        <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-user-plus"/></svg>
+                        <svg class="icon" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-user-plus" />
+                        </svg>
                     </div>
                     <div class="min-w-0">
                         <h3 class="modal-header-title">افزودن دانش‌آموز</h3>
@@ -717,7 +820,9 @@
                     </div>
                 </div>
                 <button type="button" onclick="hideModal('addStudentModal')" class="btn-close">
-                    <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-x" />
+                    </svg>
                 </button>
             </div>
 
@@ -731,11 +836,13 @@
                     <div class="form-grid-2">
                         <div class="form-group">
                             <label>شماره موبایل <span class="text-red-500">*</span></label>
-                            <input type="tel" name="phone" required placeholder="09123456789" maxlength="11" pattern="09\d{9}" dir="ltr" class="text-left">
+                            <input type="tel" name="phone" required placeholder="09123456789" maxlength="11"
+                                pattern="09\d{9}" dir="ltr" class="text-left">
                         </div>
                         <div class="form-group">
                             <label>کد ملی <span class="text-red-500">*</span></label>
-                            <input type="text" name="national_id" required placeholder="0012345678" maxlength="10" pattern="\d{10}" dir="ltr" class="text-left">
+                            <input type="text" name="national_id" required placeholder="0012345678" maxlength="10"
+                                pattern="\d{10}" dir="ltr" class="text-left">
                         </div>
                     </div>
                     <div class="form-grid-2">
@@ -754,8 +861,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group" style="background:#f0f9ff;padding:12px;border-radius:8px;border:1px solid #bae6fd;">
-                        <p class="text-sm text-gray-600" style="margin:0">حساب کاربری با شماره موبایل و رمز پیش‌فرض <strong>1234</strong> ساخته می‌شود.</p>
+                    <div class="form-group"
+                        style="background:#f0f9ff;padding:12px;border-radius:8px;border:1px solid #bae6fd;">
+                        <p class="text-sm text-gray-600" style="margin:0">حساب کاربری با شماره موبایل و رمز پیش‌فرض
+                            <strong>1234</strong> ساخته می‌شود.
+                        </p>
                     </div>
                 </form>
             </div>
@@ -764,7 +874,9 @@
             <div class="modal-footer">
                 <div class="modal-footer-buttons">
                     <button type="submit" form="addStudentForm" class="btn btn-primary">
-                        <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check"/></svg>
+                        <svg class="icon" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-check" />
+                        </svg>
                         <span>ذخیره</span>
                     </button>
                     <button type="button" onclick="hideModal('addStudentModal')" class="btn btn-secondary">
@@ -785,7 +897,9 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-edit"/></svg>
+                            <svg class="icon text-white text-xl" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-edit" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">ویرایش دانش‌آموز</h3>
@@ -794,7 +908,9 @@
                     </div>
                     <button onclick="hideModal('editStudentModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
                 <form id="editStudentForm" class="space-y-5">
@@ -836,7 +952,9 @@
                     <div class="flex gap-3 pt-4">
                         <button type="submit"
                             class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-device-floppy"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                            </svg>
                             <span>ذخیره تغییرات</span>
                         </button>
                         <button type="button" onclick="hideModal('editStudentModal')"
@@ -857,7 +975,9 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-teal-500 via-cyan-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-headset"/></svg>
+                            <svg class="icon text-white text-xl" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-headset" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">افزودن پشتیبان جدید</h3>
@@ -866,7 +986,9 @@
                     </div>
                     <button onclick="hideModal('addSupporterModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
                 <form id="addSupporterForm" class="space-y-4">
@@ -918,15 +1040,20 @@
                             <input type="password" name="password" id="addSupporterPassword" required minlength="4"
                                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300 pl-12"
                                 placeholder="حداقل ۴ کاراکتر">
-                            <button type="button" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1" onclick="togglePasswordByButton(this, 'addSupporterPassword')" title="نمایش رمز عبور">
-                                <img src="../assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5" width="20" height="20">
+                            <button type="button"
+                                class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
+                                onclick="togglePasswordByButton(this, 'addSupporterPassword')" title="نمایش رمز عبور">
+                                <img src="assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                    width="20" height="20">
                             </button>
                         </div>
                     </div>
                     <div class="flex gap-3 pt-4">
                         <button type="submit"
                             class="modal-btn-primary flex-1 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-check" />
+                            </svg>
                             <span>ذخیره</span>
                         </button>
                         <button type="button" onclick="hideModal('addSupporterModal')"
@@ -956,7 +1083,9 @@
                     </div>
                     <button onclick="hideModal('editSupporterModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
                 <form id="editSupporterForm" class="space-y-4">
@@ -1002,15 +1131,21 @@
                             <input type="password" name="new_password" id="editSupporterNewPassword" minlength="4"
                                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300 pl-12"
                                 placeholder="فقط در صورت نیاز">
-                            <button type="button" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1" onclick="togglePasswordByButton(this, 'editSupporterNewPassword')" title="نمایش رمز عبور">
-                                <img src="../assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5" width="20" height="20">
+                            <button type="button"
+                                class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
+                                onclick="togglePasswordByButton(this, 'editSupporterNewPassword')"
+                                title="نمایش رمز عبور">
+                                <img src="assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                    width="20" height="20">
                             </button>
                         </div>
                     </div>
                     <div class="flex gap-3 pt-4">
                         <button type="submit"
                             class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-device-floppy"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                            </svg>
                             <span>ذخیره تغییرات</span>
                         </button>
                         <button type="button" onclick="hideModal('editSupporterModal')"
@@ -1031,7 +1166,9 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-book"/></svg>
+                            <svg class="icon text-white text-xl" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-book" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">افزودن دوره جدید</h3>
@@ -1040,7 +1177,9 @@
                     </div>
                     <button onclick="hideModal('addCourseModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
                 <form id="addCourseForm" class="space-y-4">
@@ -1087,7 +1226,9 @@
                     <div class="flex gap-3 pt-4">
                         <button type="submit"
                             class="modal-btn-primary flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-check" />
+                            </svg>
                             <span>ذخیره</span>
                         </button>
                         <button type="button" onclick="hideModal('addCourseModal')"
@@ -1108,7 +1249,9 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-edit"/></svg>
+                            <svg class="icon text-white text-xl" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-edit" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">ویرایش دوره</h3>
@@ -1117,7 +1260,9 @@
                     </div>
                     <button onclick="hideModal('editCourseModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
                 <form id="editCourseForm" enctype="multipart/form-data" class="space-y-4">
@@ -1164,7 +1309,9 @@
                     <div class="flex gap-3 pt-4">
                         <button type="submit"
                             class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-device-floppy"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                            </svg>
                             <span>ذخیره تغییرات</span>
                         </button>
                         <button type="button" onclick="hideModal('editCourseModal')"
@@ -1185,7 +1332,9 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-indigo-500 via-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-school"/></svg>
+                            <svg class="icon text-white text-xl" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-school" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">افزودن استاد جدید</h3>
@@ -1194,7 +1343,9 @@
                     </div>
                     <button onclick="hideModal('addInstructorModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
                 <form id="addInstructorForm" enctype="multipart/form-data" class="space-y-4">
@@ -1234,7 +1385,9 @@
                     <div class="flex gap-3 pt-4">
                         <button type="submit"
                             class="modal-btn-primary flex-1 bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-check"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-check" />
+                            </svg>
                             <span>ذخیره</span>
                         </button>
                         <button type="button" onclick="hideModal('addInstructorModal')"
@@ -1255,7 +1408,9 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-edit"/></svg>
+                            <svg class="icon text-white text-xl" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-edit" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">ویرایش استاد</h3>
@@ -1264,7 +1419,9 @@
                     </div>
                     <button onclick="hideModal('editInstructorModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
                 <form id="editInstructorForm" enctype="multipart/form-data" class="space-y-4">
@@ -1304,7 +1461,9 @@
                     <div class="flex gap-3 pt-4">
                         <button type="submit"
                             class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-device-floppy"/></svg>
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                            </svg>
                             <span>ذخیره تغییرات</span>
                         </button>
                         <button type="button" onclick="hideModal('editInstructorModal')"
@@ -1330,7 +1489,9 @@
                     <div class="flex items-center gap-3">
                         <div
                             class="w-14 h-14 bg-gradient-to-br from-primary via-[#5a779e] to-primary rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-clipboard"/></svg>
+                            <svg class="icon text-white text-xl" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-clipboard" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">جزئیات آزمون</h3>
@@ -1339,7 +1500,9 @@
                     </div>
                     <button onclick="hideModal('examDetailsModal')"
                         class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-x"/></svg>
+                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-x" />
+                        </svg>
                     </button>
                 </div>
 
@@ -1353,10 +1516,12 @@
 
     <!-- Subject Row Template (for exam entry - Enhanced) -->
     <template id="subjectRowTemplate">
-        <div class="subject-row bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-primary/20 transition-all duration-300">
+        <div
+            class="subject-row bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-primary/20 transition-all duration-300">
             <div class="flex gap-3 p-4">
                 <!-- Row number badge -->
-                <div class="flex-shrink-0 w-9 h-9 bg-gradient-to-br from-primary to-[#5a779e] rounded-xl flex items-center justify-center text-white font-bold shadow-sm subject-number" style="margin-top: 1.35rem;">1</div>
+                <div class="flex-shrink-0 w-9 h-9 bg-gradient-to-br from-primary to-[#5a779e] rounded-xl flex items-center justify-center text-white font-bold shadow-sm subject-number"
+                    style="margin-top: 1.35rem;">1</div>
 
                 <!-- Content area -->
                 <div class="flex-1 min-w-0" style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -1365,7 +1530,8 @@
                         <div>
                             <label class="block text-xs font-medium text-gray-500 mb-1">نام درس *</label>
                             <input type="text" data-field="subject" placeholder="مثلاً: ریاضی" required
-                                class="w-full px-3 py-2 border-2 border-gray-200 rounded-xl modern-input keyboard-focus" autofocus>
+                                class="w-full px-3 py-2 border-2 border-gray-200 rounded-xl modern-input keyboard-focus"
+                                autofocus>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-400 mb-1">مبحث (اختیاری)</label>
@@ -1409,13 +1575,16 @@
 
                 <!-- Delete button -->
                 <button type="button" onclick="removeSubjectRow(this)"
-                    class="flex-shrink-0 w-9 h-9 bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 rounded-xl flex items-center justify-center transition-all" style="margin-top: 1.35rem;" title="حذف درس">
-                    <svg class="icon" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-trash"/></svg>
+                    class="flex-shrink-0 w-9 h-9 bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 rounded-xl flex items-center justify-center transition-all"
+                    style="margin-top: 1.35rem;" title="حذف درس">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-trash" />
+                    </svg>
                 </button>
             </div>
         </div>
     </template>
-    
+
     <script>
         // Toggle password visibility (SVGهای eye-open / eye-closed)
         function toggleAdminPassword() {
@@ -1425,11 +1594,11 @@
             if (!input || !icon) return;
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.src = '../assets/svg/eye-open.svg';
+                icon.src = 'assets/svg/eye-open.svg';
                 icon.title = 'مخفی کردن رمز عبور';
             } else {
                 input.type = 'password';
-                icon.src = '../assets/svg/eye-closed.svg';
+                icon.src = 'assets/svg/eye-closed.svg';
                 icon.title = 'نمایش رمز عبور';
             }
         }
@@ -1439,11 +1608,11 @@
             if (!input || !icon) return;
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.src = '../assets/svg/eye-open.svg';
+                icon.src = 'assets/svg/eye-open.svg';
                 icon.title = 'مخفی کردن رمز عبور';
             } else {
                 input.type = 'password';
-                icon.src = '../assets/svg/eye-closed.svg';
+                icon.src = 'assets/svg/eye-closed.svg';
                 icon.title = 'نمایش رمز عبور';
             }
         }

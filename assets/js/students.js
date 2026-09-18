@@ -2,7 +2,7 @@
  * Admin Panel - Students CRUD
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, getElementValue, setFormValues, icon, withButtonLoading } from './utils.js';
 
 export async function loadStudents() {
@@ -88,7 +88,7 @@ export async function handleAddStudent(e) {
         loadStudents();
         showAlert(result.message || 'دانش‌آموز اضافه شد و حساب کاربری ایجاد شد', 'success');
     }, 'در حال افزودن...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export function editStudent(id, name, grade, field, phone, national_id) {
@@ -123,7 +123,7 @@ export async function handleEditStudent(e) {
         loadStudents();
         showAlert('تغییرات ذخیره شد', 'success');
     }, 'در حال ذخیره...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export async function deleteStudent(id, button) {
@@ -131,36 +131,36 @@ export async function deleteStudent(id, button) {
 
     // Find the button element if clicked from window
     const btn = button || event?.target?.closest('button');
-    
+
     await withButtonLoading(btn, async () => {
         await api('delete_student', { id }, 'POST');
         loadStudents();
         showAlert('دانش‌آموز حذف شد', 'success');
     }, 'در حال حذف...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export async function createStudentAccount(id, button) {
     if (!confirm('حساب کاربری با رمز پیش‌فرض 1234 ایجاد شود؟')) return;
 
     const btn = button || event?.target?.closest('button');
-    
+
     await withButtonLoading(btn, async () => {
         const result = await api('create_student_account', { id }, 'POST');
         loadStudents();
         showAlert(result.message || 'حساب کاربری ایجاد شد', 'success');
     }, 'در حال ایجاد...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export async function resetStudentPassword(id, button) {
     if (!confirm('رمز عبور به 1234 بازنشانی شود؟')) return;
 
     const btn = button || event?.target?.closest('button');
-    
+
     await withButtonLoading(btn, async () => {
         const result = await api('reset_student_password', { id }, 'POST');
         showAlert(result.message || 'رمز عبور بازنشانی شد', 'success');
     }, 'در حال بازنشانی...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }

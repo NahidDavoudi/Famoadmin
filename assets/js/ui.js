@@ -2,7 +2,7 @@
  * Admin Panel - UI Helpers, Mobile Menu, Dates, Student List
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { setElementValue } from './utils.js';
 
 export function addNoSpinnerStyles() {

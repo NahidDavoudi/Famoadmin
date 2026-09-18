@@ -2,7 +2,7 @@
  * Admin Panel - Supporters CRUD
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 import { updateStatElement } from './utils.js';
 
@@ -72,7 +72,7 @@ function renderSupportersTable(supporters) {
 export async function handleAddSupporter(e) {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type="submit"]');
-    
+
     await withButtonLoading(submitBtn, async () => {
         await api('add_supporter', new FormData(e.target), 'POST');
         hideModal('addSupporterModal');
@@ -80,7 +80,7 @@ export async function handleAddSupporter(e) {
         loadSupporters();
         showAlert('پشتیبان جدید اضافه شد', 'success');
     }, 'در حال افزودن...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export function editSupporter(id, name, grade, field, chat_id) {
@@ -94,25 +94,25 @@ export function editSupporter(id, name, grade, field, chat_id) {
 export async function handleEditSupporter(e) {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type="submit"]');
-    
+
     await withButtonLoading(submitBtn, async () => {
         await api('update_supporter', new FormData(e.target), 'POST');
         hideModal('editSupporterModal');
         loadSupporters();
         showAlert('تغییرات ذخیره شد', 'success');
     }, 'در حال ذخیره...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export async function deleteSupporter(id, button) {
     if (!confirm('آیا مطمئن هستید؟ گزارش‌های مرتبط با این پشتیبان حذف نخواهند شد.')) return;
 
     const btn = button || event?.target?.closest('button');
-    
+
     await withButtonLoading(btn, async () => {
         await api('delete_supporter', { id }, 'POST');
         loadSupporters();
         showAlert('پشتیبان حذف شد', 'success');
     }, 'در حال حذف...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }

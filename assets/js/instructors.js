@@ -2,7 +2,7 @@
  * Admin Panel - Instructors CRUD
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 
 export async function loadInstructors() {
@@ -51,7 +51,7 @@ function renderInstructorsTable(instructors) {
 export async function handleAddInstructor(e) {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type="submit"]');
-    
+
     await withButtonLoading(submitBtn, async () => {
         await api('instructors_add', new FormData(e.target), 'POST');
         hideModal('addInstructorModal');
@@ -59,7 +59,7 @@ export async function handleAddInstructor(e) {
         loadInstructors();
         showAlert('استاد اضافه شد', 'success');
     }, 'در حال افزودن...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export async function editInstructor(id) {
@@ -94,7 +94,7 @@ export async function editInstructor(id) {
 export async function handleEditInstructor(e) {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type="submit"]');
-    
+
     await withButtonLoading(submitBtn, async () => {
         await api('instructors_update', new FormData(e.target), 'POST');
         hideModal('editInstructorModal');
@@ -102,21 +102,21 @@ export async function handleEditInstructor(e) {
         loadInstructors();
         showAlert('استاد به‌روزرسانی شد', 'success');
     }, 'در حال ذخیره...')
-    .catch(error => {
-        console.error('Error in handleEditInstructor:', error);
-        showAlert(error.message || 'خطا در به‌روزرسانی استاد', 'error');
-    });
+        .catch(error => {
+            console.error('Error in handleEditInstructor:', error);
+            showAlert(error.message || 'خطا در به‌روزرسانی استاد', 'error');
+        });
 }
 
 export async function deleteInstructor(id, name, button) {
     if (!confirm(`آیا از حذف استاد «${name}» اطمینان دارید؟`)) return;
 
     const btn = button || event?.target?.closest('button');
-    
+
     await withButtonLoading(btn, async () => {
         await api('instructors_delete', { id }, 'POST');
         loadInstructors();
         showAlert('استاد حذف شد', 'success');
     }, 'در حال حذف...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }

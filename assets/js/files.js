@@ -2,10 +2,10 @@
  * Admin Panel - Files / Uploads
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { showAlert, escapeHtml, formatDate, icon, withButtonLoading } from './utils.js';
 import { setDefaultDates } from './ui.js';
-import { formatGregorianToJalali } from '../../../shared/js/jalali.js';
+import { formatGregorianToJalali } from '../../../js/jalali.js';
 
 export async function loadFiles() {
     try {
@@ -53,7 +53,7 @@ function renderFilesTable(files) {
 export async function handleFileUpload(e) {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type="submit"]');
-    
+
     await withButtonLoading(submitBtn, async () => {
         await api('upload_file', new FormData(e.target), 'POST');
         e.target.reset();
@@ -61,18 +61,18 @@ export async function handleFileUpload(e) {
         loadFiles();
         showAlert('فایل آپلود شد', 'success');
     }, 'در حال آپلود...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export async function deleteFile(id, button) {
     if (!confirm('آیا مطمئن هستید؟')) return;
 
     const btn = button || event?.target?.closest('button');
-    
+
     await withButtonLoading(btn, async () => {
         await api('delete_file', { id }, 'POST');
         loadFiles();
         showAlert('فایل حذف شد', 'success');
     }, 'در حال حذف...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }

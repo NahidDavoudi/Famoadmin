@@ -3,14 +3,14 @@
  * Enhanced with Jalali (Shamsi) date picker & percentage preview
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { showAlert } from './utils.js';
 import { loadStudentList } from './ui.js';
 import * as config from './config.js';
 import {
     toGregorian, getTodayJalali, getJalaliMonths,
     jalaliMonthDays, formatGregorianToJalali
-} from '../../../shared/js/jalali.js';
+} from '../../../js/jalali.js';
 
 // Guard: only initialize Jalali picker once
 let jalaliPickerInitialized = false;
@@ -30,24 +30,24 @@ async function fetchStudentsWithCache() {
         if (cached) {
             const { data, timestamp } = JSON.parse(cached);
             const now = Date.now();
-            
+
             // If cache is still valid, return cached data
             if (now - timestamp < CACHE_EXPIRY) {
                 console.log('Using cached students list');
                 return data;
             }
         }
-        
+
         // Cache expired or missing, fetch from API
         console.log('Fetching fresh students list from API');
         const students = await api('get_student_list');
-        
+
         // Save to cache
         localStorage.setItem(CACHE_KEY, JSON.stringify({
             data: students,
             timestamp: Date.now()
         }));
-        
+
         return students;
     } catch (error) {
         console.error('Error fetching students:', error);
@@ -69,21 +69,21 @@ function setupAutocomplete(inputId, studentsData) {
     const input = document.getElementById(inputId);
     const hiddenInput = document.getElementById('examStudentId');
     const suggestionsList = document.getElementById('studentSuggestions');
-    
+
     if (!input || !hiddenInput || !suggestionsList) {
         console.error('Autocomplete elements not found');
         return;
     }
-    
+
     let selectedIndex = -1;
     let filteredStudents = [];
-    
+
     // Filter function
     function filterStudents(query) {
         if (!query || query.trim() === '') {
             return [];
         }
-        
+
         const lowerQuery = query.toLowerCase().trim();
         return studentsData.filter(student => {
             const name = student.name.toLowerCase();
@@ -91,27 +91,27 @@ function setupAutocomplete(inputId, studentsData) {
             return name.includes(lowerQuery) || gradeField.includes(lowerQuery);
         }).slice(0, 10); // Limit to 10 results
     }
-    
+
     // Render suggestions
     function renderSuggestions(students) {
         suggestionsList.innerHTML = '';
         selectedIndex = -1;
-        
+
         if (students.length === 0) {
             suggestionsList.classList.add('hidden');
             return;
         }
-        
+
         students.forEach((student, index) => {
             const li = document.createElement('li');
             li.textContent = `${student.name} - ${student.grade} ${student.field}`;
             li.dataset.studentId = student.id;
             li.dataset.studentName = student.name;
-            
+
             li.addEventListener('click', () => {
                 selectStudent(student.id, student.name);
             });
-            
+
             li.addEventListener('mouseenter', () => {
                 // Remove previous selection
                 suggestionsList.querySelectorAll('li').forEach(item => {
@@ -120,36 +120,36 @@ function setupAutocomplete(inputId, studentsData) {
                 li.classList.add('selected');
                 selectedIndex = index;
             });
-            
+
             suggestionsList.appendChild(li);
         });
-        
+
         suggestionsList.classList.remove('hidden');
     }
-    
+
     // Select a student
     function selectStudent(studentId, studentName) {
         input.value = studentName;
         hiddenInput.value = studentId;
         suggestionsList.classList.add('hidden');
         selectedIndex = -1;
-        
+
         // Trigger change event for validation
         hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
     }
-    
+
     // Input event handler
     input.addEventListener('input', (e) => {
         const query = e.target.value;
         filteredStudents = filterStudents(query);
         renderSuggestions(filteredStudents);
-        
+
         // Clear hidden input if input is cleared
         if (!query || query.trim() === '') {
             hiddenInput.value = '';
         }
     });
-    
+
     // Keyboard navigation
     input.addEventListener('keydown', (e) => {
         if (!suggestionsList.classList.contains('hidden') && filteredStudents.length > 0) {
@@ -175,7 +175,7 @@ function setupAutocomplete(inputId, studentsData) {
             }
         }
     });
-    
+
     function updateSelection() {
         suggestionsList.querySelectorAll('li').forEach((li, index) => {
             if (index === selectedIndex) {
@@ -186,14 +186,14 @@ function setupAutocomplete(inputId, studentsData) {
             }
         });
     }
-    
+
     // Close suggestions when clicking outside
     document.addEventListener('click', (e) => {
         if (!input.contains(e.target) && !suggestionsList.contains(e.target)) {
             suggestionsList.classList.add('hidden');
         }
     });
-    
+
     // Focus event - show suggestions if there's text
     input.addEventListener('focus', () => {
         if (input.value.trim()) {
@@ -387,7 +387,7 @@ export async function handleExamEntry(e) {
             if (!student_id) missingFields.push('دانش‌آموز');
             if (!exam_date) missingFields.push('تاریخ آزمون');
             if (subjects.length === 0) missingFields.push('حداقل یک درس');
-            
+
             showAlert(`فیلدهای زیر الزامی هستند: ${missingFields.join(', ')}`, 'error');
             console.error('Missing fields:', { student_id, exam_date, subjects });
             return;
@@ -431,7 +431,7 @@ export function getStudentIdInput() {
     // Check for hidden input first (new autocomplete)
     const hiddenInput = document.getElementById('examStudentId');
     if (hiddenInput) return hiddenInput;
-    
+
     // Fallback to old select elements
     return document.getElementById('examStudentSelect') ||
         document.querySelector('select[name="student_id"]') ||

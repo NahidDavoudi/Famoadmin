@@ -4,10 +4,10 @@
  * Now using ApexCharts Radial Bar Stroked Gauge for each lesson result
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { showAlert, escapeHtml, icon } from './utils.js';
 import * as config from './config.js';
-import { formatGregorianToJalali, formatJalaliLong } from '../../../shared/js/jalali.js';
+import { formatGregorianToJalali, formatJalaliLong } from '../../../js/jalali.js';
 import { setupTableResponsive } from './ui.js';
 
 // ApexCharts will be loaded globally (make sure it's included in page)

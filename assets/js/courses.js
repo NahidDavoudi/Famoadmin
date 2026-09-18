@@ -2,7 +2,7 @@
  * Admin Panel - Courses CRUD
  */
 
-import { api } from '../../../shared/js/api-client.js';
+import { api } from '../../../js/api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon } from './utils.js';
 
 const ICON_MAP = {
@@ -80,7 +80,7 @@ function renderCoursesTable(courses) {
 export async function handleAddCourse(e) {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type="submit"]');
-    
+
     await withButtonLoading(submitBtn, async () => {
         await api('courses_add', new FormData(e.target), 'POST');
         hideModal('addCourseModal');
@@ -88,7 +88,7 @@ export async function handleAddCourse(e) {
         loadCourses();
         showAlert('دوره اضافه شد', 'success');
     }, 'در حال افزودن...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
 
 export async function editCourse(id) {
@@ -124,7 +124,7 @@ export async function editCourse(id) {
 export async function handleEditCourse(e) {
     e.preventDefault();
     const submitBtn = e.target.querySelector('[type="submit"]');
-    
+
     await withButtonLoading(submitBtn, async () => {
         await api('courses_update', new FormData(e.target), 'POST');
         hideModal('editCourseModal');
@@ -132,21 +132,21 @@ export async function handleEditCourse(e) {
         loadCourses();
         showAlert('دوره به‌روزرسانی شد', 'success');
     }, 'در حال ذخیره...')
-    .catch(error => {
-        console.error('Error in handleEditCourse:', error);
-        showAlert(error.message || 'خطا در به‌روزرسانی دوره', 'error');
-    });
+        .catch(error => {
+            console.error('Error in handleEditCourse:', error);
+            showAlert(error.message || 'خطا در به‌روزرسانی دوره', 'error');
+        });
 }
 
 export async function deleteCourse(id, name, button) {
     if (!confirm(`آیا از حذف دوره «${name}» اطمینان دارید؟`)) return;
 
     const btn = button || event?.target?.closest('button');
-    
+
     await withButtonLoading(btn, async () => {
         await api('courses_delete', { id }, 'POST');
         loadCourses();
         showAlert('دوره حذف شد', 'success');
     }, 'در حال حذف...')
-    .catch(error => showAlert(error.message, 'error'));
+        .catch(error => showAlert(error.message, 'error'));
 }
