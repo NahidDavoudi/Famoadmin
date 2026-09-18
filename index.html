@@ -846,36 +846,38 @@
         </main>
     </div>
     <!-- Add Student Modal -->
-    <div id="addStudentModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                    <div class="modal-icon primary">
-                        <svg class="icon" aria-hidden="true">
+<div id="addStudentModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addStudentModalTitle">
+    <div
+        class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="p-6 md:p-8">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-primary via-primary-light to-primary rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
+                        <svg class="icon text-white text-xl" aria-hidden="true">
                             <use href="assets/icons/sprite.svg#icon-user-plus" />
                         </svg>
                     </div>
-                    <div class="min-w-0">
-                        <h3 class="modal-header-title">افزودن دانش‌آموز</h3>
-                        <p class="modal-header-subtitle">اطلاعات دانش‌آموز جدید را وارد کنید</p>
+                    <div>
+                        <h3 class="modal-header-title text-xl font-bold text-gray-800" id="addStudentModalTitle">افزودن دانش‌آموز</h3>
                     </div>
                 </div>
-                <button type="button" onclick="hideModal('addStudentModal')" class="btn-close">
-                    <svg class="icon" aria-hidden="true">
+                <button type="button"
+                    onclick="hideModal('addStudentModal'"
+                    class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group"
+                    aria-label="بستن modal">
+                    <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
                         <use href="assets/icons/sprite.svg#icon-x" />
                     </svg>
                 </button>
             </div>
-
-            <!-- Body -->
-            <div class="modal-body">
-                <form id="addStudentForm" class="modal-form">
-                    <div class="form-group">
-                        <label>نام و نام خانوادگی</label>
-                        <input type="text" name="name" required placeholder="علی محمدی">
-                    </div>
+            <div class="p-6 md:p-8">
+                <form id="addStudentForm" class="modal-form space-y-4">
                     <div class="form-grid-2">
                         <div class="form-group">
                             <label>شماره موبایل <span class="text-red-500">*</span></label>
@@ -916,15 +918,16 @@
             <!-- Footer -->
             <div class="modal-footer">
                 <div class="modal-footer-buttons">
-                    <button type="submit" form="addStudentForm" class="btn btn-primary">
-                        <svg class="icon" aria-hidden="true">
+                    <button type="submit"
+                        class="modal-btn-primary flex-1 bg-gradient-to-r from-primary to-primary-light text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
+                        <svg class="icon text-xl" aria-hidden="true">
                             <use href="assets/icons/sprite.svg#icon-check" />
                         </svg>
                         <span>ذخیره</span>
                     </button>
-                    <button type="button" onclick="hideModal('addStudentModal')" class="btn btn-secondary">
-                        انصراف
-                    </button>
+                    <button type="button"
+                        onclick="hideModal('addStudentModal'"
+                        class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
                 </div>
             </div>
         </div>

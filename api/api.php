@@ -77,6 +77,16 @@ function requireAdmin() {
     }
 }
 
+// Include extracted API modules
+require_once __DIR__ . '/api/auth.php';
+require_once __DIR__ . '/api/dashboard.php';
+require_once __DIR__ . '/api/reports.php';
+require_once __DIR__ . '/api/topics.php';
+require_once __DIR__ . '/api/files.php';
+require_once __DIR__ . '/api/courses.php';
+require_once __DIR__ . '/api/instructors.php';
+require_once __DIR__ . '/api/blog.php';
+
 // ===================== Router =====================
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
@@ -85,64 +95,20 @@ switch ($action) {
     
     // ==================== Auth ====================
     case 'login':
-        $username = $_POST['username'] ?? '';
-        $password = $_POST['password'] ?? '';
-        
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? AND role IN ('admin', 'supporter')");
-        $stmt->execute([$username]);
-        $user = $stmt->fetch();
-        
-        if ($user && password_verify($password, $user['password_hash'])) {
-            $_SESSION['admin_id'] = $user['id'];
-            $_SESSION['admin_role'] = $user['role'];
-            $_SESSION['admin_username'] = $user['username'];
-            $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?")->execute([$user['id']]);
-            jsonResponse(['success' => true, 'role' => $user['role'], 'username' => $user['username']]);
-        }
-        jsonResponse(['error' => 'نام کاربری یا رمز عبور اشتباه است'], 401);
+        auth_login();
         break;
         
     case 'logout':
-        session_destroy();
-        jsonResponse(['success' => true]);
+        auth_logout();
         break;
         
     case 'check_auth':
-        if (isset($_SESSION['admin_id'])) {
-            jsonResponse([
-                'authenticated' => true,
-                'role' => $_SESSION['admin_role'],
-                'username' => $_SESSION['admin_username']
-            ]);
-        }
-        jsonResponse(['authenticated' => false]);
+        auth_check();
         break;
     
     // ==================== Dashboard Stats ====================
     case 'get_stats':
-        requireAuth();
-        
-        $stats = [];
-        $stats['students_count'] = (int)$pdo->query("SELECT COUNT(*) FROM students")->fetchColumn();
-        
-        $week_start = date('Y-m-d', strtotime('saturday last week'));
-        $stmt = $pdo->prepare("SELECT COUNT(DISTINCT exam_date) FROM exam_results WHERE exam_date >= ?");
-        $stmt->execute([$week_start]);
-        $stats['exams_this_week'] = (int)$stmt->fetchColumn();
-        
-        $stats['students_no_exam'] = (int)$pdo->query("SELECT COUNT(DISTINCT s.id) FROM students s LEFT JOIN exam_results er ON s.id = er.student_id WHERE er.id IS NULL")->fetchColumn();
-        $stats['pending_reports'] = (int)$pdo->query("SELECT COUNT(*) FROM reports_status WHERE status = 'pending'")->fetchColumn();
-        
-        $stats['avg_by_field'] = $pdo->query("
-            SELECT s.field, 
-                   ROUND(AVG(er.percentage), 1) as avg_percentage, 
-                   COUNT(DISTINCT s.id) as student_count 
-            FROM students s 
-            INNER JOIN exam_results er ON s.id = er.student_id 
-            GROUP BY s.field
-        ")->fetchAll();
-        
-        jsonResponse($stats);
+        dashboard_get_stats();
         break;
     
     // ==================== Students ====================
@@ -508,163 +474,23 @@ $pdo->commit();
 
     // ==================== Blog Posts ====================
     case 'get_blog_posts':
-        requireAuth();
-
-        $stmt = $pdo->query("
-            SELECT id, title, slug, category, excerpt, content, cover_image, meta_description, published_at, views, is_published
-            FROM blog_posts
-            ORDER BY published_at DESC
-        ");
-        $posts = $stmt->fetchAll();
-
-        jsonResponse($posts);
+        blog_get_blog_posts();
         break;
 
     case 'get_blog_post':
-        requireAuth();
-
-        $id = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
-        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
-
-        $stmt = $pdo->prepare("
-            SELECT id, title, slug, category, excerpt, content, cover_image, meta_description, published_at, views, is_published
-            FROM blog_posts
-            WHERE id = ?
-        ");
-        $stmt->execute([$id]);
-        $post = $stmt->fetch();
-
-        if (!$post) jsonResponse(['error' => 'پست یافت نشد'], 404);
-
-        jsonResponse($post);
+        blog_get_blog_post();
         break;
 
     case 'add_blog_post':
-        requireAdmin();
-
-        $title = trim($_POST['title'] ?? '');
-        $slug = trim($_POST['slug'] ?? '');
-        $category = trim($_POST['category'] ?? '');
-        $excerpt = trim($_POST['excerpt'] ?? '');
-        $content = trim($_POST['content'] ?? '');
-        $meta_description = trim($_POST['meta_description'] ?? '');
-        $is_published = isset($_POST['is_published']) ? 1 : 0;
-
-        if (!$title || !$slug || !$category || !$content) {
-            jsonResponse(['error' => 'عنوان، اسلاگ، دسته‌بندی و محتوا الزامی است'], 400);
-        }
-
-        // Check slug uniqueness
-        $stmt = $pdo->prepare("SELECT id FROM blog_posts WHERE slug = ?");
-        $stmt->execute([$slug]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این اسلاگ قبلاً استفاده شده است'], 400);
-        }
-
-        // Handle cover image upload
-        $cover_image = null;
-        if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
-            $file = $_FILES['cover_image'];
-            if ($file['size'] > MAX_BLOG_IMAGE_SIZE) {
-                jsonResponse(['error' => 'حجم فایل نباید بیشتر از ۵ مگابایت باشد'], 400);
-            }
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            if (!in_array($ext, ALLOWED_BLOG_IMAGE_EXTENSIONS)) {
-                jsonResponse(['error' => 'فرمت فایل مجاز نیست. فقط JPG, PNG, WEBP'], 400);
-            }
-            $filename = uniqid('blog_') . '_' . time() . '.' . $ext;
-            $upload_path = BLOG_IMAGES_PATH . '/' . $filename;
-            if (!move_uploaded_file($file['tmp_name'], $upload_path)) {
-                jsonResponse(['error' => 'خطا در آپلود فایل'], 500);
-            }
-            $cover_image = $filename;
-        }
-
-        $stmt = $pdo->prepare("
-            INSERT INTO blog_posts (title, slug, category, excerpt, content, cover_image, meta_description, is_published)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([$title, $slug, $category, $excerpt, $content, $cover_image, $meta_description, $is_published]);
-
-        jsonResponse(['success' => true, 'id' => $pdo->lastInsertId()]);
+        blog_add_blog_post();
         break;
 
     case 'update_blog_post':
-        requireAdmin();
-
-        $id = (int)($_POST['id'] ?? 0);
-        $title = trim($_POST['title'] ?? '');
-        $slug = trim($_POST['slug'] ?? '');
-        $category = trim($_POST['category'] ?? '');
-        $excerpt = trim($_POST['excerpt'] ?? '');
-        $content = trim($_POST['content'] ?? '');
-        $meta_description = trim($_POST['meta_description'] ?? '');
-        $is_published = isset($_POST['is_published']) ? 1 : 0;
-        $current_cover_image = trim($_POST['current_cover_image'] ?? '');
-
-        if (!$id || !$title || !$slug || !$category || !$content) {
-            jsonResponse(['error' => 'داده‌های ناقص'], 400);
-        }
-
-        // Check slug uniqueness (excluding current post)
-        $stmt = $pdo->prepare("SELECT id FROM blog_posts WHERE slug = ? AND id != ?");
-        $stmt->execute([$slug, $id]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این اسلاگ قبلاً استفاده شده است'], 400);
-        }
-
-        // Handle cover image upload
-        $cover_image = $current_cover_image;
-        if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
-            $file = $_FILES['cover_image'];
-            if ($file['size'] > MAX_BLOG_IMAGE_SIZE) {
-                jsonResponse(['error' => 'حجم فایل نباید بیشتر از ۵ مگابایت باشد'], 400);
-            }
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            if (!in_array($ext, ALLOWED_BLOG_IMAGE_EXTENSIONS)) {
-                jsonResponse(['error' => 'فرمت فایل مجاز نیست. فقط JPG, PNG, WEBP'], 400);
-            }
-            $filename = uniqid('blog_') . '_' . time() . '.' . $ext;
-            $upload_path = BLOG_IMAGES_PATH . '/' . $filename;
-            if (!move_uploaded_file($file['tmp_name'], $upload_path)) {
-                jsonResponse(['error' => 'خطا در آپلود فایل'], 500);
-            }
-            // Delete old cover image if exists
-            if ($current_cover_image && file_exists(BLOG_IMAGES_PATH . '/' . $current_cover_image)) {
-                unlink(BLOG_IMAGES_PATH . '/' . $current_cover_image);
-            }
-            $cover_image = $filename;
-        }
-
-        $stmt = $pdo->prepare("
-            UPDATE blog_posts
-            SET title = ?, slug = ?, category = ?, excerpt = ?, content = ?, cover_image = ?, meta_description = ?, is_published = ?
-            WHERE id = ?
-        ");
-        $stmt->execute([$title, $slug, $category, $excerpt, $content, $cover_image, $meta_description, $is_published, $id]);
-
-        jsonResponse(['success' => true]);
+        blog_update_blog_post();
         break;
 
     case 'delete_blog_post':
-        requireAdmin();
-
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
-
-        // Get cover image to delete file
-        $stmt = $pdo->prepare("SELECT cover_image FROM blog_posts WHERE id = ?");
-        $stmt->execute([$id]);
-        $post = $stmt->fetch();
-
-        if ($post && $post['cover_image'] && file_exists(BLOG_IMAGES_PATH . '/' . $post['cover_image'])) {
-            unlink(BLOG_IMAGES_PATH . '/' . $post['cover_image']);
-        }
-
-        $stmt = $pdo->prepare("DELETE FROM blog_posts WHERE id = ?");
-        $stmt->execute([$id]);
-
-        jsonResponse(['success' => true]);
+        blog_delete_blog_post();
         break;
 
     // ==================== Weekly Plans ====================
@@ -1138,83 +964,15 @@ $pdo->commit();
     
     // ==================== Files ====================
     case 'get_files':
-        requireAuth();
-        
-        $files = $pdo->query("
-            SELECT f.*, s.name as student_name, 
-                   SUBSTRING_INDEX(f.file_path, '/', -1) as filename 
-            FROM files f 
-            LEFT JOIN students s ON f.owner_type = 'student' AND f.owner_id = s.id 
-            WHERE f.file_type = 'exam' 
-            ORDER BY f.created_at DESC
-        ")->fetchAll();
-        
-        jsonResponse($files);
+        files_get_files();
         break;
         
     case 'upload_file':
-        requireAuth();
-        
-        $student_id = $_POST['student_id'] ?? null;
-        $exam_date = $_POST['exam_date'] ?? date('Y-m-d');
-        $description = $_POST['description'] ?? '';
-        
-        if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
-            jsonResponse(['error' => 'خطا در آپلود فایل'], 400);
-        }
-        
-        $file = $_FILES['file'];
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        
-        if (!in_array($ext, ALLOWED_EXAM_EXTENSIONS)) {
-            jsonResponse(['error' => 'فرمت فایل مجاز نیست'], 400);
-        }
-        if ($file['size'] > MAX_FILE_SIZE) {
-            jsonResponse(['error' => 'حجم فایل بیش از حد مجاز است'], 400);
-        }
-        
-        $filename = 'exam_' . ($student_id ?: 'general') . '_' . date('Ymd_His') . '.' . $ext;
-        $upload_path = EXAMS_PATH . '/' . $filename;
-        
-        if (!move_uploaded_file($file['tmp_name'], $upload_path)) {
-            jsonResponse(['error' => 'خطا در ذخیره فایل'], 500);
-        }
-        
-        $stmt = $pdo->prepare("
-            INSERT INTO files (owner_type, owner_id, file_type, report_date, file_path, file_size, description) 
-            VALUES (?, ?, 'exam', ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-            $student_id ? 'student' : 'admin',
-            $student_id ?: $_SESSION['admin_id'],
-            $exam_date,
-            'uploads/exams/' . $filename,
-            $file['size'],
-            $description
-        ]);
-        
-        jsonResponse(['success' => true, 'id' => $pdo->lastInsertId()]);
+        files_upload_file();
         break;
         
     case 'delete_file':
-        requireAdmin();
-        
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
-        
-        $stmt = $pdo->prepare("SELECT file_path FROM files WHERE id = ?");
-        $stmt->execute([$id]);
-        $file = $stmt->fetch();
-        
-        if ($file) {
-            $fullPath = BASE_PATH . '/' . $file['file_path'];
-            if (file_exists($fullPath)) unlink($fullPath);
-            
-            $pdo->prepare("UPDATE exam_results SET file_id = NULL WHERE file_id = ?")->execute([$id]);
-            $pdo->prepare("DELETE FROM files WHERE id = ?")->execute([$id]);
-        }
-        
-        jsonResponse(['success' => true]);
+        files_delete_file();
         break;
     
     // ==================== Reports ====================
@@ -1247,308 +1005,37 @@ $pdo->commit();
         break;
     
     // ==================== Courses Management ====================
-case 'courses_list':
-    requireAuth();
-    $courses = $pdo->query("
-        SELECT id, name, icon, gradient_color_from, gradient_color_to, 
-               background_image_url, description, price, display_order, created_at
-        FROM courses 
-        ORDER BY display_order ASC, id ASC
-    ")->fetchAll();
-    jsonResponse($courses);
-    break;
-
-     case 'courses_add':
-        requireAdmin();
-        try {
-            $name = trim($_POST['name'] ?? '');
-            $description = trim($_POST['description'] ?? '');
-            $price = trim($_POST['price'] ?? '');
-            $display_order = (int)($_POST['display_order'] ?? 0);
-            $gradient_from = trim($_POST['gradient_color_from'] ?? '#445D84');
-            $gradient_to = trim($_POST['gradient_color_to'] ?? '#5a779e');
-            
-            // فقط نام الزامی است
-            if (empty($name)) {
-                jsonResponse(['error' => 'نام دوره الزامی است'], 400);
-            }
-            
-            // آپلود تصویر دوره
-            $image_url = null;
-            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $upload_dir = __DIR__ . '/../uploads/courses/';
-                if (!is_dir($upload_dir)) {
-                    mkdir($upload_dir, 0755, true);
-                }
-                
-                $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-                $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
-                
-                if (!in_array($file_ext, $allowed_ext)) {
-                    jsonResponse(['error' => 'فرمت فایل مجاز نیست. فقط JPG, PNG, WEBP'], 400);
-                }
-                
-                $max_size = 5 * 1024 * 1024; // 5MB
-                if ($_FILES['image']['size'] > $max_size) {
-                    jsonResponse(['error' => 'حجم فایل نباید بیشتر از 5MB باشد'], 400);
-                }
-                
-                // نام فایل unique با timestamp
-                $filename = 'course_' . time() . '_' . uniqid() . '.' . $file_ext;
-                $filepath = $upload_dir . $filename;
-                
-                if (!move_uploaded_file($_FILES['image']['tmp_name'], $filepath)) {
-                    jsonResponse(['error' => 'خطا در آپلود تصویر'], 500);
-                }
-                
-                $image_url = '../uploads/courses/' . $filename;
-            }
-            
-            // اگر تصویر آپلود نشده، از آیکون پیش‌فرض استفاده کن
-            $icon = 'fas fa-book';
-            
-            $stmt = $pdo->prepare("
-                INSERT INTO courses (name, icon, gradient_color_from, gradient_color_to, background_image_url, description, price, display_order)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-            $stmt->execute([$name, $icon, $gradient_from, $gradient_to, $image_url, $description ?: null, $price ?: null, $display_order]);
-            jsonResponse(['success' => true, 'id' => $pdo->lastInsertId()]);
-        } catch (PDOException $e) {
-            error_log("Database error in courses_add: " . $e->getMessage());
-            jsonResponse(['error' => 'خطا در ثبت دوره: ' . $e->getMessage()], 500);
-        } catch (Exception $e) {
-            error_log("Error in courses_add: " . $e->getMessage());
-            jsonResponse(['error' => 'خطا در ثبت دوره'], 500);
-        }
+    case 'courses_list':
+        courses_list();
         break;
 
-     case 'courses_update':
-        requireAdmin();
-        $id = (int)($_POST['id'] ?? 0);
-        $name = trim($_POST['name'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $price = trim($_POST['price'] ?? '');
-        $display_order = (int)($_POST['display_order'] ?? 0);
-        $gradient_from = trim($_POST['gradient_color_from'] ?? '#445D84');
-        $gradient_to = trim($_POST['gradient_color_to'] ?? '#5a779e');
-        
-        if (!$id || empty($name)) {
-            jsonResponse(['error' => 'نام دوره و شناسه الزامی است'], 400);
-        }
-        
-        // آپلود تصویر جدید (اختیاری)
-        $new_image_url = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK && $_FILES['image']['size'] > 0) {
-            $upload_dir = __DIR__ . '/../uploads/courses/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            
-            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-            $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
-            
-            if (!in_array($file_ext, $allowed_ext)) {
-                jsonResponse(['error' => 'فرمت فایل مجاز نیست. فقط JPG, PNG, WEBP'], 400);
-            }
-            
-            $max_size = 5 * 1024 * 1024; // 5MB
-            if ($_FILES['image']['size'] > $max_size) {
-                jsonResponse(['error' => 'حجم فایل نباید بیشتر از 5MB باشد'], 400);
-            }
-            
-            // نام فایل unique با timestamp
-            $filename = 'course_' . $id . '_' . time() . '_' . uniqid() . '.' . $file_ext;
-            $filepath = $upload_dir . $filename;
-            
-            if (!move_uploaded_file($_FILES['image']['tmp_name'], $filepath)) {
-                jsonResponse(['error' => 'خطا در آپلود تصویر'], 500);
-            }
-            
-            $new_image_url = '../uploads/courses/' . $filename;
-        }
-        
-        // ساخت SQL برای آپدیت
-        if ($new_image_url) {
-            // با تصویر جدید
-            $stmt = $pdo->prepare("
-                UPDATE courses 
-                SET name = ?, gradient_color_from = ?, gradient_color_to = ?, 
-                    background_image_url = ?, description = ?, price = ?, display_order = ?
-                WHERE id = ?
-            ");
-            $stmt->execute([$name, $gradient_from, $gradient_to, $new_image_url, $description ?: null, $price ?: null, $display_order, $id]);
-        } else {
-            // بدون تغییر تصویر
-            $stmt = $pdo->prepare("
-                UPDATE courses 
-                SET name = ?, gradient_color_from = ?, gradient_color_to = ?, 
-                    description = ?, price = ?, display_order = ?
-                WHERE id = ?
-            ");
-            $stmt->execute([$name, $gradient_from, $gradient_to, $description ?: null, $price ?: null, $display_order, $id]);
-        }
-        
-        jsonResponse(['success' => true]);
+    case 'courses_add':
+        courses_add();
         break;
 
-case 'courses_delete':
-    requireAdmin();
-    $id = (int)($_POST['id'] ?? 0);
-    if (!$id) {
-        jsonResponse(['error' => 'شناسه دوره نامعتبر است'], 400);
-    }
-    $pdo->prepare("DELETE FROM courses WHERE id = ?")->execute([$id]);
-    jsonResponse(['success' => true]);
-    break;
+    case 'courses_update':
+        courses_update();
+        break;
+
+    case 'courses_delete':
+        courses_delete();
+        break;
     
     // ==================== Instructors Management ====================
     case 'instructors_list':
-        requireAuth();
-        $instructors = $pdo->query("
-            SELECT id, name, title, description, image_url, initial_letter, display_order, created_at
-            FROM instructors 
-            ORDER BY display_order ASC, id ASC
-        ")->fetchAll();
-        jsonResponse($instructors);
+        instructors_list();
         break;
-    
-     case 'instructors_add':
-        requireAdmin();
-        $name = trim($_POST['name'] ?? '');
-        $title = trim($_POST['title'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $display_order = (int)($_POST['display_order'] ?? 0);
-        $initial_letter = trim($_POST['initial_letter'] ?? '');
-        
-        if (empty($name) || empty($title)) {
-            jsonResponse(['error' => 'نام و عنوان الزامی است'], 400);
-        }
-        
-        // اگر initial_letter خالی است، از اولین حرف name استفاده کن
-        if (empty($initial_letter) && !empty($name)) {
-            $initial_letter = mb_substr($name, 0, 1, 'UTF-8');
-        }
-        
-        // آپلود تصویر استاد
-        $image_url = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = __DIR__ . '/../uploads/instructors/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            
-            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-            $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
-            
-            if (!in_array($file_ext, $allowed_ext)) {
-                jsonResponse(['error' => 'فرمت فایل مجاز نیست. فقط JPG, PNG, WEBP'], 400);
-            }
-            
-            $max_size = 5 * 1024 * 1024; // 5MB
-            if ($_FILES['image']['size'] > $max_size) {
-                jsonResponse(['error' => 'حجم فایل نباید بیشتر از 5MB باشد'], 400);
-            }
-            
-            // نام فایل unique با timestamp
-            $filename = 'instructor_' . time() . '_' . uniqid() . '.' . $file_ext;
-            $filepath = $upload_dir . $filename;
-            
-            if (!move_uploaded_file($_FILES['image']['tmp_name'], $filepath)) {
-                jsonResponse(['error' => 'خطا در آپلود تصویر'], 500);
-            }
-            
-            $image_url = '../uploads/instructors/' . $filename;
-        }
-        
-        $stmt = $pdo->prepare("
-            INSERT INTO instructors (name, title, description, image_url, initial_letter, display_order)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([$name, $title, $description ?: null, $image_url, $initial_letter, $display_order]);
-        jsonResponse(['success' => true, 'id' => $pdo->lastInsertId()]);
+
+    case 'instructors_add':
+        instructors_add();
         break;
-    
-     case 'instructors_update':
-        requireAdmin();
-        $id = (int)($_POST['id'] ?? 0);
-        $name = trim($_POST['name'] ?? '');
-        $title = trim($_POST['title'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $display_order = (int)($_POST['display_order'] ?? 0);
-        $initial_letter = trim($_POST['initial_letter'] ?? '');
-        
-        if (!$id || empty($name) || empty($title)) {
-            jsonResponse(['error' => 'داده‌های ناقص'], 400);
-        }
-        
-        // اگر initial_letter خالی است، از اولین حرف name استفاده کن
-        if (empty($initial_letter) && !empty($name)) {
-            $initial_letter = mb_substr($name, 0, 1, 'UTF-8');
-        }
-        
-        // آپلود تصویر جدید (اختیاری)
-        $new_image_url = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK && $_FILES['image']['size'] > 0) {
-            $upload_dir = __DIR__ . '/../uploads/instructors/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            
-            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-            $allowed_ext = ['jpg', 'jpeg', 'png', 'webp'];
-            
-            if (!in_array($file_ext, $allowed_ext)) {
-                jsonResponse(['error' => 'فرمت فایل مجاز نیست. فقط JPG, PNG, WEBP'], 400);
-            }
-            
-            $max_size = 5 * 1024 * 1024; // 5MB
-            if ($_FILES['image']['size'] > $max_size) {
-                jsonResponse(['error' => 'حجم فایل نباید بیشتر از 5MB باشد'], 400);
-            }
-            
-            // نام فایل unique با timestamp
-            $filename = 'instructor_' . $id . '_' . time() . '_' . uniqid() . '.' . $file_ext;
-            $filepath = $upload_dir . $filename;
-            
-            if (!move_uploaded_file($_FILES['image']['tmp_name'], $filepath)) {
-                jsonResponse(['error' => 'خطا در آپلود تصویر'], 500);
-            }
-            
-            $new_image_url = '../uploads/instructors/' . $filename;
-        }
-        
-        // ساخت SQL برای آپدیت
-        if ($new_image_url) {
-            // با تصویر جدید
-            $stmt = $pdo->prepare("
-                UPDATE instructors 
-                SET name = ?, title = ?, description = ?, image_url = ?, 
-                    initial_letter = ?, display_order = ?
-                WHERE id = ?
-            ");
-            $stmt->execute([$name, $title, $description ?: null, $new_image_url, $initial_letter, $display_order, $id]);
-        } else {
-            // بدون تغییر تصویر
-            $stmt = $pdo->prepare("
-                UPDATE instructors 
-                SET name = ?, title = ?, description = ?, 
-                    initial_letter = ?, display_order = ?
-                WHERE id = ?
-            ");
-            $stmt->execute([$name, $title, $description ?: null, $initial_letter, $display_order, $id]);
-        }
-        
-        jsonResponse(['success' => true]);
+
+    case 'instructors_update':
+        instructors_update();
         break;
-    
+
     case 'instructors_delete':
-        requireAdmin();
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) {
-            jsonResponse(['error' => 'شناسه استاد نامعتبر است'], 400);
-        }
-        $pdo->prepare("DELETE FROM instructors WHERE id = ?")->execute([$id]);
-        jsonResponse(['success' => true]);
+        instructors_delete();
         break;
     
     // ==================== Topic Tree (Subject Autocomplete) ====================

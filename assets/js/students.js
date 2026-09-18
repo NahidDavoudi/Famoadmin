@@ -3,7 +3,8 @@
  */
 
 import { api } from './/api-client.js';
-import { showAlert, showModal, hideModal, escapeHtml, getElementValue, setFormValues, icon, withButtonLoading } from './utils.js';
+import { showAlert, showModal, hideModal, escapeHtml, getElementValue, setFormValues, icon, withButtonLoading, confirmDelete, confirmAction } from './utils.js';
+import { showConfirm } from './confirm-modal.js';
 
 export async function loadStudents() {
     const search = getElementValue('filterSearch');
@@ -127,17 +128,29 @@ export async function handleEditStudent(e) {
 }
 
 export async function deleteStudent(id, button) {
-    if (!confirm('آیا از حذف این دانش‌آموز و حساب کاربری مرتبط اطمینان دارید؟')) return;
+    // Use accessible confirmation modal instead of native confirm()
+    const result = await showConfirm({
+        message: 'آیا از حذف این دانش‌آموز و حساب کاربری مرتبط اطمینان دارید؟',
+        confirmText: 'حذف',
+        cancelText: 'انصراف',
+        onConfirm: async () => {
+            // Find the button element if clicked from window
+            const btn = button || event?.target?.closest('button');
 
-    // Find the button element if clicked from window
-    const btn = button || event?.target?.closest('button');
-
-    await withButtonLoading(btn, async () => {
-        await api('delete_student', { id }, 'POST');
-        loadStudents();
-        showAlert('دانش‌آموز حذف شد', 'success');
-    }, 'در حال حذف...')
-        .catch(error => showAlert(error.message, 'error'));
+            await withButtonLoading(btn, async () => {
+                await api('delete_student', { id }, 'POST');
+                loadStudents();
+                showAlert('دانش‌آموز حذف شد', 'success');
+            }, 'در حال حذف...')
+                .catch(error => showAlert(error.message, 'error'));
+        },
+        onCancel: () => {
+            // User cancelled
+        },
+    });
+    
+    // If result is false (cancelled), do nothing
+    if (result === false) return;
 }
 
 export async function createStudentAccount(id, button) {

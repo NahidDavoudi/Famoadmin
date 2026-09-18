@@ -1,10 +1,16 @@
 // ui-helpers.js
 
+import { createFocusTrap } from './focus-trap.js';
+
 export function showModal(id) {
     const modal = document.getElementById(id);
     if (modal) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+        // Initialize focus trap
+        initFocusTrap(id, {
+            escapeToClose: true,
+        });
     } else {
         console.warn(`Modal with id "${id}" not found`);
     }
@@ -18,21 +24,16 @@ export function hideModal(id) {
     }
 }
 
-export function showAlert(message, type = 'success') {
-    const alertBox = document.getElementById('alertBox');
-    if (!alertBox) {
-        console.warn('alertBox element not found, using console instead');
-        console.log(`[${type.toUpperCase()}] ${message}`);
-        return;
-    }
-    
-    alertBox.textContent = message;
-    alertBox.className = `px-4 py-3 rounded mb-4 ${type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`;
-    alertBox.classList.remove('hidden');
-    
-    setTimeout(() => {
-        alertBox.classList.add('hidden');
-    }, 5000);
+export function showAlert(message, type = 'success', duration = 5000) {
+    const typeMap = {
+        success: 'success',
+        error: 'error',
+        warning: 'warning',
+        info: 'info',
+    };
+
+    const toastType = typeMap[type] || ToastType.INFO;
+    return toastContainer.show(message, { type: toastType, duration });
 }
 
 export function escapeHtml(text) {

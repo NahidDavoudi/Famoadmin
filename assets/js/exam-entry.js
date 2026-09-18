@@ -591,7 +591,15 @@ export function updateRowNumbers() {
 }
 
 export function clearExamForm() {
-    if (confirm('آیا مطمئن هستید که می‌خواهید فرم را پاک کنید؟')) {
-        resetExamForm();
-    }
+    showConfirm({
+        message: 'آیا مطمئن هستید که می‌خواهید فرم را پاک کنید؟',
+        confirmText: 'پاک کردن',
+        cancelText: 'انصراف',
+        onConfirm: () => {
+            resetExamForm();
+        },
+        onCancel: () => {
+            // User cancelled, do nothing
+        },
+    });
 }

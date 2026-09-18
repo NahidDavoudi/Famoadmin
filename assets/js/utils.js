@@ -4,6 +4,8 @@
 
 export { showModal, hideModal, showAlert, escapeHtml, formatDate } from './ui-helpers.js';
 
+export { showConfirm } from './confirm-modal.js';
+
 export function getElementValue(id) {
     const element = document.getElementById(id);
     return element ? element.value : '';
