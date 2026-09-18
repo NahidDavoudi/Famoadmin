@@ -372,6 +372,13 @@ input[type="range"]::-webkit-slider-thumb {
     }
 }
 
+@media (max-width: 339px) {
+    #sidebar {
+        width: 14rem;
+        transform: translateX(0) !important;
+    }
+}
+
 /* Sidebar link base styles */
 .sidebar-link {
     position: relative;
@@ -462,7 +469,7 @@ input[type="range"]::-webkit-slider-thumb {
     top: 0;
     left: 0;
     right: 0;
-    height: var(--space-6); /* 24px - minimal safe height */
+    height: calc(var(--space-8) + var(--space-2)); /* 32px + 8px = 40px - better for mobile */
     z-index: 60;
     background: var(--color-primary-dark);
     color: white;
@@ -516,9 +523,10 @@ input[type="range"]::-webkit-slider-thumb {
         padding-top: 0;
     }
 
-    #mainPanel>main>div {
-        padding: var(--space-8); /* 32px */
-    }
+#mainPanel>main>div {
+    padding: var(--space-8); /* 32px */
+    padding-top: calc(var(--space-8) + var(--space-2)); /* 32px + 8px for header */
+}
 }
 
 /* ===== TABLE SYSTEM ===== */
@@ -1152,7 +1160,7 @@ table tbody td {
 
 /* ===== BUTTON SYSTEM ===== */
 
-/* Size variants: sm (36px), md (44px), lg (52px) */
+/* Size variants: sm (40px), md (48px), lg (56px) - touch-friendly */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -1166,9 +1174,16 @@ table tbody td {
     border: none;
     transition: all 0.2s ease;
     font-family: var(--font-sans);
-    min-height: var(--space-5); /* 44px */
-    min-width: var(--space-5); /* 44px */
+    min-height: calc(var(--space-5) + 8px); /* 48px - touch friendly */
+    min-width: calc(var(--space-5) + 8px); /* 48px - touch friendly */
     box-sizing: border-box;
+}
+
+@media (max-width: 639px) {
+    .btn {
+        min-height: calc(var(--space-6) + 8px); /* 56px on small phones */
+        min-width: calc(var(--space-6) + 8px); /* 56px on small phones */
+    }
 }
 
 .btn:active {
@@ -1197,13 +1212,41 @@ table tbody td {
 
 /* Color variants */
 .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4) var(--space-6); /* 16px vertical, 24px horizontal */
+    border-radius: var(--radius-md);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
     background: var(--color-primary);
-    color: var(--color-primary-light);
+    color: var(--color-white);
+    min-height: var(--space-5);
+    min-width: var(--space-6);
 }
 
 .btn-primary:hover:not(:disabled) {
     box-shadow: 0 4px 12px rgba(68, 93, 132, 0.4);
     transform: translateY(-1px);
+    background: color-mix(in srgb, var(--color-primary), transparent 10%);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-primary:focus-visible:not(:disabled) {
+    outline: 2px solid var(--color-white);
+    outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .btn-secondary {
@@ -1468,6 +1511,40 @@ body {
 
     .max-h-\[90vh\] {
         max-height: 85vh;
+    }
+}
+
+/* Touch-friendly button sizes for mobile */
+@media (max-width: 639px) {
+    .btn {
+        min-height: calc(var(--space-6) + 8px); /* 56px on small phones */
+        min-width: calc(var(--space-6) + 8px); /* 56px on small phones */
+    }
+    
+    .input {
+        padding: calc(var(--space-4) + 4px) calc(var(--space-5) + 4px); /* 24px vertical, 28px horizontal */
+    }
+    
+    .input-sm {
+        padding: calc(var(--space-3) + 2px) calc(var(--space-4) + 2px); /* 16px vertical, 20px horizontal */
+    }
+    
+    .input-md {
+        padding: calc(var(--space-4) + 4px) calc(var(--space-5) + 4px); /* 24px vertical, 28px horizontal */
+    }
+}
+
+/* Ensure form controls are touch-friendly on mobile */
+@media (max-width: 639px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="search"],
+    textarea,
+    select {
+        min-height: calc(var(--space-4) + 8px); /* 48px minimum */
+        font-size: var(--text-sm);
     }
 }
 
