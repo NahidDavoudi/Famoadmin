@@ -842,6 +842,9 @@
   .py-16 {
     padding-block: calc(var(--spacing) * 16);
   }
+  .pb-2 {
+    padding-bottom: calc(var(--spacing) * 2);
+  }
   .pl-12 {
     padding-left: calc(var(--spacing) * 12);
   }
