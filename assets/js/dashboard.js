@@ -2,7 +2,7 @@
  * Admin Panel - Overview / Dashboard Stats
  */
 
-import { api } from './/api-client.js';
+import { api } from './api-client.js';
 import { showAlert } from './utils.js';
 import { updateStatElement } from './utils.js';
 import * as config from './config.js';

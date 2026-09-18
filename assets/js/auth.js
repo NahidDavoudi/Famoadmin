@@ -2,7 +2,7 @@
  * Admin Panel - Auth & Login
  */
 
-import { api } from './/api-client.js';
+import { api } from './api-client.js';
 import { toggleElement } from './utils.js';
 import { navigateTo } from './nav.js';
 
