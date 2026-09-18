@@ -269,7 +269,7 @@
                             <input type="number" id="filterGrade" placeholder="پایه..." min="7" max="12"
                                 class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
                             <button onclick="loadStudents()"
-                                class="bg-primary text-white px-4 py-2.5 rounded-xl hover:bg-[#5a779e] transition font-medium flex items-center justify-center gap-2">
+                                class="btn btn-primary flex items-center justify-center gap-2">
                                 <svg class="icon" aria-hidden="true">
                                     <use href="assets/icons/sprite.svg#icon-search" />
                                 </svg>
@@ -294,6 +294,24 @@
                             </thead>
                             <tbody id="studentsTable"></tbody>
                         </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="studentsEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-users" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state__title">هیچ دانش‌آموزی یافت نشد</h3>
+                        <p class="empty-state__description">هنوز دانش‌آموزی در سیستم ثبت نشده است. برای شروع اولین دانش‌آموز را اضافه کنید.</p>
+                        <button onclick="showModal('addStudentModal')"
+                            class="empty-state__action btn btn-primary">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
+                            <span>افزودن دانش‌آموز</span>
+                        </button>
                     </div>
                 </div>
 
@@ -333,6 +351,24 @@
                             <tbody id="coursesTable"></tbody>
                         </table>
                     </div>
+
+                    <!-- Empty State -->
+                    <div id="coursesEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-book" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state__title">هیچ دوره‌ای یافت نشد</h3>
+                        <p class="empty-state__description">هنوز دوره‌ای در سیستم ثبت نشده است. اولین دوره را اضافه کنید.</p>
+                        <button onclick="showModal('addCourseModal')"
+                            class="empty-state__action btn btn-primary">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
+                            <span>افزودن دوره</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- INSTRUCTORS PAGE -->
@@ -366,6 +402,24 @@
                             </thead>
                             <tbody id="instructorsTable"></tbody>
                         </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="instructorsEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-school" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state__title">هیچ استادی یافت نشد</h3>
+                        <p class="empty-state__description">هنوز استادی در سیستم ثبت نشده است. اولین استاد را اضافه کنید.</p>
+                        <button onclick="showModal('addInstructorModal')"
+                            class="empty-state__action btn btn-primary">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
+                            <span>افزودن استاد</span>
+                        </button>
                     </div>
                 </div>
 
@@ -599,7 +653,7 @@
                     <h1 class="text-2xl md:text-3xl font-bold text-primary mb-6">فایل‌های آزمون</h1>
 
                     <!-- Upload Form -->
-                    <div class="filter-bar mb-6" style="padding: 1.25rem;">
+                    <div class="filter-bar mb-6">
                         <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-primary">
                             <svg class="icon" aria-hidden="true">
                                 <use href="assets/icons/sprite.svg#icon-upload" />
@@ -634,7 +688,7 @@
                             </div>
                             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                                 <button type="submit"
-                                    class="w-full sm:w-auto bg-primary text-white px-6 py-2.5 rounded-xl hover:bg-[#5a779e] transition font-medium flex items-center justify-center gap-2">
+                                    class="btn btn-primary w-full sm:w-auto flex items-center justify-center gap-2">
                                     <svg class="icon" aria-hidden="true">
                                         <use href="assets/icons/sprite.svg#icon-upload" />
                                     </svg>
@@ -661,6 +715,24 @@
                             </thead>
                             <tbody id="filesTable"></tbody>
                         </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="filesEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-file" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state__title">هیچ فایلی آپلود نشده</h3>
+                        <p class="empty-state__description">هنوز فایل آزمونی در سیستم وجود ندارد. اولین فایل را آپلود کنید.</p>
+                        <button onclick="showModal('addFileModal')" id="filesEmptyActionBtn"
+                            class="empty-state__action btn btn-primary">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-upload" />
+                            </svg>
+                            <span>آپلود فایل</span>
+                        </button>
                     </div>
                 </div>
 
@@ -696,13 +768,13 @@
                             </div>
                         </div>
                         <div class="stat-card-modern stat-green">
-                            <div class="stat-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <div class="stat-icon">
                                 <svg class="icon" aria-hidden="true">
                                     <use href="assets/icons/sprite.svg#icon-check" />
                                 </svg>
                             </div>
                             <div class="stat-info">
-                                <div id="stat-supporters-replied" class="stat-value" style="color: #16a34a;">-</div>
+                                <div id="stat-supporters-replied" class="stat-value">-</div>
                                 <div class="stat-label">گزارش‌های پاسخ‌داده شده</div>
                             </div>
                         </div>
@@ -735,6 +807,24 @@
                             </thead>
                             <tbody id="supportersTable"></tbody>
                         </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="supportersEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-headset" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state__title">هیچ پشتیبانی ثبت نشده</h3>
+                        <p class="empty-state__description">هنوز پشتیبانی در سیستم وجود ندارد. اولین پشتیبان را اضافه کنید.</p>
+                        <button onclick="showModal('addSupporterModal')"
+                            class="empty-state__action btn btn-primary">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
+                            <span>افزودن پشتیبان</span>
+                        </button>
                     </div>
                 </div>
 
@@ -783,13 +873,13 @@
                             </div>
                         </div>
                         <div class="stat-card-modern stat-green">
-                            <div class="stat-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <div class="stat-icon">
                                 <svg class="icon" aria-hidden="true">
                                     <use href="assets/icons/sprite.svg#icon-check" />
                                 </svg>
                             </div>
                             <div class="stat-info">
-                                <div id="report-replied" class="stat-value" style="color: #16a34a;">-</div>
+                                <div id="report-replied" class="stat-value">-</div>
                                 <div class="stat-label">پاسخ داده شده</div>
                             </div>
                         </div>
@@ -839,6 +929,24 @@
                             </thead>
                             <tbody id="blogTable"></tbody>
                         </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="blogEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-newspaper" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state__title">هیچ پست وبلاگی ثبت نشده</h3>
+                        <p class="empty-state__description">هنوز پستی در وبلاگ وجود ندارد. اولین پست را اضافه کنید.</p>
+                        <button onclick="showModal('addBlogPostModal')"
+                            class="empty-state__action btn btn-primary">
+                            <svg class="icon" aria-hidden="true">
+                                <use href="assets/icons/sprite.svg#icon-plus" />
+                            </svg>
+                            <span>افزودن پست</span>
+                        </button>
                     </div>
                 </div>
 

@@ -45,12 +45,20 @@ export async function loadCourses() {
 
 function renderCoursesTable(courses) {
     const tbody = document.getElementById('coursesTable');
+    const emptyState = document.getElementById('coursesEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+
     if (!tbody) return;
 
     if (courses.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500">دوره‌ای یافت نشد</td></tr>';
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
     }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
 
     tbody.innerHTML = courses.map(c => `
         <tr class="hover:bg-gray-50">

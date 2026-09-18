@@ -1271,6 +1271,91 @@ table tbody td {
     background: var(--color-white);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray-100);
+}
+
+.empty-state__icon {
+    width: 7rem; /* 112px */
+    height: 7rem;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-6);
+    background: linear-gradient(135deg, var(--color-gray-100), var(--color-gray-200));
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.empty-state__icon .icon {
+    width: 3.5rem; /* 56px */
+    height: 3.5rem;
+    color: var(--color-gray-400);
+}
+
+.empty-state__title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--color-gray-700);
+    margin-bottom: var(--space-3);
+}
+
+.empty-state__description {
+    font-size: var(--text-sm);
+    color: var(--color-gray-500);
+    max-width: 28rem;
+    margin: 0 auto var(--space-6);
+    line-height: var(--leading-relaxed);
+}
+
+.empty-state__action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* ===== SKELETON LOADERS ===== */
+@keyframes skeletonPulse {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--color-gray-200) 25%,
+        var(--color-gray-100) 50%,
+        var(--color-gray-200) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeletonPulse 1.5s ease-in-out infinite;
+    border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+    height: 1rem;
+    margin-bottom: var(--space-2);
+}
+
+.skeleton-text:last-child {
+    width: 70%;
+}
+
+.skeleton-card {
+    padding: var(--space-5);
+}
+
+.skeleton-table-row {
+    height: 3.5rem;
+}
+
+.skeleton-stat {
+    height: 5rem;
+    border-radius: var(--radius-lg);
+}
+
+.skeleton-chart {
+    height: 20rem;
+    border-radius: var(--radius-lg);
 }
 
 /* ===== FILTER BAR ===== */

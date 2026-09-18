@@ -22,12 +22,20 @@ export async function loadStudents() {
 
 function renderStudentsTable(students) {
     const tbody = document.getElementById('studentsTable');
+    const emptyState = document.getElementById('studentsEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+
     if (!tbody) return;
 
     if (students.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500">دانش‌آموزی یافت نشد</td></tr>';
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
     }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
 
     tbody.innerHTML = students.map(s => `
         <tr class="hover:bg-gray-50">

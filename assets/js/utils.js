@@ -5,6 +5,8 @@
 export { showModal, hideModal, showAlert, escapeHtml, formatDate } from './ui-helpers.js';
 
 export { showConfirm } from './confirm-modal.js';
+export { confirmAction } from './confirm-modal.js';
+export { confirmDelete } from './confirm-modal.js';
 
 export function getElementValue(id) {
     const element = document.getElementById(id);

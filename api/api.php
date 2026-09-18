@@ -42,18 +42,18 @@ function requireAdmin() {
 }
 
 // Include extracted API modules
-require_once __DIR__ . '/api/auth.php';
-require_once __DIR__ . '/api/dashboard.php';
-require_once __DIR__ . '/api/reports.php';
-require_once __DIR__ . '/api/topics.php';
-require_once __DIR__ . '/api/files.php';
-require_once __DIR__ . '/api/courses.php';
-require_once __DIR__ . '/api/instructors.php';
-require_once __DIR__ . '/api/blog.php';
-require_once __DIR__ . '/api/supporters.php';
-require_once __DIR__ . '/api/students.php';
-require_once __DIR__ . '/api/weekly-plans.php';
-require_once __DIR__ . '/api/exams.php';
+require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/dashboard.php';
+require_once __DIR__ . '/reports.php';
+require_once __DIR__ . '/topics.php';
+require_once __DIR__ . '/files.php';
+require_once __DIR__ . '/courses.php';
+require_once __DIR__ . '/instructors.php';
+require_once __DIR__ . '/blog.php';
+require_once __DIR__ . '/supporters.php';
+require_once __DIR__ . '/students.php';
+require_once __DIR__ . '/weekly-plans.php';
+require_once __DIR__ . '/exams.php';
 
 // ===================== Router =====================
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
