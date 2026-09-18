@@ -417,7 +417,7 @@ input[type="range"]::-webkit-slider-thumb {
     color: white;
 }
 
- flex-shrink: 0; width: var(--space-6); height: var(--space-6); }
+.sidebar-link .icon {
     flex-shrink: 0;
     width: var(--space-5); /* 20px */
     height: var(--space-5);
@@ -585,14 +585,16 @@ table tbody td {
     background-color: color-mix(in srgb, var(--color-gray-100), var(--color-primary-light) 20%);
 }
 
- width: var(--space-5); height: var(--space-5); vertical-align: middle; }
-    width: var(--space-5); /* 20px */
-    height: var(--space-5); /* 20px */
+.table-wrap tbody td .icon {
+    width: var(--space-3); /* 12px */
+    height: var(--space-3); /* 12px */
     vertical-align: middle;
 }
 
- width: var(--space-5); height: var(--space-5); }
-.table-wrap tbody td a .icon{ width: var(--space-5); height: var(--space-5); }
+.table-wrap tbody td button .icon,
+.table-wrap tbody td a .icon {
+    width: var(--space-3);
+    height: var(--space-3);
 }
 
 /* Row highlight on hover */
@@ -720,8 +722,10 @@ table tbody td {
     flex-shrink: 0;
 }
 
- width: var(--space-8); height: var(--space-8); }
-.stat-card-modern .stat-icon .icon{ width: var(--space-8); height: var(--space-8); } /* 24px */
+.stat-card .stat-icon .icon,
+.stat-card-modern .stat-icon .icon {
+    width: var(--space-6); /* 24px */
+    height: var(--space-6); /* 24px */
     color: white;
 }
 
@@ -753,7 +757,7 @@ table tbody td {
 
 .stat-card-primary .stat-value,
 .stat-blue .stat-value {
-    color: var(--color-primary-dark);
+    color: var(--color-primary);
 }
 
 .stat-card-primary::after,
@@ -1007,12 +1011,6 @@ table tbody td {
     flex-shrink: 0;
 }
 
-.modal-icon.primary {
-    background: var(--color-primary);
-    color: white;
-}
-
-/* Modal icon color variants */
 .modal-icon.primary {
     background: var(--color-primary);
     color: white;
@@ -1311,7 +1309,7 @@ table tbody td {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
- width: var(--space-10); height: var(--space-10); }
+.empty-state__icon .icon {
     width: 3.5rem; /* 56px */
     height: 3.5rem;
     color: var(--color-gray-400);
