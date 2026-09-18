@@ -21,42 +21,6 @@ try {
     exit;
 }
 
-// ===================== Auto-create tables if not exist =====================
-function ensureWeeklyPlanTablesExist($pdo) {
-    // جدول برنامه هفتگی
-    $pdo->exec("
-        CREATE TABLE IF NOT EXISTS weekly_plans (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            student_id INT NOT NULL,
-            day_of_week TINYINT NOT NULL COMMENT '0=شنبه, 1=یکشنبه, ..., 6=جمعه',
-            time_slot VARCHAR(20) NOT NULL COMMENT 'مثلاً 08:00-09:00',
-            subject VARCHAR(100) NOT NULL,
-            description TEXT NULL,
-            color VARCHAR(20) DEFAULT '#445D84',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
-            UNIQUE KEY unique_plan (student_id, day_of_week, time_slot)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    ");
-    
-    // جدول قالب‌های برنامه هفتگی (برای کپی کردن)
-    $pdo->exec("
-        CREATE TABLE IF NOT EXISTS weekly_plan_templates (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            grade TINYINT NULL,
-            field VARCHAR(50) NULL,
-            day_of_week TINYINT NOT NULL,
-            time_slot VARCHAR(20) NOT NULL,
-            subject VARCHAR(100) NOT NULL,
-            description TEXT NULL,
-            color VARCHAR(20) DEFAULT '#445D84',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    ");
-}
-
 // ===================== Helper Functions =====================
 function jsonResponse($data, $status = 200) {
     http_response_code($status);
@@ -88,6 +52,8 @@ require_once __DIR__ . '/api/instructors.php';
 require_once __DIR__ . '/api/blog.php';
 require_once __DIR__ . '/api/supporters.php';
 require_once __DIR__ . '/api/students.php';
+require_once __DIR__ . '/api/weekly-plans.php';
+require_once __DIR__ . '/api/exams.php';
 
 // ===================== Router =====================
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
@@ -182,473 +148,63 @@ switch ($action) {
 
     // ==================== Weekly Plans ====================
     case 'get_weekly_plan':
-        requireAuth();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $student_id = (int)($_GET['student_id'] ?? 0);
-        if (!$student_id) {
-            jsonResponse(['error' => 'شناسه دانش‌آموز الزامی است'], 400);
-        }
-        
-        $stmt = $pdo->prepare("
-            SELECT id, day_of_week, time_slot, subject, description, color
-            FROM weekly_plans
-            WHERE student_id = ?
-            ORDER BY day_of_week, time_slot
-        ");
-        $stmt->execute([$student_id]);
-        $plans = $stmt->fetchAll();
-        
-        // گروه‌بندی بر اساس روز و ساعت
-        $grouped = [];
-        foreach ($plans as $plan) {
-            $key = $plan['day_of_week'] . '_' . $plan['time_slot'];
-            $grouped[$key] = $plan;
-        }
-        
-        jsonResponse([
-            'plans' => $plans,
-            'grouped' => $grouped
-        ]);
+        weekly_plans_get_weekly_plan();
         break;
-    
+
     case 'save_weekly_plan_item':
-        requireAuth();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $student_id = (int)($_POST['student_id'] ?? 0);
-        $day_of_week = (int)($_POST['day_of_week'] ?? -1);
-        $time_slot = trim($_POST['time_slot'] ?? '');
-        $subject = trim($_POST['subject'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $color = trim($_POST['color'] ?? '#445D84');
-        
-        if (!$student_id || $day_of_week < 0 || $day_of_week > 6 || !$time_slot) {
-            jsonResponse(['error' => 'داده‌های ناقص'], 400);
-        }
-        
-        // اگر subject خالی است، یعنی حذف کن
-        if (empty($subject)) {
-            $stmt = $pdo->prepare("DELETE FROM weekly_plans WHERE student_id = ? AND day_of_week = ? AND time_slot = ?");
-            $stmt->execute([$student_id, $day_of_week, $time_slot]);
-            jsonResponse(['success' => true, 'action' => 'deleted']);
-        }
-        
-        // INSERT یا UPDATE با ON DUPLICATE KEY
-        $stmt = $pdo->prepare("
-            INSERT INTO weekly_plans (student_id, day_of_week, time_slot, subject, description, color)
-            VALUES (?, ?, ?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE subject = VALUES(subject), description = VALUES(description), color = VALUES(color)
-        ");
-        $stmt->execute([$student_id, $day_of_week, $time_slot, $subject, $description, $color]);
-        
-        jsonResponse(['success' => true, 'action' => 'saved']);
+        weekly_plans_save_weekly_plan_item();
         break;
-    
+
     case 'save_weekly_plan_bulk':
-        requireAuth();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $student_id = (int)($_POST['student_id'] ?? 0);
-        $plans = json_decode($_POST['plans'] ?? '[]', true);
-        
-        if (!$student_id) {
-            jsonResponse(['error' => 'شناسه دانش‌آموز الزامی است'], 400);
-        }
-        
-        $pdo->beginTransaction();
-        try {
-            // حذف برنامه‌های قبلی
-            $pdo->prepare("DELETE FROM weekly_plans WHERE student_id = ?")->execute([$student_id]);
-            
-            // درج برنامه‌های جدید
-            $stmt = $pdo->prepare("
-                INSERT INTO weekly_plans (student_id, day_of_week, time_slot, subject, description, color)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ");
-            
-            $inserted = 0;
-            foreach ($plans as $plan) {
-                if (!empty($plan['subject'])) {
-                    $stmt->execute([
-                        $student_id,
-                        (int)$plan['day_of_week'],
-                        $plan['time_slot'],
-                        $plan['subject'],
-                        $plan['description'] ?? '',
-                        $plan['color'] ?? '#445D84'
-                    ]);
-                    $inserted++;
-                }
-            }
-            
-            $pdo->commit();
-            jsonResponse(['success' => true, 'inserted' => $inserted]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            jsonResponse(['error' => 'خطا در ذخیره برنامه: ' . $e->getMessage()], 500);
-        }
+        weekly_plans_save_weekly_plan_bulk();
         break;
-    
+
     case 'clear_weekly_plan':
-        requireAuth();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $student_id = (int)($_POST['student_id'] ?? 0);
-        if (!$student_id) {
-            jsonResponse(['error' => 'شناسه دانش‌آموز الزامی است'], 400);
-        }
-        
-        $pdo->prepare("DELETE FROM weekly_plans WHERE student_id = ?")->execute([$student_id]);
-        jsonResponse(['success' => true]);
+        weekly_plans_clear_weekly_plan();
         break;
-    
+
     case 'get_plan_templates':
-        requireAuth();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $grade = $_GET['grade'] ?? '';
-        $field = $_GET['field'] ?? '';
-        
-        $sql = "SELECT DISTINCT name, grade, field FROM weekly_plan_templates WHERE 1=1";
-        $params = [];
-        
-        if ($grade) { $sql .= " AND (grade = ? OR grade IS NULL)"; $params[] = $grade; }
-        if ($field) { $sql .= " AND (field = ? OR field IS NULL)"; $params[] = $field; }
-        
-        $sql .= " ORDER BY name";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        
-        jsonResponse($stmt->fetchAll());
+        weekly_plans_get_plan_templates();
         break;
-    
+
     case 'get_template_details':
-        requireAuth();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $template_name = trim($_GET['name'] ?? '');
-        if (!$template_name) {
-            jsonResponse(['error' => 'نام قالب الزامی است'], 400);
-        }
-        
-        $stmt = $pdo->prepare("
-            SELECT day_of_week, time_slot, subject, description, color
-            FROM weekly_plan_templates
-            WHERE name = ?
-            ORDER BY day_of_week, time_slot
-        ");
-        $stmt->execute([$template_name]);
-        
-        jsonResponse($stmt->fetchAll());
+        weekly_plans_get_template_details();
         break;
-    
+
     case 'copy_plan_from_template':
-        requireAuth();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $student_id = (int)($_POST['student_id'] ?? 0);
-        $template_name = trim($_POST['template_name'] ?? '');
-        
-        if (!$student_id || !$template_name) {
-            jsonResponse(['error' => 'داده‌های ناقص'], 400);
-        }
-        
-        // دریافت برنامه‌های قالب
-        $stmt = $pdo->prepare("
-            SELECT day_of_week, time_slot, subject, description, color
-            FROM weekly_plan_templates
-            WHERE name = ?
-        ");
-        $stmt->execute([$template_name]);
-        $template_plans = $stmt->fetchAll();
-        
-        if (empty($template_plans)) {
-            jsonResponse(['error' => 'قالب یافت نشد'], 404);
-        }
-        
-        $pdo->beginTransaction();
-        try {
-            // حذف برنامه‌های قبلی
-            $pdo->prepare("DELETE FROM weekly_plans WHERE student_id = ?")->execute([$student_id]);
-            
-            // کپی از قالب
-            $stmt = $pdo->prepare("
-                INSERT INTO weekly_plans (student_id, day_of_week, time_slot, subject, description, color)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ");
-            
-            foreach ($template_plans as $plan) {
-                $stmt->execute([
-                    $student_id,
-                    $plan['day_of_week'],
-                    $plan['time_slot'],
-                    $plan['subject'],
-                    $plan['description'],
-                    $plan['color']
-                ]);
-            }
-            
-            $pdo->commit();
-            jsonResponse(['success' => true, 'copied' => count($template_plans)]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            jsonResponse(['error' => 'خطا در کپی قالب'], 500);
-        }
+        weekly_plans_copy_plan_from_template();
         break;
-    
+
     case 'save_as_template':
-        requireAdmin();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $student_id = (int)($_POST['student_id'] ?? 0);
-        $template_name = trim($_POST['template_name'] ?? '');
-        $grade = $_POST['grade'] ?? null;
-        $field = $_POST['field'] ?? null;
-        
-        if (!$student_id || !$template_name) {
-            jsonResponse(['error' => 'نام قالب و شناسه دانش‌آموز الزامی است'], 400);
-        }
-        
-        // دریافت برنامه دانش‌آموز
-        $stmt = $pdo->prepare("SELECT day_of_week, time_slot, subject, description, color FROM weekly_plans WHERE student_id = ?");
-        $stmt->execute([$student_id]);
-        $plans = $stmt->fetchAll();
-        
-        if (empty($plans)) {
-            jsonResponse(['error' => 'برنامه‌ای برای این دانش‌آموز وجود ندارد'], 400);
-        }
-        
-        $pdo->beginTransaction();
-        try {
-            // حذف قالب قبلی با همین نام
-            $pdo->prepare("DELETE FROM weekly_plan_templates WHERE name = ?")->execute([$template_name]);
-            
-            // ذخیره قالب جدید
-            $stmt = $pdo->prepare("
-                INSERT INTO weekly_plan_templates (name, grade, field, day_of_week, time_slot, subject, description, color)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-            
-            foreach ($plans as $plan) {
-                $stmt->execute([
-                    $template_name,
-                    $grade,
-                    $field,
-                    $plan['day_of_week'],
-                    $plan['time_slot'],
-                    $plan['subject'],
-                    $plan['description'],
-                    $plan['color']
-                ]);
-            }
-            
-            $pdo->commit();
-            jsonResponse(['success' => true, 'saved' => count($plans)]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            jsonResponse(['error' => 'خطا در ذخیره قالب'], 500);
-        }
+        weekly_plans_save_as_template();
         break;
-    
+
     case 'delete_template':
-        requireAdmin();
-        ensureWeeklyPlanTablesExist($pdo);
-        
-        $template_name = trim($_POST['template_name'] ?? '');
-        if (!$template_name) {
-            jsonResponse(['error' => 'نام قالب الزامی است'], 400);
-        }
-        
-        $pdo->prepare("DELETE FROM weekly_plan_templates WHERE name = ?")->execute([$template_name]);
-        jsonResponse(['success' => true]);
+        weekly_plans_delete_template();
         break;
     
     // ==================== Exams ====================
     
-    // لیست آزمون‌ها گروه‌بندی شده بر اساس تاریخ
     case 'get_exam_dates':
-        requireAuth();
-        
-        $stmt = $pdo->query("
-            SELECT 
-                exam_date,
-                COUNT(DISTINCT student_id) as student_count,
-                COUNT(DISTINCT subject) as subject_count,
-                ROUND(AVG(percentage), 1) as avg_percentage
-            FROM exam_results
-            GROUP BY exam_date
-            ORDER BY exam_date DESC
-            LIMIT 50
-        ");
-        jsonResponse($stmt->fetchAll());
+        exams_get_exam_dates();
         break;
     
-    // لیست دانش‌آموزان یک آزمون خاص
     case 'get_exam_students':
-        requireAuth();
-        
-        $exam_date = $_GET['exam_date'] ?? '';
-        if (!$exam_date) jsonResponse(['error' => 'تاریخ الزامی است'], 400);
-        
-        $stmt = $pdo->prepare("
-            SELECT 
-                s.id as student_id,
-                s.name,
-                s.grade,
-                s.field,
-                COUNT(er.id) as subject_count,
-                ROUND(AVG(er.percentage), 1) as avg_percentage
-            FROM students s
-            INNER JOIN exam_results er ON s.id = er.student_id
-            WHERE er.exam_date = ?
-            GROUP BY s.id, s.name, s.grade, s.field
-            ORDER BY s.name
-        ");
-        $stmt->execute([$exam_date]);
-        jsonResponse($stmt->fetchAll());
+        exams_get_exam_students();
         break;
     
-    // جزئیات نتایج یک دانش‌آموز در یک آزمون
     case 'get_exam_details':
-        requireAuth();
-        
-        $exam_date = $_GET['exam_date'] ?? '';
-        $student_id = (int)($_GET['student_id'] ?? 0);
-        
-        if (!$exam_date || !$student_id) {
-            jsonResponse(['error' => 'پارامترها ناقص است'], 400);
-        }
-        
-        // اطلاعات دانش‌آموز
-        $stmt = $pdo->prepare("SELECT id, name, grade, field FROM students WHERE id = ?");
-        $stmt->execute([$student_id]);
-        $student = $stmt->fetch();
-        
-        if (!$student) {
-            jsonResponse(['error' => 'دانش‌آموز یافت نشد'], 404);
-        }
-        
-        // نتایج درس به درس
-        $stmt = $pdo->prepare("
-            SELECT subject, chapter, total_q, correct, wrong, skipped, percentage
-            FROM exam_results
-            WHERE student_id = ? AND exam_date = ?
-            ORDER BY subject
-        ");
-        $stmt->execute([$student_id, $exam_date]);
-        $subjects = $stmt->fetchAll();
-        
-        // میانگین کل
-        $stmt = $pdo->prepare("SELECT ROUND(AVG(percentage), 1) as avg FROM exam_results WHERE student_id = ? AND exam_date = ?");
-        $stmt->execute([$student_id, $exam_date]);
-        $avg = $stmt->fetchColumn();
-        
-        jsonResponse([
-            'student' => $student,
-            'subjects' => $subjects,
-            'avg_percentage' => $avg
-        ]);
+        exams_get_exam_details();
         break;
     
-    // API قدیمی برای سازگاری
     case 'get_exams':
-        requireAuth();
-        
-        $student_id = $_GET['student_id'] ?? '';
-        $date_from = $_GET['date_from'] ?? '';
-        $date_to = $_GET['date_to'] ?? '';
-        
-        $sql = "SELECT er.*, s.name as student_name, s.field, s.grade, f.file_path 
-                FROM exam_results er 
-                JOIN students s ON er.student_id = s.id 
-                LEFT JOIN files f ON er.file_id = f.id 
-                WHERE 1=1";
-        $params = [];
-        
-        if ($student_id) { $sql .= " AND er.student_id = ?"; $params[] = $student_id; }
-        if ($date_from) { $sql .= " AND er.exam_date >= ?"; $params[] = $date_from; }
-        if ($date_to) { $sql .= " AND er.exam_date <= ?"; $params[] = $date_to; }
-        
-        $sql .= " ORDER BY er.exam_date DESC, s.name LIMIT 200";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        
-        jsonResponse($stmt->fetchAll());
-        break;
-        
-    case 'save_exam':
-        requireAuth();
-        
-        $student_id = (int)($_POST['student_id'] ?? 0);
-        $exam_date = $_POST['exam_date'] ?? '';
-        $subjects = json_decode($_POST['subjects'] ?? '[]', true);
-        
-        if (!$student_id || !$exam_date || empty($subjects)) {
-            jsonResponse(['error' => 'داده‌های ناقص'], 400);
-        }
-        
-        // اعتبارسنجی سمت سرور
-        foreach ($subjects as $subj) {
-            if (!empty($subj['subject']) && isset($subj['total_q'])) {
-                $total = (int)$subj['total_q'];
-                $correct = (int)($subj['correct'] ?? 0);
-                $wrong = (int)($subj['wrong'] ?? 0);
-                $skipped = (int)($subj['skipped'] ?? 0);
-                
-                if ($correct > $total) {
-                    jsonResponse(['error' => "درس «{$subj['subject']}»: تعداد صحیح نمی‌تواند بیشتر از کل سوالات باشد"], 400);
-                }
-                if ($wrong > $total) {
-                    jsonResponse(['error' => "درس «{$subj['subject']}»: تعداد غلط نمی‌تواند بیشتر از کل سوالات باشد"], 400);
-                }
-                if ($skipped > $total) {
-                    jsonResponse(['error' => "درس «{$subj['subject']}»: تعداد نزده نمی‌تواند بیشتر از کل سوالات باشد"], 400);
-                }
-                if ($correct + $wrong + $skipped > $total) {
-                    jsonResponse(['error' => "درس «{$subj['subject']}»: مجموع صحیح+غلط+نزده بیشتر از کل سوالات است"], 400);
-                }
-            }
-        }
-        
-        // Start transaction for data integrity
-        $pdo->beginTransaction();
-        try {
-            $inserted = 0;
-            foreach ($subjects as $subj) {
-                if (!empty($subj['subject']) && isset($subj['total_q'])) {
-                    $total = (int)$subj['total_q'];
-                    $correct = (int)($subj['correct'] ?? 0);
-                    $wrong = (int)($subj['wrong'] ?? 0);
-                    $skipped = (int)($subj['skipped'] ?? 0);
-                    
-                    // ستون percentage به صورت خودکار توسط دیتابیس محاسبه میشود (Generated Column)
-                    // فرمول: (correct * 3 - wrong) / (total_q * 3) * 100
-                    $stmt = $pdo->prepare("
-                        INSERT INTO exam_results (student_id, exam_date, subject, chapter, total_q, correct, wrong, skipped)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                    ");
-                    $stmt->execute([
-                        $student_id, $exam_date,
-                        $subj['subject'],
-                        $subj['chapter'] ?? null,
-                        $total, $correct, $wrong, $skipped
-                    ]);
-                    $inserted++;
-                }
-            }
-            
-            // Commit transaction if all inserts succeeded
-            $pdo->commit();
-            jsonResponse(['success' => true, 'inserted' => $inserted]);
-        } catch (Exception $e) {
-            // Rollback transaction on any error
-            $pdo->rollBack();
-            error_log("Error in save_exam transaction: " . $e->getMessage());
-            jsonResponse(['error' => 'خطا در ثبت نتایج آزمون: ' . $e->getMessage()], 500);
-        }
+        exams_get_exams();
         break;
     
+case 'save_exam':
+        exams_save_exam();
+        break;
+        
     // ==================== Files ====================
     case 'get_files':
         files_get_files();
@@ -664,31 +220,12 @@ switch ($action) {
     
     // ==================== Reports ====================
     case 'get_reports':
-        requireAuth();
-        
-        $date_from = $_GET['date_from'] ?? date('Y-m-01');
-        $date_to = $_GET['date_to'] ?? date('Y-m-d');
-        
-        $stmt = $pdo->prepare("
-            SELECT report_date, 
-                   COUNT(*) as total, 
-                   SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending, 
-                   SUM(CASE WHEN status = 'replied' THEN 1 ELSE 0 END) as replied 
-            FROM reports_status 
-            WHERE report_date BETWEEN ? AND ? 
-            GROUP BY report_date 
-            ORDER BY report_date
-        ");
-        $stmt->execute([$date_from, $date_to]);
-        
-        jsonResponse($stmt->fetchAll());
+        reports_get_reports();
         break;
     
     // ==================== Student List (for dropdowns) ====================
     case 'get_student_list':
-        requireAuth();
-        $students = $pdo->query("SELECT id, name, grade, field FROM students ORDER BY name")->fetchAll();
-        jsonResponse($students);
+        students_get_student_list();
         break;
     
     // ==================== Courses Management ====================
@@ -727,214 +264,22 @@ switch ($action) {
     
     // ==================== Topic Tree (Subject Autocomplete) ====================
     
-    // Get children of a specific node (for cascading autocomplete)
     case 'get_topic_children':
-        requireAuth();
-        
-        $parent_id = isset($_GET['parent_id']) ? (int)$_GET['parent_id'] : null;
-        $level = isset($_GET['level']) ? (int)$_GET['level'] : null;
-        
-        $sql = "SELECT id, parent_id, label, level, sort_order FROM topic_tree WHERE 1=1";
-        $params = [];
-        
-        if ($parent_id !== null) {
-            $sql .= " AND parent_id = ?";
-            $params[] = $parent_id;
-        } else {
-            // If no parent specified, return root children (level 1)
-            $sql .= " AND level = 1";
-        }
-        
-        if ($level !== null) {
-            $sql .= " AND level = ?";
-            $params[] = $level;
-        }
-        
-        $sql .= " ORDER BY sort_order ASC, label ASC";
-        
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        jsonResponse($stmt->fetchAll());
+        topics_get_topic_children();
         break;
     
-    // Search topics by label (for autocomplete text search)
     case 'search_topics':
-        requireAuth();
-        
-        $query = trim($_GET['q'] ?? '');
-        $level = isset($_GET['level']) ? (int)$_GET['level'] : null;
-        $parent_id = isset($_GET['parent_id']) ? (int)$_GET['parent_id'] : null;
-        
-        if (empty($query) && $parent_id === null) {
-            jsonResponse([]);
-        }
-        
-        $sql = "SELECT id, parent_id, label, level, sort_order FROM topic_tree WHERE 1=1";
-        $params = [];
-        
-        if (!empty($query)) {
-            $sql .= " AND label LIKE ?";
-            $params[] = "%{$query}%";
-        }
-        
-        if ($level !== null) {
-            $sql .= " AND level = ?";
-            $params[] = $level;
-        }
-        
-        if ($parent_id !== null) {
-            $sql .= " AND parent_id = ?";
-            $params[] = $parent_id;
-        }
-        
-        $sql .= " ORDER BY level ASC, sort_order ASC, label ASC LIMIT 50";
-        
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        jsonResponse($stmt->fetchAll());
+        topics_search_topics();
         break;
     
-    // Get full path from a node to root (breadcrumb)
     case 'get_topic_path':
-        requireAuth();
-        
-        $node_id = (int)($_GET['id'] ?? 0);
-        if (!$node_id) {
-            jsonResponse(['error' => 'شناسه گره الزامی است'], 400);
-        }
-        
-        $path = [];
-        $currentId = $node_id;
-        $maxDepth = 10; // prevent infinite loop
-        
-        while ($currentId && $maxDepth > 0) {
-            $stmt = $pdo->prepare("SELECT id, parent_id, label, level FROM topic_tree WHERE id = ?");
-            $stmt->execute([$currentId]);
-            $node = $stmt->fetch();
-            
-            if (!$node) break;
-            
-            array_unshift($path, $node);
-            $currentId = $node['parent_id'];
-            $maxDepth--;
-        }
-        
-        jsonResponse($path);
+        topics_get_topic_path();
         break;
     
-    // Get subjects and chapters for a specific grade/field combination
-    // This is optimized for the exam entry autocomplete
     case 'get_subjects_for_grade':
-        requireAuth();
-        
-        $grade_label = trim($_GET['grade'] ?? '');
-        $field_label = trim($_GET['field'] ?? '');
-        
-        if (empty($grade_label)) {
-            jsonResponse(['error' => 'پایه تحصیلی الزامی است'], 400);
-        }
-        
-        // Map grade number to label
-        $gradeMap = [
-            '7' => 'هفتم', '8' => 'هشتم', '9' => 'نهم',
-            '10' => 'دهم', '11' => 'یازدهم', '12' => 'دوازدهم'
-        ];
-        
-        $gradeName = $gradeMap[$grade_label] ?? $grade_label;
-        
-        // Map field to parent branch
-        $fieldMap = [
-            'ریاضی' => 'ریاضی و فیزیک',
-            'تجربی' => 'علوم تجربی',
-            'انسانی' => 'علوم انسانی'
-        ];
-        
-        // For grades 7-9 (متوسطه ۱), grade is at level 2, subjects at level 3
-        $gradeNum = (int)$grade_label;
-        
-        if ($gradeNum >= 7 && $gradeNum <= 9) {
-            // متوسطه ۱: find grade node, then get its children (subjects)
-            $stmt = $pdo->prepare("
-                SELECT t.id, t.label, t.level
-                FROM topic_tree t
-                WHERE t.parent_id IN (
-                    SELECT id FROM topic_tree WHERE label = ? AND level = 2
-                )
-                ORDER BY t.sort_order ASC
-            ");
-            $stmt->execute([$gradeName]);
-            $subjects = $stmt->fetchAll();
-            
-            // For each subject, get chapters (level 5 children via level 4)
-            $result = [];
-            foreach ($subjects as $subj) {
-                $chStmt = $pdo->prepare("
-                    SELECT id, label FROM topic_tree 
-                    WHERE parent_id = ? 
-                    ORDER BY sort_order ASC
-                ");
-                $chStmt->execute([$subj['id']]);
-                $chapters = $chStmt->fetchAll();
-                
-                $result[] = [
-                    'id' => $subj['id'],
-                    'subject' => $subj['label'],
-                    'chapters' => $chapters
-                ];
-            }
-            
-            jsonResponse($result);
-            
-        } else {
-            // متوسطه ۲: find field branch -> grade -> subjects -> chapters
-            $fieldName = $fieldMap[$field_label] ?? $field_label;
-            
-            // Find the grade node under the field branch
-            $stmt = $pdo->prepare("
-                SELECT id FROM topic_tree 
-                WHERE label = ? AND level = 3
-                AND parent_id IN (
-                    SELECT id FROM topic_tree WHERE label = ? AND level = 2
-                )
-            ");
-            $stmt->execute([$gradeName, $fieldName]);
-            $gradeNode = $stmt->fetch();
-            
-            if (!$gradeNode) {
-                jsonResponse([]);
-            }
-            
-            // Get subjects (level 4) under this grade
-            $stmt = $pdo->prepare("
-                SELECT id, label FROM topic_tree 
-                WHERE parent_id = ? AND level = 4
-                ORDER BY sort_order ASC
-            ");
-            $stmt->execute([$gradeNode['id']]);
-            $subjects = $stmt->fetchAll();
-            
-            // For each subject, get chapters (level 5)
-            $result = [];
-            foreach ($subjects as $subj) {
-                $chStmt = $pdo->prepare("
-                    SELECT id, label FROM topic_tree 
-                    WHERE parent_id = ? AND level = 5
-                    ORDER BY sort_order ASC
-                ");
-                $chStmt->execute([$subj['id']]);
-                $chapters = $chStmt->fetchAll();
-                
-                $result[] = [
-                    'id' => $subj['id'],
-                    'subject' => $subj['label'],
-                    'chapters' => $chapters
-                ];
-            }
-            
-            jsonResponse($result);
-        }
+        topics_get_subjects_for_grade();
         break;
-    
+        
     // ==================== Default ====================
     default:
         jsonResponse(['error' => 'Invalid action'], 400);

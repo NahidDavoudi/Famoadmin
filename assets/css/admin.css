@@ -667,7 +667,8 @@ table tbody td {
 
 /* ===== STATISTIC CARDS ===== */
 
-.stat-card {
+.stat-card,
+.stat-card-modern {
     background: var(--color-white);
     border-radius: var(--radius-lg);
     padding: var(--space-5) var(--space-6); /* 20px vertical, 24px horizontal */
@@ -675,100 +676,126 @@ table tbody td {
     overflow: hidden;
     border: 1px solid var(--color-gray-100);
     box-shadow: var(--shadow-sm);
-    transition: var(--transition-fast);
+    transition: all 0.25s ease;
     display: flex;
     align-items: center;
-    gap: var(--space-3); /* 12px */
+    gap: var(--space-4); /* 16px */
 }
 
-.stat-card:hover {
+.stat-card:hover,
+.stat-card-modern:hover {
     box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
-.stat-card .stat-icon {
-    width: var(--space-6); /* 24px */
-    height: var(--space-6); /* 24px */
-    border-radius: var(--radius-md);
+.stat-card .stat-icon,
+.stat-card-modern .stat-icon {
+    width: var(--space-12); /* 48px */
+    height: var(--space-12); /* 48px */
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 }
 
-.stat-card .stat-icon .icon {
-    width: var(--text-sm);
-    height: var(--text-sm);
+.stat-card .stat-icon .icon,
+.stat-card-modern .stat-icon .icon {
+    width: var(--space-6); /* 24px */
+    height: var(--space-6); /* 24px */
     color: white;
 }
 
-.stat-card .stat-info {
+.stat-card .stat-info,
+.stat-card-modern .stat-info {
     flex: 1;
     min-width: 0;
 }
 
-.stat-card .stat-value {
-    font-size: var(--text-xl);
+.stat-card .stat-value,
+.stat-card-modern .stat-value {
+    font-size: var(--text-2xl); /* 24px */
     font-weight: var(--font-bold);
     line-height: var(--leading-tight);
 }
 
-.stat-card .stat-label {
+.stat-card .stat-label,
+.stat-card-modern .stat-label {
     font-size: var(--text-xs);
     color: var(--color-gray-500);
     margin-top: var(--space-1); /* 4px */
 }
 
-/* Stat card color variants */
-.stat-card-primary .stat-icon {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+/* Stat card color variants (support both naming systems) */
+.stat-card-primary .stat-icon,
+.stat-blue .stat-icon {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
 }
 
-.stat-card-primary .stat-value {
-    color: var(--color-primary-dark);
+.stat-card-primary .stat-value,
+.stat-blue .stat-value {
+    color: var(--color-primary);
 }
 
-.stat-card-primary::after {
+.stat-card-primary::after,
+.stat-blue::after {
     content: '';
     position: absolute;
     top: calc(var(--space-2) * -1);
     left: calc(var(--space-2) * -1);
-    width: calc(var(--space-5) * 2.5);
-    height: calc(var(--space-5) * 2.5);
-    background: color-mix(in srgb, var(--color-primary), transparent 6%);
+    width: 5rem;
+    height: 5rem;
+    background: color-mix(in srgb, var(--color-primary), transparent 93%);
     border-radius: var(--radius-full);
 }
 
-.stat-card-success .stat-icon {
+.stat-card-success .stat-icon,
+.stat-green .stat-icon {
     background: linear-gradient(135deg, var(--color-success), var(--color-success-light));
 }
 
-.stat-card-success .stat-value {
+.stat-card-success .stat-value,
+.stat-green .stat-value {
     color: var(--color-success);
 }
 
-.stat-card-warning .stat-icon {
+.stat-card-warning .stat-icon,
+.stat-warning .stat-icon {
     background: linear-gradient(135deg, var(--color-warning), var(--color-warning-light));
 }
 
-.stat-card-warning .stat-value {
+.stat-card-warning .stat-value,
+.stat-warning .stat-value {
     color: var(--color-warning);
 }
 
-.stat-card-danger .stat-icon {
-    background: linear-gradient(135deg, var(--color-danger), var(--color-gray-100));
-    border: 2px solid var(--color-gray-200);
+.stat-card-danger .stat-icon,
+.stat-danger .stat-icon {
+    background: linear-gradient(135deg, var(--color-danger), var(--color-danger-light));
 }
 
-.stat-card-danger .stat-value {
+.stat-card-danger .stat-value,
+.stat-danger .stat-value {
     color: var(--color-danger);
 }
 
-/* Keep stat-card-modern for backward compatibility */
-.stat-card-modern {
-    @apply stat-card;
-    border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-6);
+.stat-accent .stat-icon {
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+}
+
+.stat-accent .stat-value {
+    color: var(--color-accent);
+}
+
+.stat-accent::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--space-2) * -1);
+    left: calc(var(--space-2) * -1);
+    width: 5rem;
+    height: 5rem;
+    background: color-mix(in srgb, var(--color-accent), transparent 92%);
+    border-radius: var(--radius-full);
 }
 
 /* ===== CHART CONTAINER ===== */
@@ -911,6 +938,23 @@ table tbody td {
     overflow: hidden;
 }
 
+/* Modal sizes (width variants) */
+.modal-sm {
+    max-width: 28rem; /* 448px */
+}
+
+.modal-md {
+    max-width: 32rem; /* 512px */
+}
+
+.modal-lg {
+    max-width: 48rem; /* 768px */
+}
+
+.modal-xl {
+    max-width: 56rem; /* 896px */
+}
+
 .modal-header {
     display: flex;
     align-items: center;
@@ -949,6 +993,53 @@ table tbody td {
     color: white;
 }
 
+/* Modal icon color variants */
+.modal-icon-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+}
+
+.modal-icon-amber {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.modal-icon-teal {
+    background: linear-gradient(135deg, #14b8a6, #0d9488);
+    color: white;
+}
+
+.modal-icon-purple {
+    background: linear-gradient(135deg, #8b5cf6, #d946ef);
+    color: white;
+}
+
+.modal-icon-indigo {
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    color: white;
+}
+
+/* Modal close button */
+.modal-close {
+    width: var(--space-6); /* 40px */
+    height: var(--space-6); /* 40px */
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-100);
+    color: var(--color-gray-500);
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.modal-close:hover {
+    background: color-mix(in srgb, var(--color-danger), var(--color-gray-100) 60%);
+    color: var(--color-danger);
+}
+
 .modal-body {
     padding: var(--space-5) var(--space-6); /* 20px */
 }
@@ -963,7 +1054,6 @@ table tbody td {
 .modal-footer-buttons {
     display: flex;
     gap: var(--space-3); /* 12px */
-    flex-direction: row-reverse;
 }
 
 @media (max-width: 480px) {
@@ -996,7 +1086,7 @@ table tbody td {
     color: var(--color-gray-500);
 }
 
-.modal-form .form-group input,
+.modal-form .form-group input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
 .modal-form .form-group select,
 .modal-form .form-group textarea {
     width: 100%;
@@ -1009,7 +1099,7 @@ table tbody td {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.modal-form .form-group input:focus,
+.modal-form .form-group input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):focus,
 .modal-form .form-group select:focus,
 .modal-form .form-group textarea:focus {
     outline: none;
@@ -1021,6 +1111,14 @@ table tbody td {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3); /* 12px */
+}
+
+/* Informational note box inside forms */
+.form-info {
+    background: color-mix(in srgb, var(--color-info), var(--color-white) 94%);
+    border: 1px solid color-mix(in srgb, var(--color-info), transparent 85%);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
 }
 
 @media (max-width: 480px) {
@@ -1132,6 +1230,8 @@ table tbody td {
     font-family: var(--font-sans);
     min-height: var(--space-5);
     min-width: var(--space-7);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: var(--color-white);
 }
 
 .modal-btn-primary:hover:not(:disabled) {

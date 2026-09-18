@@ -695,7 +695,7 @@
                                 <div class="stat-label">تعداد پشتیبان‌ها</div>
                             </div>
                         </div>
-                        <div class="stat-card-modern" style="--stat-color: #16a34a;">
+                        <div class="stat-card-modern stat-green">
                             <div class="stat-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
                                 <svg class="icon" aria-hidden="true">
                                     <use href="assets/icons/sprite.svg#icon-check" />
@@ -782,7 +782,7 @@
                                 <div class="stat-label">در انتظار پاسخ</div>
                             </div>
                         </div>
-                        <div class="stat-card-modern" style="--stat-color: #16a34a;">
+                        <div class="stat-card-modern stat-green">
                             <div class="stat-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
                                 <svg class="icon" aria-hidden="true">
                                     <use href="assets/icons/sprite.svg#icon-check" />
@@ -845,854 +845,819 @@
             </div>
         </main>
     </div>
-    <!-- Add Student Modal -->
+    <!-- افزودن دانش‌آموز Modal -->
 <div id="addStudentModal"
     class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
     role="dialog"
     aria-modal="true"
     aria-labelledby="addStudentModalTitle">
     <div
-        class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20"
+        class="modal modal-sm w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
         tabindex="-1">
-        <div class="p-6 md:p-8">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-14 h-14 bg-gradient-to-br from-primary via-primary-light to-primary rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                        <svg class="icon text-white text-xl" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-user-plus" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="modal-header-title text-xl font-bold text-gray-800" id="addStudentModalTitle">افزودن دانش‌آموز</h3>
-                    </div>
-                </div>
-                <button type="button"
-                    onclick="hideModal('addStudentModal'"
-                    class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group"
-                    aria-label="بستن modal">
-                    <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                        <use href="assets/icons/sprite.svg#icon-x" />
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-primary">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-user-plus" />
                     </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="addStudentModalTitle">افزودن دانش‌آموز</h3>
+                    <p class="modal-header-subtitle">اطلاعات دانش‌آموز جدید را وارد کنید</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('addStudentModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="addStudentForm" class="modal-form">
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>شماره موبایل <span class="text-red-500">*</span></label>
+                        <input type="tel" name="phone" required placeholder="09123456789" maxlength="11"
+                            pattern="09\d{9}" dir="ltr" class="text-left">
+                    </div>
+                    <div class="form-group">
+                        <label>کد ملی <span class="text-red-500">*</span></label>
+                        <input type="text" name="national_id" required placeholder="0012345678" maxlength="10"
+                            pattern="\d{10}" dir="ltr" class="text-left">
+                    </div>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>پایه</label>
+                        <input type="number" name="grade" min="7" max="12" required placeholder="10">
+                    </div>
+                    <div class="form-group">
+                        <label>رشته</label>
+                    <select name="field" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="ریاضی">ریاضی</option>
+                        <option value="تجربی">تجربی</option>
+                        <option value="انسانی">انسانی</option>
+                        <option value="راهنمایی">راهنمایی</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="form-group form-info">
+                    <p class="text-sm text-gray-600">حساب کاربری با شماره موبایل و رمز پیش‌فرض
+                        <strong>1234</strong> ساخته می‌شود.
+                    </p>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="addStudentForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-check" />
+                    </svg>
+                    <span>ذخیره</span>
                 </button>
-            </div>
-            <div class="p-6 md:p-8">
-                <form id="addStudentForm" class="modal-form space-y-4">
-                    <div class="form-grid-2">
-                        <div class="form-group">
-                            <label>شماره موبایل <span class="text-red-500">*</span></label>
-                            <input type="tel" name="phone" required placeholder="09123456789" maxlength="11"
-                                pattern="09\d{9}" dir="ltr" class="text-left">
-                        </div>
-                        <div class="form-group">
-                            <label>کد ملی <span class="text-red-500">*</span></label>
-                            <input type="text" name="national_id" required placeholder="0012345678" maxlength="10"
-                                pattern="\d{10}" dir="ltr" class="text-left">
-                        </div>
-                    </div>
-                    <div class="form-grid-2">
-                        <div class="form-group">
-                            <label>پایه</label>
-                            <input type="number" name="grade" min="7" max="12" required placeholder="10">
-                        </div>
-                        <div class="form-group">
-                            <label>رشته</label>
-                            <select name="field" required>
-                                <option value="">انتخاب کنید</option>
-                                <option value="ریاضی">ریاضی</option>
-                                <option value="تجربی">تجربی</option>
-                                <option value="انسانی">انسانی</option>
-                                <option value="راهنمایی">راهنمایی</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group"
-                        style="background:#f0f9ff;padding:12px;border-radius:8px;border:1px solid #bae6fd;">
-                        <p class="text-sm text-gray-600" style="margin:0">حساب کاربری با شماره موبایل و رمز پیش‌فرض
-                            <strong>1234</strong> ساخته می‌شود.
-                        </p>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Footer -->
-            <div class="modal-footer">
-                <div class="modal-footer-buttons">
-                    <button type="submit"
-                        class="modal-btn-primary flex-1 bg-gradient-to-r from-primary to-primary-light text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                        <svg class="icon text-xl" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-check" />
-                        </svg>
-                        <span>ذخیره</span>
-                    </button>
-                    <button type="button"
-                        onclick="hideModal('addStudentModal'"
-                        class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                </div>
+                <button type="button"
+                    onclick="hideModal('addStudentModal')"
+                    class="btn btn-secondary">انصراف</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Edit Student Modal -->
-    <div id="editStudentModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-edit" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">ویرایش دانش‌آموز</h3>
-                            <p class="text-sm text-gray-500">تغییر اطلاعات</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('editStudentModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
+
+<!-- ویرایش دانش‌آموز Modal -->
+<div id="editStudentModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editStudentModalTitle">
+    <div
+        class="modal modal-sm w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-amber">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-edit" />
+                    </svg>
                 </div>
-                <form id="editStudentForm" class="space-y-5">
-                    <input type="hidden" name="id">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-lg transition-all duration-300">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">شماره موبایل</label>
-                            <input type="tel" name="phone" required maxlength="11" pattern="09\d{9}" dir="ltr"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-lg transition-all duration-300 text-left">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">کد ملی</label>
-                            <input type="text" name="national_id" required maxlength="10" pattern="\d{10}" dir="ltr"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-lg transition-all duration-300 text-left">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">پایه</label>
-                            <input type="number" name="grade" required
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-lg text-center transition-all duration-300">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">رشته</label>
-                            <select name="field" required
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-lg transition-all duration-300">
-                                <option value="ریاضی">ریاضی</option>
-                                <option value="تجربی">تجربی</option>
-                                <option value="انسانی">انسانی</option>
-                                <option value="راهنمایی">راهنمایی</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
-                            </svg>
-                            <span>ذخیره تغییرات</span>
-                        </button>
-                        <button type="button" onclick="hideModal('editStudentModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Supporter Modal -->
-    <div id="addSupporterModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-teal-500 via-cyan-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-headset" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">افزودن پشتیبان جدید</h3>
-                            <p class="text-sm text-gray-500">اطلاعات پشتیبان</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('addSupporterModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
-                </div>
-                <form id="addSupporterForm" class="space-y-4">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام و نام خانوادگی</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">پایه تحصیلی</label>
-                            <select name="grade" required
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                                <option value="">انتخاب...</option>
-                                <option value="7">هفتم</option>
-                                <option value="8">هشتم</option>
-                                <option value="9">نهم</option>
-                                <option value="10">دهم</option>
-                                <option value="11">یازدهم</option>
-                                <option value="12">دوازدهم</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">رشته/درس</label>
-                            <select name="field" required
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                                <option value="">انتخاب...</option>
-                                <option value="ریاضی">ریاضی</option>
-                                <option value="تجربی">تجربی</option>
-                                <option value="انسانی">انسانی</option>
-                                <option value="راهنمایی">راهنمایی</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">شناسه تلگرام (اختیاری)</label>
-                        <input type="text" name="chat_id" placeholder="123456789"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام کاربری</label>
-                        <input type="text" name="username" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300"
-                            placeholder="برای ورود به پنل">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">رمز عبور</label>
-                        <div class="relative">
-                            <input type="password" name="password" id="addSupporterPassword" required minlength="4"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300 pl-12"
-                                placeholder="حداقل ۴ کاراکتر">
-                            <button type="button"
-                                class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
-                                onclick="togglePasswordByButton(this, 'addSupporterPassword')" title="نمایش رمز عبور">
-                                <img src="assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
-                                    width="20" height="20">
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-check" />
-                            </svg>
-                            <span>ذخیره</span>
-                        </button>
-                        <button type="button" onclick="hideModal('addSupporterModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Supporter Modal -->
-    <div id="editSupporterModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <i class="fas fa-user-cog text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">ویرایش پشتیبان</h3>
-                            <p class="text-sm text-gray-500">تغییر اطلاعات</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('editSupporterModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
-                </div>
-                <form id="editSupporterForm" class="space-y-4">
-                    <input type="hidden" name="id">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام و نام خانوادگی</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">پایه تحصیلی</label>
-                            <select name="grade" required
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                                <option value="7">هفتم</option>
-                                <option value="8">هشتم</option>
-                                <option value="9">نهم</option>
-                                <option value="10">دهم</option>
-                                <option value="11">یازدهم</option>
-                                <option value="12">دوازدهم</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">رشته/درس</label>
-                            <select name="field" required
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                                <option value="ریاضی">ریاضی</option>
-                                <option value="تجربی">تجربی</option>
-                                <option value="انسانی">انسانی</option>
-                                <option value="راهنمایی">راهنمایی</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">شناسه تلگرام</label>
-                        <input type="text" name="chat_id"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">رمز عبور جدید (خالی = بدون
-                            تغییر)</label>
-                        <div class="relative">
-                            <input type="password" name="new_password" id="editSupporterNewPassword" minlength="4"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300 pl-12"
-                                placeholder="فقط در صورت نیاز">
-                            <button type="button"
-                                class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
-                                onclick="togglePasswordByButton(this, 'editSupporterNewPassword')"
-                                title="نمایش رمز عبور">
-                                <img src="assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
-                                    width="20" height="20">
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
-                            </svg>
-                            <span>ذخیره تغییرات</span>
-                        </button>
-                        <button type="button" onclick="hideModal('editSupporterModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Course Modal -->
-    <div id="addCourseModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-book" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">افزودن دوره جدید</h3>
-                            <p class="text-sm text-gray-500">اطلاعات دوره آموزشی</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('addCourseModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
-                </div>
-                <form id="addCourseForm" class="space-y-4">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام دوره</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">تصویر دوره</label>
-                        <input type="file" name="image" accept="image/*"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                        <p class="text-xs text-gray-500 mt-1">JPG, PNG, WEBP | حداکثر: 5MB</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">رنگ شروع</label>
-                            <input type="color" name="gradient_color_from" value="#445D84"
-                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">رنگ پایان</label>
-                            <input type="color" name="gradient_color_to" value="#5a779e"
-                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">توضیحات</label>
-                        <textarea name="description" rows="3"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300"></textarea>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">قیمت</label>
-                            <input type="text" name="price" placeholder="500,000 تومان"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">ترتیب نمایش</label>
-                            <input type="number" name="display_order" value="0" min="0"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-center transition-all duration-300">
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-check" />
-                            </svg>
-                            <span>ذخیره</span>
-                        </button>
-                        <button type="button" onclick="hideModal('addCourseModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Course Modal -->
-    <div id="editCourseModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-edit" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">ویرایش دوره</h3>
-                            <p class="text-sm text-gray-500">تغییر اطلاعات دوره</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('editCourseModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
-                </div>
-                <form id="editCourseForm" enctype="multipart/form-data" class="space-y-4">
-                    <input type="hidden" name="id">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام دوره</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">تصویر جدید (اختیاری)</label>
-                        <input type="file" name="image" accept="image/*"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">رنگ شروع</label>
-                            <input type="color" name="gradient_color_from"
-                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">رنگ پایان</label>
-                            <input type="color" name="gradient_color_to"
-                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">توضیحات</label>
-                        <textarea name="description" rows="3"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300"></textarea>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">قیمت</label>
-                            <input type="text" name="price"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">ترتیب نمایش</label>
-                            <input type="number" name="display_order" min="0"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-center transition-all duration-300">
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
-                            </svg>
-                            <span>ذخیره تغییرات</span>
-                        </button>
-                        <button type="button" onclick="hideModal('editCourseModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Instructor Modal -->
-    <div id="addInstructorModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-indigo-500 via-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-school" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">افزودن استاد جدید</h3>
-                            <p class="text-sm text-gray-500">اطلاعات مدرس</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('addInstructorModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
-                </div>
-                <form id="addInstructorForm" enctype="multipart/form-data" class="space-y-4">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام و نام خانوادگی</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">عنوان/سمت</label>
-                        <input type="text" name="title" required placeholder="مشاور تخصصی تحصیلی"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">تصویر</label>
-                        <input type="file" name="image" accept="image/*"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                        <p class="text-xs text-gray-500 mt-1">JPG, PNG, WEBP | حداکثر: 5MB | پیشنهادی: 400x500px</p>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">توضیحات</label>
-                        <textarea name="description" rows="3"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300"></textarea>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">حرف اول</label>
-                            <input type="text" name="initial_letter" maxlength="1" placeholder="م"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-center text-xl transition-all duration-300">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">ترتیب نمایش</label>
-                            <input type="number" name="display_order" value="0" min="0"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-center transition-all duration-300">
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-check" />
-                            </svg>
-                            <span>ذخیره</span>
-                        </button>
-                        <button type="button" onclick="hideModal('addInstructorModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Instructor Modal -->
-    <div id="editInstructorModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-edit" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">ویرایش استاد</h3>
-                            <p class="text-sm text-gray-500">تغییر اطلاعات مدرس</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('editInstructorModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
-                </div>
-                <form id="editInstructorForm" enctype="multipart/form-data" class="space-y-4">
-                    <input type="hidden" name="id">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">نام و نام خانوادگی</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">عنوان/سمت</label>
-                        <input type="text" name="title" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">تصویر جدید (اختیاری)</label>
-                        <input type="file" name="image" accept="image/*"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">توضیحات</label>
-                        <textarea name="description" rows="3"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300"></textarea>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">حرف اول</label>
-                            <input type="text" name="initial_letter" maxlength="1"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-center text-xl transition-all duration-300">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-600">ترتیب نمایش</label>
-                            <input type="number" name="display_order" min="0"
-                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-center transition-all duration-300">
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-device-floppy" />
-                            </svg>
-                            <span>ذخیره تغییرات</span>
-                        </button>
-                        <button type="button" onclick="hideModal('editInstructorModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Exam Details Modal -->
-    <div id="examDetailsModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-primary via-[#5a779e] to-primary rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-clipboard" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">جزئیات آزمون</h3>
-                            <p id="examDetailsDate" class="text-sm text-gray-500"></p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('examDetailsModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Exam Details Content -->
-                <div id="examDetailsContent">
-                    <!-- Will be populated dynamically -->
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="editStudentModalTitle">ویرایش دانش‌آموز</h3>
+                    <p class="modal-header-subtitle">تغییر اطلاعات</p>
                 </div>
             </div>
+                        <button type="button"
+                onclick="hideModal('editStudentModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
         </div>
-    </div>
 
-    <!-- Add Blog Post Modal -->
-    <div id="addBlogPostModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-            <div class="p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-14 h-14 bg-gradient-to-br from-primary via-[#5a779e] to-primary rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                            <svg class="icon text-white text-xl" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-plus" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">افزودن پست جدید</h3>
-                            <p class="text-sm text-gray-500">اطلاعات پست وبلاگ را وارد کنید</p>
-                        </div>
-                    </div>
-                    <button onclick="hideModal('addBlogPostModal')"
-                        class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                        <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-x" />
-                        </svg>
-                    </button>
+        <div class="modal-body">
+                        <form id="editStudentForm" class="modal-form">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label>نام</label>
+                    <input type="text" name="name" required>
                 </div>
-                <form id="addBlogPostForm" enctype="multipart/form-data" class="space-y-4">
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">عنوان پست <span class="text-red-500">*</span></label>
-                        <input type="text" name="title" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>شماره موبایل</label>
+                        <input type="tel" name="phone" required maxlength="11" pattern="09\d{9}" dir="ltr" class="text-left">
                     </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">اسلاگ (URL) <span class="text-red-500">*</span></label>
-                        <input type="text" name="slug" required placeholder="my-blog-post"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300 dir-ltr">
-                        <p class="text-xs text-gray-500 mt-1">فقط حروف انگلیسی، اعداد و خط تیره. برای URL استفاده می‌شود.</p>
+                    <div class="form-group">
+                        <label>کد ملی</label>
+                        <input type="text" name="national_id" required maxlength="10" pattern="\d{10}" dir="ltr" class="text-left">
                     </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">دسته‌بندی <span class="text-red-500">*</span></label>
-                        <select name="category" required
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>پایه</label>
+                        <input type="number" name="grade" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رشته</label>
+                        <select name="field" required>
                             <option value="">انتخاب کنید</option>
-                            <option value="دانش‌آموزی">دانش‌آموزی</option>
-                            <option value="روش مطالعه">روش مطالعه</option>
-                            <option value="مشاوره تحصیلی">مشاوره تحصیلی</option>
-                            <option value="اخبار">اخبار</option>
-                            <option value="داستان نجاح">داستان نجاح</option>
+                            <option value="ریاضی">ریاضی</option>
+                            <option value="تجربی">تجربی</option>
+                            <option value="انسانی">انسانی</option>
+                            <option value="راهنمایی">راهنمایی</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">خلاصه</label>
-                        <textarea name="excerpt" rows="3" placeholder="خلاصه کوتاه برای پیش‌نمایش کارت..."
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300"></textarea>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">محتوا (HTML) <span class="text-red-500">*</span></label>
-                        <textarea name="content" rows="8" required placeholder="محتوا کامل پست (می‌توانید از تگ‌های HTML استفاده کنید)"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300 font-mono text-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">تصویر کاور</label>
-                        <input type="file" name="cover_image" accept="image/*"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                        <p class="text-xs text-gray-500 mt-1">JPG, PNG, WEBP | حداکثر: 5MB | پیشنهادی: 1200x630px</p>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-600">توضیحات متا (SEO)</label>
-                        <input type="text" name="meta_description" maxlength="300" placeholder="توضیحات برای موتورهای جستجو (حداکثر ۳۰۰ کاراکتر)"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="is_published" value="1" checked
-                                class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2">
-                            <span class="text-sm text-gray-600">منتشر شده</span>
-                        </label>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit"
-                            class="modal-btn-primary flex-1 bg-gradient-to-r from-primary to-[#5a779e] text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="icon" aria-hidden="true">
-                                <use href="assets/icons/sprite.svg#icon-check" />
-                            </svg>
-                            <span>ذخیره</span>
-                        </button>
-                        <button type="button" onclick="hideModal('addBlogPostModal')"
-                            class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
-                    </div>
-                </form>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="editStudentForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                    </svg>
+                    <span>ذخیره تغییرات</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('editStudentModal')"
+                    class="btn btn-secondary">انصراف</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Edit Blog Post Modal -->
-    <div id="editBlogPostModal"
-        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto modal-animate modal-content border border-white/20">
-        <div class="p-6 md:p-8">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-14 h-14 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg modal-icon-glass">
-                        <svg class="icon text-white text-xl" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-edit" />
-                        </svg>
+
+<!-- افزودن پشتیبان جدید Modal -->
+<div id="addSupporterModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addSupporterModalTitle">
+    <div
+        class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-teal">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-headset" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="addSupporterModalTitle">افزودن پشتیبان جدید</h3>
+                    <p class="modal-header-subtitle">اطلاعات پشتیبان</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('addSupporterModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="addSupporterForm" class="modal-form">
+                <div class="form-group">
+                    <label>نام و نام خانوادگی</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>پایه تحصیلی</label>
+                    <select name="grade" required>
+                        <option value="">انتخاب...</option>
+                        <option value="7">هفتم</option>
+                        <option value="8">هشتم</option>
+                        <option value="9">نهم</option>
+                        <option value="10">دهم</option>
+                        <option value="11">یازدهم</option>
+                        <option value="12">دوازدهم</option>
+                    </select>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-800">ویرایش پست</h3>
-                        <p class="text-sm text-gray-500">تغییر اطلاعات پست وبلاگ</p>
+                    <div class="form-group">
+                        <label>رشته/درس</label>
+                    <select name="field" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="ریاضی">ریاضی</option>
+                        <option value="تجربی">تجربی</option>
+                        <option value="انسانی">انسانی</option>
+                        <option value="راهنمایی">راهنمایی</option>
+                    </select>
                     </div>
                 </div>
-                <button onclick="hideModal('editBlogPostModal')"
-                    class="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-all duration-300 group">
-                    <svg class="icon text-gray-500 group-hover:text-red-600 transition-colors" aria-hidden="true">
+                <div class="form-group">
+                    <label>شناسه تلگرام (اختیاری)</label>
+                    <input type="text" name="chat_id" placeholder="123456789">
+                </div>
+                <div class="form-group">
+                    <label>نام کاربری</label>
+                    <input type="text" name="username" required placeholder="برای ورود به پنل">
+                </div>
+                <div class="form-group">
+                    <label>رمز عبور</label>
+                    <div class="relative">
+                        <input type="password" name="password" id="addSupporterPassword" required minlength="4"
+                            class="pl-12" placeholder="حداقل ۴ کاراکتر">
+                        <button type="button"
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
+                            onclick="togglePasswordByButton(this, 'addSupporterPassword')" title="نمایش رمز عبور">
+                            <img src="assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                width="20" height="20">
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="addSupporterForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-check" />
+                    </svg>
+                    <span>ذخیره</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('addSupporterModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ویرایش پشتیبان Modal -->
+<div id="editSupporterModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editSupporterModalTitle">
+    <div
+        class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-amber">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-edit" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="editSupporterModalTitle">ویرایش پشتیبان</h3>
+                    <p class="modal-header-subtitle">تغییر اطلاعات</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('editSupporterModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="editSupporterForm" class="modal-form">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label>نام و نام خانوادگی</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>پایه تحصیلی</label>
+                    <select name="grade" required>
+                        
+                        <option value="7">هفتم</option>
+                        <option value="8">هشتم</option>
+                        <option value="9">نهم</option>
+                        <option value="10">دهم</option>
+                        <option value="11">یازدهم</option>
+                        <option value="12">دوازدهم</option>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label>رشته/درس</label>
+                    <select name="field" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="ریاضی">ریاضی</option>
+                        <option value="تجربی">تجربی</option>
+                        <option value="انسانی">انسانی</option>
+                        <option value="راهنمایی">راهنمایی</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>شناسه تلگرام</label>
+                    <input type="text" name="chat_id">
+                </div>
+                <div class="form-group">
+                    <label>رمز عبور جدید (خالی = بدون تغییر)</label>
+                    <div class="relative">
+                        <input type="password" name="new_password" id="editSupporterNewPassword" minlength="4"
+                            class="pl-12" placeholder="فقط در صورت نیاز">
+                        <button type="button"
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
+                            onclick="togglePasswordByButton(this, 'editSupporterNewPassword')" title="نمایش رمز عبور">
+                            <img src="assets/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                width="20" height="20">
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="editSupporterForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                    </svg>
+                    <span>ذخیره تغییرات</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('editSupporterModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- افزودن دوره جدید Modal -->
+<div id="addCourseModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addCourseModalTitle">
+    <div
+        class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-purple">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-book" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="addCourseModalTitle">افزودن دوره جدید</h3>
+                    <p class="modal-header-subtitle">اطلاعات دوره آموزشی</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('addCourseModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="addCourseForm" enctype="multipart/form-data" class="modal-form">
+                <div class="form-group">
+                    <label>نام دوره</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>تصویر دوره</label>
+                    <input type="file" name="image" accept="image/*">
+                    <p class="text-xs text-gray-500">JPG, PNG, WEBP | حداکثر: 5MB</p>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>رنگ شروع</label>
+                        <input type="color" name="gradient_color_from" value="#445D84"
+                            class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                    </div>
+                    <div class="form-group">
+                        <label>رنگ پایان</label>
+                        <input type="color" name="gradient_color_to" value="#5a779e"
+                            class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea name="description" rows="3" class="resize-none"></textarea>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>قیمت</label>
+                        <input type="text" name="price" placeholder="500,000 تومان">
+                    </div>
+                    <div class="form-group">
+                        <label>ترتیب نمایش</label>
+                        <input type="number" name="display_order" value="0" min="0" class="text-center">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="addCourseForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-check" />
+                    </svg>
+                    <span>ذخیره</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('addCourseModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ویرایش دوره Modal -->
+<div id="editCourseModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editCourseModalTitle">
+    <div
+        class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-amber">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-edit" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="editCourseModalTitle">ویرایش دوره</h3>
+                    <p class="modal-header-subtitle">تغییر اطلاعات دوره</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('editCourseModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="editCourseForm" enctype="multipart/form-data" class="modal-form">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label>نام دوره</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>تصویر جدید (اختیاری)</label>
+                    <input type="file" name="image" accept="image/*">
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>رنگ شروع</label>
+                        <input type="color" name="gradient_color_from"
+                            class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                    </div>
+                    <div class="form-group">
+                        <label>رنگ پایان</label>
+                        <input type="color" name="gradient_color_to"
+                            class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea name="description" rows="3" class="resize-none"></textarea>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>قیمت</label>
+                        <input type="text" name="price">
+                    </div>
+                    <div class="form-group">
+                        <label>ترتیب نمایش</label>
+                        <input type="number" name="display_order" min="0" class="text-center">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="editCourseForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                    </svg>
+                    <span>ذخیره تغییرات</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('editCourseModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- افزودن استاد جدید Modal -->
+<div id="addInstructorModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addInstructorModalTitle">
+    <div
+        class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-indigo">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-school" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="addInstructorModalTitle">افزودن استاد جدید</h3>
+                    <p class="modal-header-subtitle">اطلاعات مدرس</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('addInstructorModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="addInstructorForm" enctype="multipart/form-data" class="modal-form">
+                <div class="form-group">
+                    <label>نام و نام خانوادگی</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>عنوان/سمت</label>
+                    <input type="text" name="title" required placeholder="مشاور تخصصی تحصیلی">
+                </div>
+                <div class="form-group">
+                    <label>تصویر</label>
+                    <input type="file" name="image" accept="image/*">
+                    <p class="text-xs text-gray-500">JPG, PNG, WEBP | حداکثر: 5MB | پیشنهادی: 400x500px</p>
+                </div>
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea name="description" rows="3" class="resize-none"></textarea>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>حرف اول</label>
+                        <input type="text" name="initial_letter" maxlength="1" placeholder="م" class="text-center">
+                    </div>
+                    <div class="form-group">
+                        <label>ترتیب نمایش</label>
+                        <input type="number" name="display_order" value="0" min="0" class="text-center">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="addInstructorForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-check" />
+                    </svg>
+                    <span>ذخیره</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('addInstructorModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ویرایش استاد Modal -->
+<div id="editInstructorModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editInstructorModalTitle">
+    <div
+        class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-amber">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-edit" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="editInstructorModalTitle">ویرایش استاد</h3>
+                    <p class="modal-header-subtitle">تغییر اطلاعات مدرس</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('editInstructorModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="editInstructorForm" enctype="multipart/form-data" class="modal-form">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <label>نام و نام خانوادگی</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>عنوان/سمت</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>تصویر جدید (اختیاری)</label>
+                    <input type="file" name="image" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea name="description" rows="3" class="resize-none"></textarea>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>حرف اول</label>
+                        <input type="text" name="initial_letter" maxlength="1" class="text-center">
+                    </div>
+                    <div class="form-group">
+                        <label>ترتیب نمایش</label>
+                        <input type="number" name="display_order" min="0" class="text-center">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="editInstructorForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                    </svg>
+                    <span>ذخیره تغییرات</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('editInstructorModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- جزئیات آزمون Modal -->
+<div id="examDetailsModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="examDetailsModalTitle">
+    <div
+        class="modal modal-xl w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-primary">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-clipboard" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="examDetailsModalTitle">جزئیات آزمون</h3>
+                    <p class="modal-header-subtitle" id="examDetailsDate"></p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('examDetailsModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <div id="examDetailsContent">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="button"
+                    onclick="hideModal('examDetailsModal')"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
                         <use href="assets/icons/sprite.svg#icon-x" />
                     </svg>
+                    <span>بستن</span>
                 </button>
             </div>
-            <form id="editBlogPostForm" enctype="multipart/form-data" class="space-y-4">
-                <input type="hidden" name="id">
-                <input type="hidden" name="current_cover_image">
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-600">عنوان پست <span class="text-red-500">*</span></label>
-                    <input type="text" name="title" required
-                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
+        </div>
+    </div>
+</div>
+
+
+<!-- افزودن پست جدید Modal -->
+<div id="addBlogPostModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addBlogPostModalTitle">
+    <div
+        class="modal modal-lg w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-primary">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-plus" />
+                    </svg>
                 </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-600">اسلاگ (URL) <span class="text-red-500">*</span></label>
-                    <input type="text" name="slug" required placeholder="my-blog-post"
-                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300 dir-ltr">
-                    <p class="text-xs text-gray-500 mt-1">فقط حروف انگلیسی، اعداد و خط تیره. برای URL استفاده می‌شود.</p>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="addBlogPostModalTitle">افزودن پست جدید</h3>
+                    <p class="modal-header-subtitle">اطلاعات پست وبلاگ را وارد کنید</p>
                 </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-600">دسته‌بندی <span class="text-red-500">*</span></label>
-                    <select name="category" required
-                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
+            </div>
+                        <button type="button"
+                onclick="hideModal('addBlogPostModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="addBlogPostForm" enctype="multipart/form-data" class="modal-form">
+                <div class="form-group">
+                    <label>عنوان پست <span class="text-red-500">*</span></label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>اسلاگ (URL) <span class="text-red-500">*</span></label>
+                    <input type="text" name="slug" required placeholder="my-blog-post" dir="ltr" class="text-left">
+                    <p class="text-xs text-gray-500">فقط حروف انگلیسی، اعداد و خط تیره. برای URL استفاده می‌شود.</p>
+                </div>
+                <div class="form-group">
+                    <label>دسته‌بندی <span class="text-red-500">*</span></label>
+                    <select name="category" required>
                         <option value="">انتخاب کنید</option>
                         <option value="دانش‌آموزی">دانش‌آموزی</option>
                         <option value="روش مطالعه">روش مطالعه</option>
@@ -1701,51 +1666,156 @@
                         <option value="داستان نجاح">داستان نجاح</option>
                     </select>
                 </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-600">خلاصه</label>
-                    <textarea name="excerpt" rows="3" placeholder="خلاصه کوتاه برای پیش‌نمایش کارت..."
-                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300"></textarea>
+                <div class="form-group">
+                    <label>خلاصه</label>
+                    <textarea name="excerpt" rows="3" placeholder="خلاصه کوتاه برای پیش‌نمایش کارت..." class="resize-none"></textarea>
                 </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-600">محتوا (HTML) <span class="text-red-500">*</span></label>
-                    <textarea name="content" rows="8" required placeholder="محتوا کامل پست (می‌توانید از تگ‌های HTML استفاده کنید)"
-                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input resize-none transition-all duration-300 font-mono text-sm"></textarea>
+                <div class="form-group">
+                    <label>محتوا (HTML) <span class="text-red-500">*</span></label>
+                    <textarea name="content" rows="8" required placeholder="محتوا کامل پست (می‌توانید از تگ‌های HTML استفاده کنید)" class="resize-none font-mono text-sm"></textarea>
                 </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-600">تصویر کاور</label>
-                    <div id="editBlogPostCurrentImage" class="mb-2"></div>
-                    <input type="file" name="cover_image" accept="image/*"
-                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
-                    <p class="text-xs text-gray-500 mt-1">جایگزین تصویر قبلی (اختیاری) | JPG, PNG, WEBP | حداکثر: 5MB</p>
+                <div class="form-group">
+                    <label>تصویر کاور</label>
+                    <input type="file" name="cover_image" accept="image/*">
+                    <p class="text-xs text-gray-500">JPG, PNG, WEBP | حداکثر: 5MB | پیشنهادی: 1200x630px</p>
                 </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-600">توضیحات متا (SEO)</label>
-                    <input type="text" name="meta_description" maxlength="300" placeholder="توضیحات برای موتورهای جستجو (حداکثر ۳۰۰ کاراکتر)"
-                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input transition-all duration-300">
+                <div class="form-group">
+                    <label>توضیحات متا (SEO)</label>
+                    <input type="text" name="meta_description" maxlength="300" placeholder="توضیحات برای موتورهای جستجو (حداکثر ۳۰۰ کاراکتر)">
                 </div>
-                <div class="flex items-center gap-3">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="is_published" value="1"
-                            class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2">
-                        <span class="text-sm text-gray-600">منتشر شده</span>
-                    </label>
-                </div>
-                <div class="flex gap-3 pt-4">
-                    <button type="submit"
-                        class="modal-btn-primary flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3.5 rounded-xl font-medium hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                        <svg class="icon" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-check" />
-                        </svg>
-                        <span>ذخیره تغییرات</span>
-                    </button>
-                    <button type="button" onclick="hideModal('editBlogPostModal')"
-                        class="px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:scale-[1.02] transition-all duration-300">انصراف</button>
+                <div class="form-group">
+                    <div class="flex items-center gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="is_published" value="1" checked
+                                class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2">
+                            <span class="text-sm text-gray-600">منتشر شده</span>
+                        </label>
+                    </div>
                 </div>
             </form>
         </div>
-    </div>
 
-    <!-- Subject Row Template (for exam entry - Enhanced) -->
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="addBlogPostForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-check" />
+                    </svg>
+                    <span>ذخیره</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('addBlogPostModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ویرایش پست Modal -->
+<div id="editBlogPostModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editBlogPostModalTitle">
+    <div
+        class="modal modal-lg w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-amber">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-edit" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="editBlogPostModalTitle">ویرایش پست</h3>
+                    <p class="modal-header-subtitle">تغییر اطلاعات پست وبلاگ</p>
+                </div>
+            </div>
+                        <button type="button"
+                onclick="hideModal('editBlogPostModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+                        <form id="editBlogPostForm" enctype="multipart/form-data" class="modal-form">
+                <input type="hidden" name="id">
+                <input type="hidden" name="current_cover_image">
+                <div class="form-group">
+                    <label>عنوان پست <span class="text-red-500">*</span></label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>اسلاگ (URL) <span class="text-red-500">*</span></label>
+                    <input type="text" name="slug" required placeholder="my-blog-post" dir="ltr" class="text-left">
+                    <p class="text-xs text-gray-500">فقط حروف انگلیسی، اعداد و خط تیره. برای URL استفاده می‌شود.</p>
+                </div>
+                <div class="form-group">
+                    <label>دسته‌بندی <span class="text-red-500">*</span></label>
+                    <select name="category" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="دانش‌آموزی">دانش‌آموزی</option>
+                        <option value="روش مطالعه">روش مطالعه</option>
+                        <option value="مشاوره تحصیلی">مشاوره تحصیلی</option>
+                        <option value="اخبار">اخبار</option>
+                        <option value="داستان نجاح">داستان نجاح</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>خلاصه</label>
+                    <textarea name="excerpt" rows="3" placeholder="خلاصه کوتاه برای پیش‌نمایش کارت..." class="resize-none"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>محتوا (HTML) <span class="text-red-500">*</span></label>
+                    <textarea name="content" rows="8" required placeholder="محتوا کامل پست (می‌توانید از تگ‌های HTML استفاده کنید)" class="resize-none font-mono text-sm"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>تصویر کاور</label>
+                    <div id="editBlogPostCurrentImage" class="mb-2"></div>
+                    <input type="file" name="cover_image" accept="image/*">
+                    <p class="text-xs text-gray-500">جایگزین تصویر قبلی (اختیاری) | JPG, PNG, WEBP | حداکثر: 5MB</p>
+                </div>
+                <div class="form-group">
+                    <label>توضیحات متا (SEO)</label>
+                    <input type="text" name="meta_description" maxlength="300" placeholder="توضیحات برای موتورهای جستجو (حداکثر ۳۰۰ کاراکتر)">
+                </div>
+                <div class="form-group">
+                    <div class="flex items-center gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="is_published" value="1"
+                                class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2">
+                            <span class="text-sm text-gray-600">منتشر شده</span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+                <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="submit" form="editBlogPostForm"
+                    class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-device-floppy" />
+                    </svg>
+                    <span>ذخیره تغییرات</span>
+                </button>
+                <button type="button"
+                    onclick="hideModal('editBlogPostModal')"
+                    class="btn btn-secondary">انصراف</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Subject Row Template (for exam entry - Enhanced) -->
     <template id="subjectRowTemplate">
         <div
             class="subject-row bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-primary/20 transition-all duration-300">
