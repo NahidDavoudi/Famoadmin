@@ -2,7 +2,7 @@
  * Admin Panel - Instructors CRUD
  */
 
-import { api } from './/api-client.js';
+import { api } from './api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 
 export async function loadInstructors() {

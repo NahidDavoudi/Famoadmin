@@ -2,9 +2,10 @@
  * Admin Panel - Students CRUD
  */
 
-import { api } from './/api-client.js';
+import { api } from './api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, getElementValue, setFormValues, icon, withButtonLoading, confirmDelete, confirmAction } from './utils.js';
 import { showConfirm } from './confirm-modal.js';
+import { withPagination } from './ui.js';
 
 export async function loadStudents() {
     const search = getElementValue('filterSearch');
@@ -30,22 +31,9 @@ export async function loadStudents() {
     }
 }
 
-function renderStudentsTable(students) {
+function renderStudentsTableRows(students) {
     const tbody = document.getElementById('studentsTable');
-    const emptyState = document.getElementById('studentsEmptyState');
-    const tableWrap = tbody?.closest('.table-wrap');
-
     if (!tbody) return;
-
-    if (students.length === 0) {
-        tbody.innerHTML = '';
-        if (tableWrap) tableWrap.style.display = 'none';
-        if (emptyState) emptyState.classList.remove('hidden');
-        return;
-    }
-
-    if (tableWrap) tableWrap.style.display = '';
-    if (emptyState) emptyState.classList.add('hidden');
 
     tbody.innerHTML = students.map(s => `
         <tr class="hover:bg-gray-50">
@@ -80,6 +68,41 @@ function renderStudentsTable(students) {
             </td>
         </tr>
     `).join('');
+}
+
+function renderStudentsTable(students) {
+    const tbody = document.getElementById('studentsTable');
+    const emptyState = document.getElementById('studentsEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+    const paginationContainer = document.getElementById('studentsPagination');
+
+    if (!tbody) return;
+
+    if (students.length === 0) {
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
+        if (paginationContainer) paginationContainer.classList.add('hidden');
+        return;
+    }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
+
+    // Use pagination if more than 50 rows
+    if (students.length > 50) {
+        if (paginationContainer) paginationContainer.classList.remove('hidden');
+        return withPagination({
+            data: students,
+            renderFn: renderStudentsTableRows,
+            containerId: 'studentsPagination',
+            threshold: 50,
+            pageSize: 50
+        });
+    }
+
+    if (paginationContainer) paginationContainer.classList.add('hidden');
+    return renderStudentsTableRows(students);
 }
 
 export async function handleAddStudent(e) {

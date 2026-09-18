@@ -2,8 +2,8 @@
  * Admin Panel - Courses CRUD
  */
 
-import { api } from './/api-client.js';
-import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon } from './utils.js';
+import { api } from './api-client.js';
+import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 
 const ICON_MAP = {
     'fa-book': 'book',
@@ -78,7 +78,6 @@ function renderCoursesTable(courses) {
             <td class="px-5 py-4">
                 <div class="flex items-center gap-2">
                     <div class="w-10 h-10 rounded-lg" style="background: linear-gradient(135deg, ${c.gradient_color_from || '#445D84'}, ${c.gradient_color_to || '#E2D9C6'})"></div>
-                    <span class="text-sm">${c.gradient_color_from || '#445D84'} → ${c.gradient_color_to || '#E2D9C6'}</span>
                 </div>
             </td>
             <td class="px-5 py-4">

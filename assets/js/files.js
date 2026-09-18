@@ -2,7 +2,7 @@
  * Admin Panel - Files / Uploads
  */
 
-import { api } from './/api-client.js';
+import { api } from './api-client.js';
 import { showAlert, escapeHtml, formatDate, icon, withButtonLoading } from './utils.js';
 import { setDefaultDates } from './ui.js';
 import { formatGregorianToJalali } from './/jalali.js';

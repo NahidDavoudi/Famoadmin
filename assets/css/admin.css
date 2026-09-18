@@ -372,12 +372,23 @@ input[type="range"]::-webkit-slider-thumb {
     }
 }
 
-/* Sidebar link hover effect */
+/* Sidebar link base styles */
 .sidebar-link {
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3); /* 12px */
+    padding: var(--space-3) var(--space-4); /* 12px vertical, 16px horizontal */
+    border-radius: var(--radius-md); /* 8px */
+    color: var(--color-gray-100);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Sidebar link hover effect */
 .sidebar-link::before {
     content: '';
     position: absolute;
@@ -391,6 +402,11 @@ input[type="range"]::-webkit-slider-thumb {
     transition: opacity 0.2s;
 }
 
+.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
 .sidebar-link.active::before {
     opacity: 1;
 }
@@ -398,6 +414,13 @@ input[type="range"]::-webkit-slider-thumb {
 .sidebar-link.active {
     background-color: rgba(255, 255, 255, 0.15);
     font-weight: 600;
+    color: white;
+}
+
+.sidebar-link .icon {
+    flex-shrink: 0;
+    width: var(--space-5); /* 20px */
+    height: var(--space-5);
 }
 
 /* Sidebar overlay */
