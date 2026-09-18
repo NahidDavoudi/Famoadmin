@@ -703,6 +703,22 @@ table tbody td {
     vertical-align: middle;
 }
 
+@media (max-width: 639px) {
+    .table-wrap tbody td .icon {
+        width: var(--space-5); /* 20px - larger on mobile */
+        /* 20px */
+        height: var(--space-5);
+        /* 20px */
+    }
+    .table-wrap tbody td button .icon,
+    .table-wrap tbody td a .icon {
+        width: var(--space-5); /* 20px - larger on mobile */
+        /* 20px */
+        height: var(--space-5);
+        /* 20px */
+    }
+}
+
 .table-wrap tbody td button .icon,
 .table-wrap tbody td a .icon {
     width: var(--space-3);
