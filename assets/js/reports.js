@@ -2,11 +2,11 @@
  * Admin Panel - Reports & Chart
  */
 
-import { api } from '../../../js/api-client.js';
+import { api } from './api-client.js';
 import { showAlert, getElementValue } from './utils.js';
 import { updateStatElement } from './utils.js';
 import * as config from './config.js';
-import { getBaseChartOptions, CHART_COLORS } from '../../../js/chart-theme.js';
+import { getBaseChartOptions, CHART_COLORS } from './chart-theme.js';
 
 const ApexCharts = window.ApexCharts;
 

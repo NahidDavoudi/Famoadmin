@@ -2,7 +2,7 @@
  * Admin Panel - Utilities (re-export ui-helpers + form helpers)
  */
 
-export { showModal, hideModal, showAlert, escapeHtml, formatDate } from '../../../js/ui-helpers.js';
+export { showModal, hideModal, showAlert, escapeHtml, formatDate } from './ui-helpers.js';
 
 export function getElementValue(id) {
     const element = document.getElementById(id);
@@ -34,7 +34,7 @@ export function toggleElement(id, show) {
 }
 
 export function icon(name, className = 'icon') {
-    return `<svg class="${className}" aria-hidden="true"><use href="../assets/icons/sprite.svg#icon-${name}"/></svg>`;
+    return `<svg class="${className}" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-${name}"/></svg>`;
 }
 
 /**

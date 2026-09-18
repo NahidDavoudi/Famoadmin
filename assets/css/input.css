@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* Scan all HTML/PHP for Tailwind classes */
-@source "../../../**/*.html";
-@source "../../../**/*.php";
 
 /* Project theme (plan page and others) */
 @theme {
@@ -10,6 +7,5 @@
   --color-primary-light: #E2D9C6;
   --color-accent: #8B786D;
   --color-cream: #f5f5f0;
+  --font-family: 'Vazirmatn', sans-serif;
 }
-
-/* استایل‌های سفارشی پروژه را اینجا اضافه کنید */

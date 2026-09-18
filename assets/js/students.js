@@ -2,7 +2,7 @@
  * Admin Panel - Students CRUD
  */
 
-import { api } from '../../../js/api-client.js';
+import { api } from './/api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, getElementValue, setFormValues, icon, withButtonLoading } from './utils.js';
 
 export async function loadStudents() {

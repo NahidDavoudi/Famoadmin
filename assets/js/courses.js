@@ -2,7 +2,7 @@
  * Admin Panel - Courses CRUD
  */
 
-import { api } from '../../../js/api-client.js';
+import { api } from './/api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon } from './utils.js';
 
 const ICON_MAP = {

@@ -2,7 +2,7 @@
  * Admin Panel - Supporters CRUD
  */
 
-import { api } from '../../../js/api-client.js';
+import { api } from './api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 import { updateStatElement } from './utils.js';
 

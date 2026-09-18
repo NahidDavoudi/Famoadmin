@@ -3,14 +3,14 @@
  * Enhanced with Jalali (Shamsi) date picker & percentage preview
  */
 
-import { api } from '../../../js/api-client.js';
+import { api } from './/api-client.js';
 import { showAlert } from './utils.js';
 import { loadStudentList } from './ui.js';
 import * as config from './config.js';
 import {
     toGregorian, getTodayJalali, getJalaliMonths,
     jalaliMonthDays, formatGregorianToJalali
-} from '../../../js/jalali.js';
+} from './/jalali.js';
 
 // Guard: only initialize Jalali picker once
 let jalaliPickerInitialized = false;
