@@ -7,23 +7,41 @@ import { api } from './api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading, updateStatElement } from './utils.js';
 
 export async function loadBlogPosts() {
+    const skeleton = document.getElementById('blogSkeleton');
+    const tableWrap = document.querySelector('#blogTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('blogEmptyState');
+
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
+
     try {
         const posts = await api('get_blog_posts');
         renderBlogTable(posts);
     } catch (error) {
         console.error('Error loading blog posts:', error);
         showAlert('خطا در بارگذاری پست‌های وبلاگ', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
     }
 }
 
 function renderBlogTable(posts) {
     const tbody = document.getElementById('blogTable');
+    const emptyState = document.getElementById('blogEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+
     if (!tbody) return;
 
     if (!posts || posts.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500">پست وبلاگی ثبت نشده است</td></tr>';
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
     }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
 
     tbody.innerHTML = posts.map(p => `
         <tr class="hover:bg-gray-50">

@@ -150,3 +150,102 @@ export function closeMobileSidebar() {
         document.body.style.overflow = 'auto';
     }
 }
+
+/**
+ * Pagination Utility
+ * @param {Object} options
+ * @param {Array} options.data - Full data array
+ * @param {number} options.pageSize - Items per page (default 50)
+ * @param {Function} options.renderFn - Function to render current page data
+ * @param {string} options.containerId - Container element ID for pagination controls
+ * @param {number} options.currentPage - Initial page (default 1)
+ * @returns {Object} Pagination controller with next/prev/goToPage methods
+ */
+export function createPagination({ data, pageSize = 50, renderFn, containerId, currentPage = 1 }) {
+    const container = document.getElementById(containerId);
+    if (!container) return null;
+
+    const totalPages = Math.ceil(data.length / pageSize);
+    if (totalPages <= 1) return null;
+
+    let page = Math.min(Math.max(1, currentPage), totalPages);
+
+    function render() {
+        const start = (page - 1) * pageSize;
+        const end = start + pageSize;
+        renderFn(data.slice(start, end));
+
+        // Update pagination controls
+        container.innerHTML = `
+            <nav class="pagination flex items-center justify-center gap-2" role="navigation" aria-label="صفحه‌بندی">
+                <button class="btn btn-sm btn-secondary" ${page === 1 ? 'disabled' : ''}
+                        onclick="window.pagination_${containerId}.goToPage(${page - 1})"
+                        aria-label="صفحه قبلی">
+                    <svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-right" /></svg>
+                </button>
+                <span class="pagination-info text-sm text-gray-600">
+                    صفحه ${page} از ${totalPages}
+                </span>
+                <button class="btn btn-sm btn-secondary" ${page === totalPages ? 'disabled' : ''}
+                        onclick="window.pagination_${containerId}.goToPage(${page + 1})"
+                        aria-label="صفحه بعدی">
+                    <svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-left" /></svg>
+                </button>
+            </nav>
+        `;
+    }
+
+    const controller = {
+        goToPage(p) {
+            page = Math.min(Math.max(1, p), totalPages);
+            render();
+        },
+        next() {
+            controller.goToPage(page + 1);
+        },
+        prev() {
+            controller.goToPage(page - 1);
+        },
+        getPage() {
+            return page;
+        },
+        getTotalPages() {
+            return totalPages;
+        }
+    };
+
+    // Expose globally for onclick handlers
+    window[`pagination_${containerId}`] = controller;
+
+    render();
+
+    return controller;
+}
+
+/**
+ * Auto-pagination helper: wraps a render function to add pagination if data exceeds threshold
+ * @param {Object} options
+ * @param {Array} options.data - Data array
+ * @param {Function} options.renderFn - Original render function
+ * @param {string} options.containerId - Table container ID (for pagination controls)
+ * @param {number} options.threshold - Minimum rows for pagination (default 50)
+ * @param {number} options.pageSize - Items per page (default 50)
+ * @returns {Function} Wrapped render function
+ */
+export function withPagination({ data, renderFn, containerId, threshold = 50, pageSize = 50 }) {
+    if (!data || data.length <= threshold) {
+        return renderFn(data);
+    }
+
+    const paginationContainer = `${containerId}Pagination`;
+    createPagination({
+        data,
+        pageSize,
+        renderFn: (pageData) => renderFn(pageData),
+        containerId: paginationContainer,
+        currentPage: 1
+    });
+
+    // Return first page
+    return renderFn(data.slice(0, pageSize));
+}

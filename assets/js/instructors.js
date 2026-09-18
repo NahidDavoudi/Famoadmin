@@ -6,23 +6,41 @@ import { api } from './/api-client.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 
 export async function loadInstructors() {
+    const skeleton = document.getElementById('instructorsSkeleton');
+    const tableWrap = document.querySelector('#instructorsTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('instructorsEmptyState');
+
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
+
     try {
         const instructors = await api('instructors_list');
         renderInstructorsTable(instructors);
     } catch (error) {
         console.error('Error loading instructors:', error);
         showAlert('خطا در بارگذاری اساتید', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
     }
 }
 
 function renderInstructorsTable(instructors) {
     const tbody = document.getElementById('instructorsTable');
+    const emptyState = document.getElementById('instructorsEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+
     if (!tbody) return;
 
     if (instructors.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500">استادی یافت نشد</td></tr>';
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
     }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
 
     tbody.innerHTML = instructors.map(i => `
         <tr class="hover:bg-gray-50">

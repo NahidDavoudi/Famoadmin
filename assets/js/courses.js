@@ -34,12 +34,22 @@ function mapCourseIcon(iconClass) {
 }
 
 export async function loadCourses() {
+    const skeleton = document.getElementById('coursesSkeleton');
+    const tableWrap = document.querySelector('#coursesTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('coursesEmptyState');
+
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
+
     try {
         const courses = await api('courses_list');
         renderCoursesTable(courses);
     } catch (error) {
         console.error('Error loading courses:', error);
         showAlert('خطا در بارگذاری دوره‌ها', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
     }
 }
 

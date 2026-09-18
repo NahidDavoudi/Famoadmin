@@ -11,12 +11,22 @@ export async function loadStudents() {
     const field = getElementValue('filterField');
     const grade = getElementValue('filterGrade');
 
+    const skeleton = document.getElementById('studentsSkeleton');
+    const tableWrap = document.querySelector('#studentsTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('studentsEmptyState');
+
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
+
     try {
         const students = await api('get_students', { q: search, field, grade });
         renderStudentsTable(students);
     } catch (error) {
         console.error('Error loading students:', error);
         showAlert('خطا در بارگذاری دانش‌آموزان', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
     }
 }
 

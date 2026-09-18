@@ -7,6 +7,14 @@ import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withB
 import { updateStatElement } from './utils.js';
 
 export async function loadSupporters() {
+    const skeleton = document.getElementById('supportersSkeleton');
+    const tableWrap = document.querySelector('#supportersTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('supportersEmptyState');
+
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
+
     try {
         const data = await api('get_supporters');
 
@@ -20,17 +28,27 @@ export async function loadSupporters() {
     } catch (error) {
         console.error('Error loading supporters:', error);
         showAlert('خطا در بارگذاری پشتیبان‌ها', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
     }
 }
 
 function renderSupportersTable(supporters) {
     const tbody = document.getElementById('supportersTable');
+    const emptyState = document.getElementById('supportersEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+
     if (!tbody) return;
 
     if (!supporters || supporters.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500">پشتیبانی ثبت نشده است</td></tr>';
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
     }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
 
     tbody.innerHTML = supporters.map(s => `
         <tr class="hover:bg-gray-50">

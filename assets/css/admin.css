@@ -1358,6 +1358,25 @@ table tbody td {
     border-radius: var(--radius-lg);
 }
 
+/* ===== PAGINATION ===== */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.pagination .btn {
+    min-width: 2.5rem;
+}
+
+.pagination-info {
+    min-width: 8rem;
+    text-align: center;
+}
+
 /* ===== FILTER BAR ===== */
 .filter-bar {
     background: var(--color-white);

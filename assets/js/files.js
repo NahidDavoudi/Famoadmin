@@ -8,23 +8,41 @@ import { setDefaultDates } from './ui.js';
 import { formatGregorianToJalali } from './/jalali.js';
 
 export async function loadFiles() {
+    const skeleton = document.getElementById('filesSkeleton');
+    const tableWrap = document.querySelector('#filesTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('filesEmptyState');
+
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
+
     try {
         const files = await api('get_files');
         renderFilesTable(files);
     } catch (error) {
         console.error('Error loading files:', error);
         showAlert('خطا در بارگذاری فایل‌ها', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
     }
 }
 
 function renderFilesTable(files) {
     const tbody = document.getElementById('filesTable');
+    const emptyState = document.getElementById('filesEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+
     if (!tbody) return;
 
     if (files.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-500">فایلی آپلود نشده</td></tr>';
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
     }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
 
     tbody.innerHTML = files.map(f => `
         <tr class="border-b hover:bg-gray-50">

@@ -278,6 +278,15 @@
                         </div>
                     </div>
 
+                    <!-- Skeleton Loader -->
+                    <div id="studentsSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
                     <!-- Table -->
                     <div class="table-wrap overflow-x-auto">
                         <table class="w-full responsive-table">
@@ -295,6 +304,9 @@
                             <tbody id="studentsTable"></tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <div id="studentsPagination" class="hidden"></div>
 
                     <!-- Empty State -->
                     <div id="studentsEmptyState" class="empty-state hidden">
@@ -333,26 +345,38 @@
                             <svg class="icon" aria-hidden="true">
                                 <use href="assets/icons/sprite.svg#icon-plus" />
                             </svg>
-                            <span>افزودن دوره</span>
-                        </button>
-                    </div>
+<span>افزودن دوره</span>
+                    </button>
+                </div>
 
-                    <div class="table-wrap overflow-x-auto">
-                        <table class="w-full responsive-table">
-                            <thead class="bg-primary text-white">
-                                <tr>
-                                    <th class="px-5 py-4 text-right">ترتیب</th>
-                                    <th class="px-5 py-4 text-right">نام</th>
-                                    <th class="px-5 py-4 text-right">آیکون</th>
-                                    <th class="px-5 py-4 text-right">رنگ‌ها</th>
-                                    <th class="px-5 py-4 text-right">عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="coursesTable"></tbody>
-                        </table>
-                    </div>
+                <!-- Skeleton Loader -->
+                <div id="coursesSkeleton" class="hidden">
+                    <div class="skeleton skeleton-table-row"></div>
+                    <div class="skeleton skeleton-table-row"></div>
+                    <div class="skeleton skeleton-table-row"></div>
+                    <div class="skeleton skeleton-table-row"></div>
+                    <div class="skeleton skeleton-table-row"></div>
+                </div>
 
-                    <!-- Empty State -->
+                <div class="table-wrap overflow-x-auto">
+                    <table class="w-full responsive-table">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th class="px-5 py-4 text-right">ترتیب</th>
+                                <th class="px-5 py-4 text-right">نام</th>
+                                <th class="px-5 py-4 text-right">آیکون</th>
+                                <th class="px-5 py-4 text-right">رنگ‌ها</th>
+                                <th class="px-5 py-4 text-right">عملیات</th>
+                            </tr>
+                        </thead>
+<tbody id="coursesTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div id="coursesPagination" class="hidden"></div>
+
+                <!-- Empty State -->
                     <div id="coursesEmptyState" class="empty-state hidden">
                         <div class="empty-state__icon">
                             <svg class="icon" aria-hidden="true">
@@ -389,6 +413,15 @@
                         </button>
                     </div>
 
+                    <!-- Skeleton Loader -->
+                    <div id="instructorsSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
                     <div class="table-wrap overflow-x-auto">
                         <table class="w-full responsive-table">
                             <thead class="bg-primary text-white">
@@ -403,6 +436,9 @@
                             <tbody id="instructorsTable"></tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <div id="instructorsPagination" class="hidden"></div>
 
                     <!-- Empty State -->
                     <div id="instructorsEmptyState" class="empty-state hidden">
@@ -701,6 +737,15 @@
                     </div>
 
                     <!-- Files Table -->
+                    <!-- Skeleton Loader -->
+                    <div id="filesSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
                     <div class="table-wrap overflow-x-auto">
                         <table class="w-full responsive-table">
                             <thead class="bg-primary text-white">
@@ -716,6 +761,9 @@
                             <tbody id="filesTable"></tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <div id="filesPagination" class="hidden"></div>
 
                     <!-- Empty State -->
                     <div id="filesEmptyState" class="empty-state hidden">
@@ -792,6 +840,15 @@
                     </div>
 
                     <!-- Supporters Table -->
+                    <!-- Skeleton Loader -->
+                    <div id="supportersSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
                     <div class="table-wrap overflow-x-auto">
                         <table class="w-full responsive-table">
                             <thead class="bg-primary text-white">
@@ -808,6 +865,9 @@
                             <tbody id="supportersTable"></tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <div id="supportersPagination" class="hidden"></div>
 
                     <!-- Empty State -->
                     <div id="supportersEmptyState" class="empty-state hidden">
@@ -912,6 +972,15 @@
                             </svg>
                             <span>افزودن پست</span>
                         </button>
+                    </div>
+
+                    <!-- Skeleton Loader -->
+                    <div id="blogSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
                     </div>
 
                     <div class="table-wrap overflow-x-auto">
@@ -1918,6 +1987,110 @@
                 <button type="button"
                     onclick="hideModal('editBlogPostModal')"
                     class="btn btn-secondary">انصراف</button>
+            </div>
+</div>
+        </div>
+    </div>
+
+<!-- Keyboard Shortcuts Help Modal -->
+<div id="keyboardShortcutsModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="keyboardShortcutsModalTitle">
+    <div
+        class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+        tabindex="-1">
+        <div class="modal-header">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="modal-icon modal-icon-primary">
+                    <svg class="icon text-white text-xl" aria-hidden="true">
+                        <use href="assets/icons/sprite.svg#icon-keyboard" />
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="modal-header-title" id="keyboardShortcutsModalTitle">کلیدهای میانبر</h3>
+                    <p class="modal-header-subtitle">راهنمای دکمه‌های سریع</p>
+                </div>
+            </div>
+            <button type="button"
+                onclick="hideModal('keyboardShortcutsModal')"
+                class="modal-close"
+                aria-label="بستن modal">
+                <svg class="icon" aria-hidden="true">
+                    <use href="assets/icons/sprite.svg#icon-x" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="space-y-4">
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <svg class="icon text-primary" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-keyboard" />
+                        </svg>
+                        کلیدهای عمومی
+                    </h4>
+                    <dl class="space-y-2">
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">بستن هر Modal</dt>
+                            <dd class="font-mono text-primary">Esc</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">نمایش این راهنما</dt>
+                            <dd class="font-mono text-primary">؟</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <svg class="icon text-primary" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-clipboard" />
+                        </svg>
+                        ثبت نتایج آزمون
+                    </h4>
+                    <dl class="space-y-2">
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">ذخیره سریع نتایج</dt>
+                            <dd class="font-mono text-primary">Ctrl + S</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">افزودن درس جدید</dt>
+                            <dd class="font-mono text-primary">Enter (در ردیف درس)</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <svg class="icon text-primary" aria-hidden="true">
+                            <use href="assets/icons/sprite.svg#icon-search" />
+                        </svg>
+                        جستجو و فیلتر
+                    </h4>
+                    <dl class="space-y-2">
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">فوکوس بر جستجو دانش‌آموز</dt>
+                            <dd class="font-mono text-primary">/ (اسلش)</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">اجرا کردن فیلتر</dt>
+                            <dd class="font-mono text-primary">Enter (در فیلد جستجو)</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <p class="text-xs text-gray-500 text-center">* میانبرها فقط زمانی کار می‌کنند که در فیلد متنی تایپ نکنید</p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="modal-footer-buttons">
+                <button type="button"
+                    onclick="hideModal('keyboardShortcutsModal')"
+                    class="btn btn-secondary">بستن</button>
             </div>
         </div>
     </div>

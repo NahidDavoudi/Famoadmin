@@ -54,6 +54,7 @@ function setupExamFormListener() {
 
 function setupKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
+        // Ctrl+S for exam entry save
         if (e.ctrlKey && e.key === 's' && config.currentPage === 'exam_entry') {
             e.preventDefault();
             const form = document.getElementById('examEntryForm');
@@ -62,15 +63,41 @@ function setupKeyboardShortcuts() {
             }
         }
 
+        // Enter in subject row adds new row
         if (e.key === 'Enter' && e.target.closest('.subject-row')) {
             e.preventDefault();
             addSubjectRow();
         }
 
+        // Escape closes modals
         if (e.key === 'Escape') {
             document.querySelectorAll('.modal:not(.hidden)').forEach(modal => {
                 hideModal(modal.id);
             });
+        }
+
+        // / key focuses search input
+        if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const active = document.activeElement;
+            const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable);
+            if (!isInput) {
+                e.preventDefault();
+                const searchInput = document.getElementById('filterSearch');
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
+        }
+
+        // ? key opens keyboard shortcuts help
+        if (e.key === '?' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const active = document.activeElement;
+            const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable);
+            if (!isInput) {
+                e.preventDefault();
+                showModal('keyboardShortcutsModal');
+            }
         }
     });
 }
