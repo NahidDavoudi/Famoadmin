@@ -520,6 +520,25 @@ $pdo->commit();
         jsonResponse($posts);
         break;
 
+    case 'get_blog_post':
+        requireAuth();
+
+        $id = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
+        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
+
+        $stmt = $pdo->prepare("
+            SELECT id, title, slug, category, excerpt, content, cover_image, meta_description, published_at, views, is_published
+            FROM blog_posts
+            WHERE id = ?
+        ");
+        $stmt->execute([$id]);
+        $post = $stmt->fetch();
+
+        if (!$post) jsonResponse(['error' => 'پست یافت نشد'], 404);
+
+        jsonResponse($post);
+        break;
+
     case 'add_blog_post':
         requireAdmin();
 

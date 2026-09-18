@@ -62,7 +62,7 @@ function renderBlogTable(posts) {
             </td>
             <td class="px-5 py-4">
                 <div class="flex items-center gap-1">
-                    <button onclick="window.editBlogPost(${p.id}, '${escapeHtml(p.title)}', '${escapeHtml(p.slug)}', '${escapeHtml(p.category)}', '${escapeHtml(p.excerpt || '')}', '${escapeHtml(p.content)}', '${(p.cover_image || '').replace(/'/g, "\\'")}', '${escapeHtml(p.meta_description || '')}', ${p.is_published ? 1 : 0})"
+                    <button onclick="window.editBlogPost(${p.id})"
                             class="p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" title="ویرایش">
                         ${icon('edit', 'icon icon--lg')}
                     </button>
@@ -91,43 +91,50 @@ export async function handleAddBlogPost(e) {
         .catch(error => showAlert(error.message, 'error'));
 }
 
-export function editBlogPost(id, title, slug, category, excerpt, content, cover_image, meta_description, is_published) {
+export async function editBlogPost(id) {
     const form = document.getElementById('editBlogPostForm');
     if (!form) return;
 
-    setFormValues(form, {
-        id,
-        title,
-        slug,
-        category,
-        excerpt,
-        content,
-        meta_description,
-        is_published: is_published ? '1' : ''
-    });
+    try {
+        const post = await api('get_blog_post', { id });
 
-    // Handle checkbox
-    const isPublishedCheckbox = form.querySelector('[name="is_published"]');
-    if (isPublishedCheckbox) {
-        isPublishedCheckbox.checked = !!is_published;
+        setFormValues(form, {
+            id: post.id,
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            excerpt: post.excerpt || '',
+            content: post.content || '',
+            meta_description: post.meta_description || '',
+            is_published: post.is_published ? '1' : ''
+        });
+
+        // Handle checkbox
+        const isPublishedCheckbox = form.querySelector('[name="is_published"]');
+        if (isPublishedCheckbox) {
+            isPublishedCheckbox.checked = !!post.is_published;
+        }
+
+        // Show current cover image
+        const currentImageDiv = document.getElementById('editBlogPostCurrentImage');
+        const currentImageInput = form.querySelector('[name="current_cover_image"]');
+        if (currentImageDiv && post.cover_image) {
+            currentImageDiv.innerHTML = `
+                <div class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
+                    <img src="/famo/v3.10.1/admin/uploads/blog/${escapeHtml(post.cover_image)}" alt="Current cover" class="w-16 h-10 object-cover rounded-lg">
+                    <span class="text-sm text-gray-600">${escapeHtml(post.cover_image)}</span>
+                </div>
+            `;
+        } else if (currentImageDiv) {
+            currentImageDiv.innerHTML = '<p class="text-sm text-gray-500">تصویر کاور تنظیم نشده است</p>';
+        }
+        if (currentImageInput) currentImageInput.value = post.cover_image || '';
+
+        showModal('editBlogPostModal');
+    } catch (error) {
+        console.error('Error fetching blog post:', error);
+        showAlert('خطا در دریافت اطلاعات پست', 'error');
     }
-
-    // Show current cover image
-    const currentImageDiv = document.getElementById('editBlogPostCurrentImage');
-    const currentImageInput = form.querySelector('[name="current_cover_image"]');
-    if (currentImageDiv && cover_image) {
-        currentImageDiv.innerHTML = `
-            <div class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
-                <img src="/famo/v3.10.1/admin/uploads/blog/${escapeHtml(cover_image)}" alt="Current cover" class="w-16 h-10 object-cover rounded-lg">
-                <span class="text-sm text-gray-600">${escapeHtml(cover_image)}</span>
-            </div>
-        `;
-    } else if (currentImageDiv) {
-        currentImageDiv.innerHTML = '<p class="text-sm text-gray-500">تصویر کاور تنظیم نشده است</p>';
-    }
-    if (currentImageInput) currentImageInput.value = cover_image || '';
-
-    showModal('editBlogPostModal');
 }
 
 export async function handleEditBlogPost(e) {
