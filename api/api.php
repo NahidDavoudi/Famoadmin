@@ -86,6 +86,8 @@ require_once __DIR__ . '/api/files.php';
 require_once __DIR__ . '/api/courses.php';
 require_once __DIR__ . '/api/instructors.php';
 require_once __DIR__ . '/api/blog.php';
+require_once __DIR__ . '/api/supporters.php';
+require_once __DIR__ . '/api/students.php';
 
 // ===================== Router =====================
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
@@ -111,365 +113,50 @@ switch ($action) {
         dashboard_get_stats();
         break;
     
-    // ==================== Students ====================
+// ==================== Students ====================
     case 'get_students':
-        requireAuth();
-        
-        $field = $_GET['field'] ?? '';
-        $grade = $_GET['grade'] ?? '';
-        $search = $_GET['q'] ?? '';
-        
-        $sql = "SELECT s.*, 
-                (SELECT COUNT(*) FROM exam_results WHERE student_id = s.id) as exam_count, 
-                (SELECT ROUND(AVG(percentage), 1) FROM exam_results WHERE student_id = s.id) as avg_percentage,
-                (SELECT u.id FROM users u WHERE u.role = 'student' AND u.linked_id = s.id LIMIT 1) as has_account
-                FROM students s WHERE 1=1";
-        $params = [];
-        
-        if ($field) { $sql .= " AND s.field = ?"; $params[] = $field; }
-        if ($grade) { $sql .= " AND s.grade = ?"; $params[] = $grade; }
-        if ($search) { $sql .= " AND (s.name LIKE ? OR s.phone LIKE ? OR s.national_id LIKE ?)"; $params[] = "%$search%"; $params[] = "%$search%"; $params[] = "%$search%"; }
-        
-        $sql .= " ORDER BY s.name";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        
-        jsonResponse($stmt->fetchAll());
+        students_get_students();
         break;
-        
+
     case 'add_student':
-        requireAdmin();
-        
-        $name = trim($_POST['name'] ?? '');
-        $grade = (int)($_POST['grade'] ?? 0);
-        $field = trim($_POST['field'] ?? '');
-        $phone = trim($_POST['phone'] ?? '');
-        $national_id = trim($_POST['national_id'] ?? '');
-        
-        // اعتبارسنجی فیلدهای الزامی
-        if (!$name || !$grade || !$field) {
-            jsonResponse(['error' => 'نام، پایه و رشته الزامی است'], 400);
-        }
-        if (!$phone || !preg_match('/^09\d{9}$/', $phone)) {
-            jsonResponse(['error' => 'شماره موبایل نامعتبر است (فرمت: 09xxxxxxxxx)'], 400);
-        }
-        if (!$national_id || !preg_match('/^\d{10}$/', $national_id)) {
-            jsonResponse(['error' => 'کد ملی باید ۱۰ رقم باشد'], 400);
-        }
-        
-        // چک تکراری نبودن شماره موبایل
-        $stmt = $pdo->prepare("SELECT id FROM students WHERE phone = ?");
-        $stmt->execute([$phone]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این شماره موبایل قبلاً ثبت شده است'], 400);
-        }
-        
-        // چک تکراری نبودن کد ملی
-        $stmt = $pdo->prepare("SELECT id FROM students WHERE national_id = ?");
-        $stmt->execute([$national_id]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این کد ملی قبلاً ثبت شده است'], 400);
-        }
-        
-        // چک تکراری نبودن نام کاربری در users
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-        $stmt->execute([$phone]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این شماره موبایل قبلاً به عنوان نام کاربری استفاده شده است'], 400);
-        }
-        
-        $pdo->beginTransaction();
-        try {
-            // ۱. ثبت دانش‌آموز
-            $stmt = $pdo->prepare("INSERT INTO students (name, phone, national_id, grade, field) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$name, $phone, $national_id, $grade, $field]);
-            $student_id = $pdo->lastInsertId();
-            
-            // ۲. ایجاد حساب کاربری با رمز پیش‌فرض 1234 (هش شده)
-            $default_password = password_hash('1234', PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, role, linked_id, created_at) VALUES (?, ?, 'student', ?, NOW())");
-            $stmt->execute([$phone, $default_password, $student_id]);
-            
-            $pdo->commit();
-            jsonResponse(['success' => true, 'id' => $student_id, 'message' => 'دانش‌آموز ثبت و حساب کاربری ایجاد شد (رمز پیش‌فرض: 1234)']);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            error_log("Error in add_student: " . $e->getMessage());
-            jsonResponse(['error' => 'خطا در ثبت دانش‌آموز: ' . $e->getMessage()], 500);
-        }
+        students_add_student();
         break;
-        
+
     case 'update_student':
-        requireAuth();
-        
-        $id = (int)($_POST['id'] ?? 0);
-        $name = trim($_POST['name'] ?? '');
-        $grade = (int)($_POST['grade'] ?? 0);
-        $field = trim($_POST['field'] ?? '');
-        $phone = trim($_POST['phone'] ?? '');
-        $national_id = trim($_POST['national_id'] ?? '');
-        
-        if (!$id || !$name || !$grade || !$field) {
-            jsonResponse(['error' => 'داده‌های ناقص'], 400);
-        }
-        if (!$phone || !preg_match('/^09\d{9}$/', $phone)) {
-            jsonResponse(['error' => 'شماره موبایل نامعتبر است (فرمت: 09xxxxxxxxx)'], 400);
-        }
-        if (!$national_id || !preg_match('/^\d{10}$/', $national_id)) {
-            jsonResponse(['error' => 'کد ملی باید ۱۰ رقم باشد'], 400);
-        }
-        
-        // چک تکراری نبودن شماره موبایل (غیر از خود دانش‌آموز)
-        $stmt = $pdo->prepare("SELECT id FROM students WHERE phone = ? AND id != ?");
-        $stmt->execute([$phone, $id]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این شماره موبایل توسط دانش‌آموز دیگری استفاده شده است'], 400);
-        }
-        
-        // چک تکراری نبودن کد ملی (غیر از خود دانش‌آموز)
-        $stmt = $pdo->prepare("SELECT id FROM students WHERE national_id = ? AND id != ?");
-        $stmt->execute([$national_id, $id]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این کد ملی توسط دانش‌آموز دیگری استفاده شده است'], 400);
-        }
-        
-        $pdo->beginTransaction();
-        try {
-            // دریافت شماره قدیمی برای آپدیت نام کاربری
-            $stmt = $pdo->prepare("SELECT phone FROM students WHERE id = ?");
-            $stmt->execute([$id]);
-            $old_student = $stmt->fetch();
-            $old_phone = $old_student ? $old_student['phone'] : null;
-            
-            // آپدیت اطلاعات دانش‌آموز
-            $stmt = $pdo->prepare("UPDATE students SET name = ?, phone = ?, national_id = ?, grade = ?, field = ? WHERE id = ?");
-            $stmt->execute([$name, $phone, $national_id, $grade, $field, $id]);
-            
-            // اگر شماره تغییر کرده، نام کاربری را هم آپدیت کن
-            if ($old_phone && $old_phone !== $phone) {
-                $stmt = $pdo->prepare("UPDATE users SET username = ? WHERE role = 'student' AND linked_id = ?");
-                $stmt->execute([$phone, $id]);
-            }
-            
-            $pdo->commit();
-            jsonResponse(['success' => true]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            error_log("Error in update_student: " . $e->getMessage());
-            jsonResponse(['error' => 'خطا در بروزرسانی: ' . $e->getMessage()], 500);
-        }
+        students_update_student();
         break;
-        
+
     case 'delete_student':
-        requireAdmin();
-        
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
-        
-        $pdo->beginTransaction();
-        try {
-            // حذف حساب کاربری مرتبط
-            $pdo->prepare("DELETE FROM users WHERE role = 'student' AND linked_id = ?")->execute([$id]);
-            // حذف دانش‌آموز (سایر وابستگی‌ها با CASCADE حذف می‌شوند)
-            $pdo->prepare("DELETE FROM students WHERE id = ?")->execute([$id]);
-            
-            $pdo->commit();
-            jsonResponse(['success' => true]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            error_log("Error in delete_student: " . $e->getMessage());
-            jsonResponse(['error' => 'خطا در حذف دانش‌آموز'], 500);
-        }
+        students_delete_student();
         break;
-    
-    // ایجاد حساب کاربری برای دانش‌آموزان قدیمی (که حساب ندارند)
+
     case 'create_student_account':
-        requireAdmin();
-        
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
-        
-        // دریافت اطلاعات دانش‌آموز
-        $stmt = $pdo->prepare("SELECT id, phone FROM students WHERE id = ?");
-        $stmt->execute([$id]);
-        $student = $stmt->fetch();
-        
-        if (!$student) {
-            jsonResponse(['error' => 'دانش‌آموز یافت نشد'], 404);
-        }
-        if (!$student['phone']) {
-            jsonResponse(['error' => 'ابتدا شماره موبایل دانش‌آموز را ثبت کنید'], 400);
-        }
-        
-        // چک اینکه حساب نداشته باشد
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'student' AND linked_id = ?");
-        $stmt->execute([$id]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این دانش‌آموز قبلاً حساب کاربری دارد'], 400);
-        }
-        
-        // ایجاد حساب
-        $default_password = password_hash('1234', PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, role, linked_id, created_at) VALUES (?, ?, 'student', ?, NOW())");
-        $stmt->execute([$student['phone'], $default_password, $id]);
-        
-        jsonResponse(['success' => true, 'message' => 'حساب کاربری ایجاد شد (رمز پیش‌فرض: 1234)']);
+        students_create_student_account();
         break;
-    
-    // بازنشانی رمز عبور دانش‌آموز
+
     case 'reset_student_password':
-        requireAdmin();
-        
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
-        
-        $default_password = password_hash('1234', PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("UPDATE users SET password_hash = ? WHERE role = 'student' AND linked_id = ?");
-        $stmt->execute([$default_password, $id]);
-        
-        if ($stmt->rowCount() === 0) {
-            jsonResponse(['error' => 'حساب کاربری برای این دانش‌آموز یافت نشد'], 404);
-        }
-        
-        jsonResponse(['success' => true, 'message' => 'رمز عبور به 1234 بازنشانی شد']);
+        students_reset_student_password();
         break;
-    
-    // ==================== Supporters ====================
+
+    case 'get_student_list':
+        students_get_student_list();
+        break;
+
+// ==================== Supporters ====================
     case 'get_supporters':
-        requireAdmin();
-        
-        // لیست پشتیبان‌ها با آمار (فیلتر id=0 که معتبر نیست)
-        $stmt = $pdo->query("
-            SELECT 
-                sup.id, sup.name, sup.grade, sup.field, sup.chat_id,
-                COUNT(rs.id) as total_reports,
-                SUM(CASE WHEN rs.status = 'replied' THEN 1 ELSE 0 END) as replied_count,
-                SUM(CASE WHEN rs.status = 'pending' THEN 1 ELSE 0 END) as pending_count,
-                ROUND(AVG(TIMESTAMPDIFF(HOUR, rs.created_at, rs.replied_at)), 1) as avg_response_hours
-            FROM supporters sup
-            LEFT JOIN reports_status rs ON sup.id = rs.supporter_id
-            WHERE sup.id > 0
-            GROUP BY sup.id
-            ORDER BY sup.name
-        ");
-        $supporters = $stmt->fetchAll();
-        
-        // آمار کلی (فیلتر id=0)
-        $stats = $pdo->query("
-            SELECT 
-                COUNT(DISTINCT sup.id) as total,
-                COALESCE(SUM(CASE WHEN rs.status = 'replied' THEN 1 ELSE 0 END), 0) as replied,
-                COALESCE(SUM(CASE WHEN rs.status = 'pending' THEN 1 ELSE 0 END), 0) as pending
-            FROM supporters sup
-            LEFT JOIN reports_status rs ON sup.id = rs.supporter_id
-            WHERE sup.id > 0
-        ")->fetch();
-        
-        jsonResponse([
-            'supporters' => $supporters,
-            'stats' => $stats
-        ]);
+        supporters_get_supporters();
         break;
-    
+
     case 'add_supporter':
-        requireAdmin();
-        
-        $name = trim($_POST['name'] ?? '');
-        $grade = (int)($_POST['grade'] ?? 0);
-        $field = trim($_POST['field'] ?? '');
-        $chat_id = trim($_POST['chat_id'] ?? '') ?: null;
-        $username = trim($_POST['username'] ?? '');
-        $password = $_POST['password'] ?? '';
-        
-        // اعتبارسنجی
-        if (!$name || !$grade || !$field) {
-            jsonResponse(['error' => 'نام، پایه و رشته الزامی است'], 400);
-        }
-        if (!$username || strlen($password) < 4) {
-            jsonResponse(['error' => 'نام کاربری و رمز عبور (حداقل ۴ کاراکتر) الزامی است'], 400);
-        }
-        
-        // چک تکراری نبودن نام کاربری
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-        $stmt->execute([$username]);
-        if ($stmt->fetch()) {
-            jsonResponse(['error' => 'این نام کاربری قبلاً استفاده شده است'], 400);
-        }
-        
-        $pdo->beginTransaction();
-        try {
-            // ثبت در جدول supporters
-            $stmt = $pdo->prepare("INSERT INTO supporters (name, grade, field, chat_id) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$name, $grade, $field, $chat_id]);
-            $supporter_id = $pdo->lastInsertId();
-            
-            // ثبت در جدول users
-            $password_hash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, role, linked_id) VALUES (?, ?, 'supporter', ?)");
-            $stmt->execute([$username, $password_hash, $supporter_id]);
-            
-            $pdo->commit();
-            jsonResponse(['success' => true, 'id' => $supporter_id]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            jsonResponse(['error' => 'خطا در ثبت پشتیبان'], 500);
-        }
+        supporters_add_supporter();
         break;
-    
+
     case 'update_supporter':
-        requireAdmin();
-        
-        $id = (int)($_POST['id'] ?? 0);
-        $name = trim($_POST['name'] ?? '');
-        $grade = (int)($_POST['grade'] ?? 0);
-        $field = trim($_POST['field'] ?? '');
-        $chat_id = trim($_POST['chat_id'] ?? '') ?: null;
-        $new_password = $_POST['new_password'] ?? '';
-        
-        if (!$id || !$name || !$grade || !$field) {
-            jsonResponse(['error' => 'داده‌های ناقص'], 400);
-        }
-        
-        $pdo->beginTransaction();
-        try {
-            // آپدیت supporters
-            $stmt = $pdo->prepare("UPDATE supporters SET name = ?, grade = ?, field = ?, chat_id = ? WHERE id = ?");
-            $stmt->execute([$name, $grade, $field, $chat_id, $id]);
-            
-            // آپدیت رمز عبور اگر وارد شده
-            if (!empty($new_password) && strlen($new_password) >= 4) {
-                $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("UPDATE users SET password_hash = ? WHERE role = 'supporter' AND linked_id = ?");
-                $stmt->execute([$password_hash, $id]);
-            }
-            
-            $pdo->commit();
-            jsonResponse(['success' => true]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            jsonResponse(['error' => 'خطا در بروزرسانی'], 500);
-        }
+        supporters_update_supporter();
         break;
-    
+
     case 'delete_supporter':
-        requireAdmin();
-        
-        $id = (int)($_POST['id'] ?? 0);
-        if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
-        
-        $pdo->beginTransaction();
-        try {
-            // حذف از users
-            $pdo->prepare("DELETE FROM users WHERE role = 'supporter' AND linked_id = ?")->execute([$id]);
-            // حذف از supporters (گزارش‌ها با SET NULL باقی می‌مانند)
-            $pdo->prepare("DELETE FROM supporters WHERE id = ?")->execute([$id]);
-            
-$pdo->commit();
-            jsonResponse(['success' => true]);
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            jsonResponse(['error' => 'خطا در حذف پشتیبان'], 500);
-        }
+        supporters_delete_supporter();
         break;
 
     // ==================== Blog Posts ====================
