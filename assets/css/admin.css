@@ -56,13 +56,37 @@ body {
 }
 
 #loginLoading {
-    display: inline-block;
+    display: none;
     width: 20px;
     height: 20px;
     border: 2px solid #f3f3f3;
     border-top: 2px solid #445D84;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+#loginLoading.show {
+    display: inline-block;
+}
+
+#loginForm button[type="submit"] {
+    transition: all 0.2s ease;
+    transform: scale(1);
+}
+
+#loginForm button[type="submit"]:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(68, 93, 132, 0.4);
+}
+
+#loginForm button[type="submit"]:active:not(:disabled) {
+    transform: scale(0.98);
+    box-shadow: 0 4px 15px rgba(68, 93, 132, 0.3);
+}
+
+#loginForm button[type="submit"]:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .modern-input {

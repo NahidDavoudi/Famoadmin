@@ -59,10 +59,12 @@ export async function checkAuth() {
 export async function handleLogin(e) {
     e.preventDefault();
     const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
     const loading = document.getElementById('loginLoading');
     const errorBox = document.getElementById('loginError');
 
-    if (loading) loading.classList.remove('hidden');
+    if (loading) loading.classList.add('show');
+    if (btn) btn.disabled = true;
     if (errorBox) errorBox.classList.add('hidden');
 
     try {
@@ -78,7 +80,8 @@ export async function handleLogin(e) {
             errorBox.classList.remove('hidden');
         }
     } finally {
-        if (loading) loading.classList.add('hidden');
+        if (loading) loading.classList.remove('show');
+        if (btn) btn.disabled = false;
     }
 }
 
