@@ -372,7 +372,7 @@ switch ($action) {
     case 'get_supporters':
         requireAdmin();
         
-        // لیست پشتیبان‌ها با آمار
+        // لیست پشتیبان‌ها با آمار (فیلتر id=0 که معتبر نیست)
         $stmt = $pdo->query("
             SELECT 
                 sup.id, sup.name, sup.grade, sup.field, sup.chat_id,
@@ -382,12 +382,13 @@ switch ($action) {
                 ROUND(AVG(TIMESTAMPDIFF(HOUR, rs.created_at, rs.replied_at)), 1) as avg_response_hours
             FROM supporters sup
             LEFT JOIN reports_status rs ON sup.id = rs.supporter_id
+            WHERE sup.id > 0
             GROUP BY sup.id
             ORDER BY sup.name
         ");
         $supporters = $stmt->fetchAll();
         
-        // آمار کلی
+        // آمار کلی (فیلتر id=0)
         $stats = $pdo->query("
             SELECT 
                 COUNT(DISTINCT sup.id) as total,
@@ -395,6 +396,7 @@ switch ($action) {
                 COALESCE(SUM(CASE WHEN rs.status = 'pending' THEN 1 ELSE 0 END), 0) as pending
             FROM supporters sup
             LEFT JOIN reports_status rs ON sup.id = rs.supporter_id
+            WHERE sup.id > 0
         ")->fetch();
         
         jsonResponse([

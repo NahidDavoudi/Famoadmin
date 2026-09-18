@@ -56,7 +56,7 @@ function renderSupportersTable(supporters) {
             </td>
             <td class="px-5 py-4">
                 <div class="flex items-center gap-1">
-                    <button onclick="window.editSupporter(${s.id}, '${escapeHtml(s.name)}', ${s.grade}, '${escapeHtml(s.field)}', '${(s.chat_id || '').replace(/'/g, "\\'")}')"
+                    <button onclick="window.editSupporter(${s.id}, '${escapeHtml(s.name)}', ${s.grade}, '${escapeHtml(s.field)}', '${String(s.chat_id || '').replace(/'/g, "\\'")}')"
                             class="p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" title="ویرایش">
                         ${icon('edit', 'icon icon--lg')}
                     </button>
