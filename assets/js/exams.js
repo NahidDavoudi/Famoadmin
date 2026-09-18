@@ -60,7 +60,7 @@ export async function loadExams() {
                                     </span>
                                 </td>
                                 <td class="px-5 py-4">
-                                    <button onclick="event.stopPropagation(); window.loadExamStudents('${exam.exam_date}')" class="inline-flex items-center gap-2 p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50">
+                                    <button onclick="event.stopPropagation(); window.loadExamStudents('${exam.exam_date}')" class="inline-flex items-center gap-2 p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" aria-label="مشاهده dettagli">
                                         ${icon('users', 'icon icon--lg ml-1')} مشاهده
                                     </button>
                                 </td>
@@ -120,7 +120,7 @@ export async function loadExamStudents(examDate) {
                                     </span>
                                 </td>
                                 <td class="px-5 py-4">
-                                    <button onclick="window.loadExamDetails('${examDate}', ${s.student_id})" class="inline-flex items-center gap-2 p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50">
+                                    <button onclick="window.loadExamDetails('${examDate}', ${s.student_id})" class="inline-flex items-center gap-2 p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" aria-label="جزئیات ${escapeHtml(s.name)}">
                                         ${icon('eye', 'icon icon--lg ml-1')} جزئیات
                                     </button>
                                 </td>

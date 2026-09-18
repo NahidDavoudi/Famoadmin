@@ -47,15 +47,15 @@ function renderStudentsTable(students) {
             </td>
             <td class="px-5 py-4">
                 <div class="flex items-center gap-1">
-                    <button onclick="window.editStudent(${s.id}, '${escapeHtml(s.name)}', ${s.grade}, '${escapeHtml(s.field)}', '${escapeHtml(s.phone || '')}', '${escapeHtml(s.national_id || '')}')" class="p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" title="ویرایش">
+                    <button onclick="window.editStudent(${s.id}, '${escapeHtml(s.name)}', ${s.grade}, '${escapeHtml(s.field)}', '${escapeHtml(s.phone || '')}', '${escapeHtml(s.national_id || '')}')" class="p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" title="ویرایش" aria-label="ویرایش دانش‌آموز ${escapeHtml(s.name)}">
                         ${icon('edit', 'icon icon--lg')}
                     </button>
                     ${s.has_account ? `
-                        <button onclick="window.resetStudentPassword(${s.id})" class="p-2 rounded-lg text-amber-600 hover:text-amber-800 hover:bg-amber-50" title="بازنشانی رمز">
+                        <button onclick="window.resetStudentPassword(${s.id})" class="p-2 rounded-lg text-amber-600 hover:text-amber-800 hover:bg-amber-50" title="بازنشانی رمز" aria-label="بازنشانی رمز دانش‌آموز ${escapeHtml(s.name)}">
                             ${icon('settings', 'icon icon--lg')}
                         </button>
                     ` : ''}
-                    <button onclick="window.deleteStudent(${s.id})" class="p-2 rounded-lg text-red-600 hover:text-red-800 hover:bg-red-50" title="حذف">
+                    <button onclick="window.deleteStudent(${s.id})" class="p-2 rounded-lg text-red-600 hover:text-red-800 hover:bg-red-50" title="حذف" aria-label="حذف دانش‌آموز ${escapeHtml(s.name)}">
                         ${icon('trash', 'icon icon--lg')}
                     </button>
                 </div>
