@@ -1200,7 +1200,7 @@ table tbody td {
 /* Color variants */
 .btn-primary {
     background: var(--color-primary);
-    color: var(--color-primary-dark);
+    color: var(--color-primary-light);
 }
 
 .btn-primary:hover:not(:disabled) {
