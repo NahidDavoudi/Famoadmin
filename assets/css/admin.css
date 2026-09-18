@@ -524,6 +524,29 @@ input[type="range"]::-webkit-slider-thumb {
     background: rgba(255, 255, 255, 0.2);
 }
 
+
+
+/* ===== SIDEBAR BRAND ===== */
+#sidebar .brand {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-primary);
+    margin-bottom: var(--space-4);
+}
+
+#sidebar .brand h2 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+#sidebar .brand h2 .icon {
+    width: var(--space-5);
+    height: var(--space-5);
+    color: var(--color-primary);
+}
 /* ===== MAIN CONTENT LAYOUT ===== */
 #mainPanel>main {
     margin-right: 0;
