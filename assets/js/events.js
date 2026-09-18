@@ -13,6 +13,7 @@ import { handleFileUpload } from './files.js';
 import { handleAddCourse, handleEditCourse } from './courses.js';
 import { handleAddInstructor, handleEditInstructor } from './instructors.js';
 import { handleExamEntry, addSubjectRow } from './exam-entry.js';
+import { handleAddBlogPost, handleEditBlogPost } from './blog.js';
 import { addNoSpinnerStyles, initMobileMenu, setupTableResponsive, setDefaultDates } from './ui.js';
 
 const forms = {
@@ -24,7 +25,9 @@ const forms = {
     addCourseForm: handleAddCourse,
     editCourseForm: handleEditCourse,
     addInstructorForm: handleAddInstructor,
-    editInstructorForm: handleEditInstructor
+    editInstructorForm: handleEditInstructor,
+    addBlogPostForm: handleAddBlogPost,
+    editBlogPostForm: handleEditBlogPost
 };
 
 function setupFormListeners() {

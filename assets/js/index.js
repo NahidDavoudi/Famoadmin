@@ -14,6 +14,7 @@ import { editCourse, deleteCourse } from './courses.js';
 import { editInstructor, deleteInstructor } from './instructors.js';
 import { navigateTo } from './nav.js';
 import { loadReports } from './reports.js';
+import { loadBlogPosts, handleAddBlogPost, handleEditBlogPost, editBlogPost, deleteBlogPost } from './blog.js';
 
 // Expose for HTML onclick and inline handlers
 window.showModal = showModal;
@@ -41,6 +42,9 @@ window.editInstructor = editInstructor;
 window.deleteInstructor = deleteInstructor;
 window.navigateTo = navigateTo;
 window.loadReports = loadReports;
+window.loadBlogPosts = loadBlogPosts;
+window.editBlogPost = editBlogPost;
+window.deleteBlogPost = deleteBlogPost;
 
 document.addEventListener('DOMContentLoaded', () => {
     init();

@@ -19,10 +19,13 @@ if (empty(DB_NAME) || empty(DB_USER)) {
 define('BASE_PATH', dirname(__DIR__)); // website/ folder
 define('UPLOADS_PATH', BASE_PATH . '/uploads');
 define('EXAMS_PATH', UPLOADS_PATH . '/exams');
+define('BLOG_IMAGES_PATH', UPLOADS_PATH . '/blog');
 
 // --- File Upload Settings ---
 define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB
+define('MAX_BLOG_IMAGE_SIZE', 5 * 1024 * 1024); // 5MB
 define('ALLOWED_EXAM_EXTENSIONS', ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx']);
+define('ALLOWED_BLOG_IMAGE_EXTENSIONS', ['jpg', 'jpeg', 'png', 'webp']);
 
 // --- Timezone ---
 date_default_timezone_set('Asia/Tehran');
@@ -30,6 +33,7 @@ date_default_timezone_set('Asia/Tehran');
 // --- Create directories if not exist ---
 if (!file_exists(UPLOADS_PATH)) mkdir(UPLOADS_PATH, 0755, true);
 if (!file_exists(EXAMS_PATH)) mkdir(EXAMS_PATH, 0755, true);
+if (!file_exists(BLOG_IMAGES_PATH)) mkdir(BLOG_IMAGES_PATH, 0755, true);
 
 /**
  * Get PDO connection instance (Singleton)

@@ -13,6 +13,7 @@ import { loadFiles } from './files.js';
 import { loadStudentList } from './ui.js';
 import { loadSupporters } from './supporters.js';
 import { loadReports } from './reports.js';
+import { loadBlogPosts } from './blog.js';
 
 const pageLoaders = {
     overview: loadStats,
@@ -27,6 +28,7 @@ const pageLoaders = {
     },
     supporters: loadSupporters,
     reports: loadReports,
+    blog: loadBlogPosts,
     weekly_plans: loadWeeklyPlans
 };
 
