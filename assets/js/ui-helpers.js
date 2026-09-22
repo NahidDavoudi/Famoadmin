@@ -1,7 +1,7 @@
 // ui-helpers.js
 import toastContainer from './toast.js';
 
-import { createFocusTrap } from './focus-trap.js';
+import { createFocusTrap, initFocusTrap } from './focus-trap.js';
 
 export function showModal(id) {
     const modal = document.getElementById(id);

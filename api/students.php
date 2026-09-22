@@ -9,23 +9,47 @@ function students_get_students() {
     $field = $_GET['field'] ?? '';
     $grade = $_GET['grade'] ?? '';
     $search = $_GET['q'] ?? '';
+    $status = $_GET['status'] ?? '';
+    $page = max(1, (int)($_GET['page'] ?? 1));
+    $limit = min(100, max(1, (int)($_GET['limit'] ?? 20)));
+    $offset = ($page - 1) * $limit;
+    
+    $where = "WHERE 1=1";
+    $params = [];
+    
+    if ($field) { $where .= " AND s.field = ?"; $params[] = $field; }
+    if ($grade) { $where .= " AND s.grade = ?"; $params[] = $grade; }
+    if ($search) { $where .= " AND (s.name LIKE ? OR s.phone LIKE ? OR s.national_id LIKE ?)"; $params[] = "%$search%"; $params[] = "%$search%"; $params[] = "%$search%"; }
+    if ($status !== '') { $where .= " AND s.status = ?"; $params[] = $status; }
+    
+    $countSql = "SELECT COUNT(*) FROM students s $where";
+    $countStmt = $pdo->prepare($countSql);
+    $countStmt->execute($params);
+    $total = (int)$countStmt->fetchColumn();
     
     $sql = "SELECT s.*, 
             (SELECT COUNT(*) FROM exam_results WHERE student_id = s.id) as exam_count, 
             (SELECT ROUND(AVG(percentage), 1) FROM exam_results WHERE student_id = s.id) as avg_percentage,
             (SELECT u.id FROM users u WHERE u.role = 'student' AND u.linked_id = s.id LIMIT 1) as has_account
-            FROM students s WHERE 1=1";
-    $params = [];
+            FROM students s $where
+            ORDER BY s.name
+            LIMIT ? OFFSET ?";
+    $params[] = $limit;
+    $params[] = $offset;
     
-    if ($field) { $sql .= " AND s.field = ?"; $params[] = $field; }
-    if ($grade) { $sql .= " AND s.grade = ?"; $params[] = $grade; }
-    if ($search) { $sql .= " AND (s.name LIKE ? OR s.phone LIKE ? OR s.national_id LIKE ?)"; $params[] = "%$search%"; $params[] = "%$search%"; $params[] = "%$search%"; }
-    
-    $sql .= " ORDER BY s.name";
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+    $students = $stmt->fetchAll();
     
-    jsonResponse($stmt->fetchAll());
+    jsonResponse([
+        'data' => $students,
+        'pagination' => [
+            'page' => $page,
+            'limit' => $limit,
+            'total' => $total,
+            'totalPages' => (int)ceil($total / $limit)
+        ]
+    ]);
 }
 
 function students_add_student() {
@@ -233,4 +257,28 @@ function students_get_student_list() {
     requireAuth();
     $students = $pdo->query("SELECT id, name, grade, field FROM students ORDER BY name")->fetchAll();
     jsonResponse($students);
+}
+
+function students_toggle_status() {
+    global $pdo;
+    requireAdmin();
+    
+    $id = (int)($_POST['id'] ?? 0);
+    if (!$id) jsonResponse(['error' => 'شناسه نامعتبر'], 400);
+    
+    // Get current status
+    $stmt = $pdo->prepare("SELECT status FROM students WHERE id = ?");
+    $stmt->execute([$id]);
+    $student = $stmt->fetch();
+    
+    if (!$student) {
+        jsonResponse(['error' => 'دانش‌آموز یافت نشد'], 404);
+    }
+    
+    // Toggle status
+    $newStatus = ($student['status'] === 'active') ? 'inactive' : 'active';
+    $stmt = $pdo->prepare("UPDATE students SET status = ? WHERE id = ?");
+    $stmt->execute([$newStatus, $id]);
+    
+    jsonResponse(['success' => true, 'newStatus' => $newStatus, 'message' => 'وضعیت دانش‌آموز به ' . ($newStatus === 'active' ? 'فعال' : 'غیرفعال') . ' تغییر یافت']);
 }

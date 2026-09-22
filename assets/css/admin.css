@@ -696,23 +696,26 @@ table tbody td {
 }
 
 .table-wrap tbody td .icon {
-    width: var(--space-3);
+    width: var(--space-4);
     /* 12px */
-    height: var(--space-3);
+    height: var(--space-4);
     /* 12px */
     vertical-align: middle;
 }
 
 @media (max-width: 639px) {
     .table-wrap tbody td .icon {
-        width: var(--space-5); /* 20px - larger on mobile */
+        width: var(--space-5);
+        /* 20px - larger on mobile */
         /* 20px */
         height: var(--space-5);
         /* 20px */
     }
+
     .table-wrap tbody td button .icon,
     .table-wrap tbody td a .icon {
-        width: var(--space-5); /* 20px - larger on mobile */
+        width: var(--space-5);
+        /* 20px - larger on mobile */
         /* 20px */
         height: var(--space-5);
         /* 20px */
@@ -721,8 +724,8 @@ table tbody td {
 
 .table-wrap tbody td button .icon,
 .table-wrap tbody td a .icon {
-    width: var(--space-3);
-    height: var(--space-3);
+    width: var(--space-5);
+    height: var(--space-5);
 }
 
 /* Row highlight on hover */
@@ -1254,12 +1257,12 @@ table tbody td {
 
 @media (max-width: 480px) {
     .modal-footer-buttons {
-        flex-direction: column-reverse;
+        flex-direction: row-reverse;
     }
 
     .modal-footer-buttons .btn,
     .modal-footer-buttons .modal-btn-primary {
-        width: 100%;
+        width: full;
     }
 }
 
@@ -1480,7 +1483,7 @@ table tbody td {
     transition: all 0.2s ease;
     font-family: var(--font-sans);
     min-height: var(--space-5);
-    min-width: var(--space-7);
+    min-width: var(--space-6);
     background: var(--color-primary);
     color: var(--color-white);
 }

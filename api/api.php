@@ -108,6 +108,10 @@ switch ($action) {
         students_get_student_list();
         break;
 
+    case 'toggle_student_status':
+        students_toggle_status();
+        break;
+
 // ==================== Supporters ====================
     case 'get_supporters':
         supporters_get_supporters();

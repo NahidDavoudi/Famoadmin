@@ -254,7 +254,7 @@
 
                     <!-- Filters -->
                     <div class="filter-bar">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                             <input type="text" id="filterSearch" placeholder="جستجو نام، موبایل یا کد ملی..."
                                 class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
                             <select id="filterField"
@@ -267,12 +267,25 @@
                             </select>
                             <input type="number" id="filterGrade" placeholder="پایه..." min="7" max="12"
                                 class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
-                            <button onclick="loadStudents()"
+                            <select id="filterStatus"
+                                class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                                <option value="">همه وضعیت</option>
+                                <option value="active">فعال</option>
+                                <option value="inactive">غیرفعال</option>
+                            </select>
+                            <button onclick="loadStudents(1)"
                                 class="btn btn-primary flex items-center justify-center gap-2">
                                 <svg class="icon" aria-hidden="true">
                                     <use href="assets/icons/sprite.svg#icon-search" />
                                 </svg>
                                 <span>فیلتر</span>
+                            </button>
+                            <button onclick="clearStudentFilters()"
+                                class="btn btn-secondary flex items-center justify-center gap-2">
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="assets/icons/sprite.svg#icon-x" />
+                                </svg>
+                                <span>پاک کردن</span>
                             </button>
                         </div>
                     </div>
@@ -291,13 +304,11 @@
                         <table class="w-full responsive-table">
                             <thead class="bg-primary text-white">
                                 <tr>
-                                    <th class="px-5 py-4 text-right">نام</th>
-                                    <th class="px-5 py-4 text-right">موبایل</th>
-                                    <th class="px-5 py-4 text-right">کد ملی</th>
-                                    <th class="px-5 py-4 text-right">پایه</th>
-                                    <th class="px-5 py-4 text-right">رشته</th>
-                                    <th class="px-5 py-4 text-right">حساب</th>
-                                    <th class="px-5 py-4 text-right">عملیات</th>
+                                    <th class="px-3 py-3 text-right font-medium">نام</th>
+                                    <th class="px-3 py-3 text-center font-medium">تماس / کد ملی</th>
+                                    <th class="px-3 py-3 text-center font-medium">پایه / رشته</th>
+                                    <th class="px-3 py-3 text-center font-medium">حساب</th>
+                                    <th class="px-3 py-3 text-center font-medium">عملیات</th>
                                 </tr>
                             </thead>
                             <tbody id="studentsTable"></tbody>
@@ -305,7 +316,7 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div id="studentsPagination" class="hidden"></div>
+                    <div id="studentsPagination" class="mt-4"></div>
 
                     <!-- Empty State -->
                     <div id="studentsEmptyState" class="empty-state hidden">

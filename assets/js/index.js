@@ -5,7 +5,7 @@
 
 import { init, setupEventListeners } from './events.js';
 import { showModal, hideModal } from './utils.js';
-import { loadStudents, editStudent, deleteStudent, createStudentAccount, resetStudentPassword } from './students.js';
+import { loadStudents, editStudent, deleteStudent, createStudentAccount, resetStudentPassword, clearStudentFilters } from './students.js';
 import { editSupporter, deleteSupporter } from './supporters.js';
 import { loadExams, loadExamStudents, loadExamDetails, goBackFromExamDetails, clearExamsFilter } from './exams.js';
 import { addSubjectRow, removeSubjectRow, clearExamForm, calculateSkipped } from './exam-entry.js';
@@ -24,6 +24,7 @@ window.editStudent = editStudent;
 window.deleteStudent = deleteStudent;
 window.createStudentAccount = createStudentAccount;
 window.resetStudentPassword = resetStudentPassword;
+window.clearStudentFilters = clearStudentFilters;
 window.editSupporter = editSupporter;
 window.deleteSupporter = deleteSupporter;
 window.loadExams = loadExams;

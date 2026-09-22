@@ -137,8 +137,18 @@ export function setupEventListeners() {
     const filterSearch = document.getElementById('filterSearch');
     if (filterSearch) {
         filterSearch.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loadStudents();
+            if (e.key === 'Enter') loadStudents(1);
         });
+    }
+
+    const filterField = document.getElementById('filterField');
+    if (filterField) {
+        filterField.addEventListener('change', () => loadStudents(1));
+    }
+
+    const filterGrade = document.getElementById('filterGrade');
+    if (filterGrade) {
+        filterGrade.addEventListener('change', () => loadStudents(1));
     }
 
     setupKeyboardShortcuts();
