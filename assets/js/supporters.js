@@ -2,7 +2,7 @@
  * Admin Panel - Supporters CRUD (unified API)
  */
 
-import API from '../../../shared/js/api.js';
+import API from './api.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading, updateStatElement } from './utils.js';
 
 export async function loadSupporters() {

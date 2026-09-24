@@ -3,7 +3,7 @@
  * Dedicated page + lightweight WYSIWYG editor
  */
 
-import API from '../../../shared/js/api.js';
+import API from './api.js';
 import { showAlert, escapeHtml, icon, withButtonLoading } from './utils.js';
 
 let editorReady = false;

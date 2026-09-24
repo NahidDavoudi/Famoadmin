@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#445D84">
     <title>پنل مدیریت - آموزشگاه فامو</title>
     <!-- Static environment config: must load before every other script. -->
-    <script src="../shared/js/config.js"
+    <script src="config.js"
         data-assets="css/output.css,css/fonts.css,js/libs/apexcharts.min.js,js/libs/lucide.min.js,js/lucide-adapter.js"></script>
     <link rel="stylesheet" href="assets/css/admin.css">
     <script type="module" src="assets/js/index.js"></script>
@@ -1827,11 +1827,11 @@
             if (!input || !icon) return;
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.src = window.FAMO_ASSET ? window.FAMO_ASSET('svg/eye-open.svg') : '../shared/svg/eye-open.svg';
+                icon.src = window.FAMO_ASSET('svg/eye-open.svg');
                 icon.title = 'مخفی کردن رمز عبور';
             } else {
                 input.type = 'password';
-                icon.src = window.FAMO_ASSET ? window.FAMO_ASSET('svg/eye-closed.svg') : '../shared/svg/eye-closed.svg';
+                icon.src = window.FAMO_ASSET('svg/eye-closed.svg');
                 icon.title = 'نمایش رمز عبور';
             }
         }

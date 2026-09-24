@@ -2,7 +2,7 @@
  * Admin Panel - Students CRUD (unified API)
  */
 
-import API from '../../../shared/js/api.js';
+import API from './api.js';
 import { showAlert, showModal, hideModal, escapeHtml, getElementValue, setFormValues, icon, withButtonLoading } from './utils.js';
 import { showConfirm } from './confirm-modal.js';
 

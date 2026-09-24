@@ -3,7 +3,7 @@
  * Enhanced with Jalali (Shamsi) date picker & percentage preview
  */
 
-import API from '../../../shared/js/api.js';
+import API from './api.js';
 import { showAlert } from './utils.js';
 import { loadStudentList } from './ui.js';
 import * as config from './config.js';
