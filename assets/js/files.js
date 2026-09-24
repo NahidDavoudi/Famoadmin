@@ -2,7 +2,7 @@
  * Admin Panel - Files / Uploads (unified API)
  */
 
-import API from './api.js';
+import API from '../shared/js/api.js';
 import { showAlert, escapeHtml, formatDate, icon, withButtonLoading } from './utils.js';
 import { setDefaultDates } from './ui.js';
 

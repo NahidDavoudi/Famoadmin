@@ -3,7 +3,7 @@
  * پنل مدیریت - احراز هویت یکپارچه
  */
 
-import API from './api.js';
+import API from '../shared/js/api.js';
 import { toggleElement } from './utils.js';
 import { navigateTo } from './nav.js';
 

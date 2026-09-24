@@ -2,7 +2,7 @@
  * Admin Panel - Overview / Dashboard Stats (unified API)
  */
 
-import API from './api.js';
+import API from '../shared/js/api.js';
 import { showAlert, updateStatElement } from './utils.js';
 import * as config from './config.js';
 import { getBaseChartOptions, CHART_COLORS } from './chart-theme.js';
