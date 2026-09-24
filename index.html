@@ -9,12 +9,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#445D84">
     <title>پنل مدیریت - آموزشگاه فامو</title>
-    <link rel="stylesheet" href="../shared/css/output.css">
-    <link rel="stylesheet" href="../shared/css/fonts.css">
+    <!-- Static environment config: must load before every other script. -->
+    <script src="../shared/js/config.js"
+        data-assets="css/output.css,css/fonts.css,js/libs/apexcharts.min.js,js/libs/lucide.min.js,js/lucide-adapter.js"></script>
     <link rel="stylesheet" href="assets/css/admin.css">
-    <script src="../shared/js/libs/apexcharts.min.js"></script>
-    <script src="../shared/js/libs/lucide.min.js"></script>
-    <script src="../shared/js/lucide-adapter.js"></script>
     <script type="module" src="assets/js/index.js"></script>
 
 
@@ -1225,7 +1223,7 @@
                             <button type="button"
                                 class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
                                 onclick="togglePasswordByButton(this, 'addSupporterPassword')" title="نمایش رمز عبور">
-                                <img src="../shared/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                <img data-famo-asset="svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
                                     width="20" height="20">
                             </button>
                         </div>
@@ -1313,7 +1311,7 @@
                                 class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
                                 onclick="togglePasswordByButton(this, 'editSupporterNewPassword')"
                                 title="نمایش رمز عبور">
-                                <img src="../shared/svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                <img data-famo-asset="svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
                                     width="20" height="20">
                             </button>
                         </div>
@@ -1829,11 +1827,11 @@
             if (!input || !icon) return;
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.src = '../shared/svg/eye-open.svg';
+                icon.src = window.FAMO_ASSET ? window.FAMO_ASSET('svg/eye-open.svg') : '../shared/svg/eye-open.svg';
                 icon.title = 'مخفی کردن رمز عبور';
             } else {
                 input.type = 'password';
-                icon.src = '../shared/svg/eye-closed.svg';
+                icon.src = window.FAMO_ASSET ? window.FAMO_ASSET('svg/eye-closed.svg') : '../shared/svg/eye-closed.svg';
                 icon.title = 'نمایش رمز عبور';
             }
         }
