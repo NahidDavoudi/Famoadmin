@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#445D84">
+    <title>پنل مدیریت - آموزشگاه فامو</title>
+    <!-- Static environment config: must load before every other script. -->
+    <script src="config.js"
+        data-assets="css/output.css,css/fonts.css,js/libs/apexcharts.min.js,js/libs/lucide.min.js,js/lucide-adapter.js"></script>
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script type="module" src="assets/js/index.js"></script>
+
+
+</head>
+
+<body>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay"></div>
+
+    <!-- Main Panel -->
+    <div id="mainPanel" class="hidden min-h-screen">
+        <!-- Mobile Header -->
+        <header id="mobileHeader">
+            <button id="mobileMenuBtn" type="button" aria-label="منو">
+                <i data-lucide="menu" class="icon w-6 h-6 logo icon" aria-hidden="true"></i>
+            </button>
+            <h1 class="font-bold logo text">پنل مدیریت فامو</h1>
+            <div class="logo">
+        </header>
+
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center gap-3 brand">
+                    <div
+                        class="bg-white/90 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+                        <span class="text-2xl font-bold text-primary">ف</span>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-lg">پنل مدیریت</h2>
+                        <p id="desktopUsername" class="text-sm text-white/70"></p>
+                    </div>
+                </div>
+            </div>
+            <nav class="p-3 flex-1 overflow-y-auto space-y-1">
+                <a href="#" data-page="overview" class="sidebar-link active">
+                    <i data-lucide="chart-column" class="icon w-5" aria-hidden="true"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="#" data-page="students" class="sidebar-link">
+                    <i data-lucide="users" class="icon w-5" aria-hidden="true"></i>
+                    <span>دانش‌آموزان</span>
+                </a>
+
+                <a href="#" data-page="courses" class="sidebar-link">
+                    <i data-lucide="book-open" class="icon w-5" aria-hidden="true"></i>
+                    <span>دوره‌ها</span>
+                </a>
+                <a href="#" data-page="instructors" class="sidebar-link">
+                    <i data-lucide="school" class="icon w-5" aria-hidden="true"></i>
+                    <span>اساتید</span>
+                </a>
+                <a href="#" data-page="exams" class="sidebar-link">
+                    <i data-lucide="clipboard-list" class="icon w-5" aria-hidden="true"></i>
+                    <span>نتایج آزمون</span>
+                </a>
+                <a href="#" data-page="exam_entry" class="sidebar-link">
+                    <i data-lucide="pencil" class="icon w-5" aria-hidden="true"></i>
+                    <span>ثبت نتایج</span>
+                </a>
+                <a href="#" data-page="files" class="sidebar-link">
+                    <i data-lucide="upload" class="icon w-5" aria-hidden="true"></i>
+                    <span>فایل‌های آزمون</span>
+                </a>
+                <a href="#" data-page="supporters" class="sidebar-link">
+                    <i data-lucide="headset" class="icon w-5" aria-hidden="true"></i>
+                    <span>پشتیبان‌ها</span>
+                </a>
+                <a href="#" data-page="blog" class="sidebar-link">
+                    <i data-lucide="newspaper" class="icon w-5" aria-hidden="true"></i>
+                    <span>وبلاگ</span>
+                </a>
+                <a href="#" data-page="reports" class="sidebar-link">
+                    <i data-lucide="chart-column" class="icon w-5" aria-hidden="true"></i>
+                    <span>گزارش‌ها</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-white/10">
+                <a href="#" id="logoutBtn" class="sidebar-link hover:bg-red-500/20 text-red-300 hover:text-white">
+                    <i data-lucide="log-out" class="icon w-5" aria-hidden="true"></i>
+                    <span>خروج</span>
+                </a>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-1 overflow-hidden">
+            <div>
+
+                <!-- Alert -->
+                <div id="alertBox" class="hidden px-4 py-3 rounded-lg mb-4 shadow-lg"></div>
+
+                <!-- OVERVIEW PAGE -->
+                <div id="page-overview" class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-header-title border-b pb-2">داشبورد</h1>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="stat-card-modern stat-blue">
+                            <div class="stat-icon">
+                                <i data-lucide="users" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="stat-students" class="stat-value">-</div>
+                                <div class="stat-label">دانش‌آموزان</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern stat-accent">
+                            <div class="stat-icon">
+                                <i data-lucide="clipboard-list" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="stat-exams" class="stat-value">-</div>
+                                <div class="stat-label">آزمون این هفته</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern stat-danger">
+                            <div class="stat-icon">
+                                <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="stat-noexam" class="stat-value">-</div>
+                                <div class="stat-label">بدون آزمون</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern stat-warning">
+                            <div class="stat-icon">
+                                <i data-lucide="chart-column" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="stat-pending" class="stat-value">-</div>
+                                <div class="stat-label">گزارش در انتظار</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h2 class="chart-card-title">
+                            <i data-lucide="chart-column" class="icon text-primary" aria-hidden="true"></i>
+                            میانگین درصد به تفکیک رشته
+                        </h2>
+                        <div id="avgChart" style="min-height: 280px;"></div>
+                    </div>
+                </div>
+
+                <!-- STUDENTS PAGE -->
+                <div id="page-students" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 class="text-2xl md:text-3xl font-bold text-primary">دانش‌آموزان</h1>
+                        <button onclick="showModal('addStudentModal')"
+                            class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن</span>
+                        </button>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filter-bar">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                            <input type="text" id="filterSearch" placeholder="جستجو نام، موبایل یا کد ملی..."
+                                class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                            <select id="filterField"
+                                class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                                <option value="">همه رشته‌ها</option>
+                                <option value="ریاضی">ریاضی</option>
+                                <option value="تجربی">تجربی</option>
+                                <option value="انسانی">انسانی</option>
+                                <option value="راهنمایی">راهنمایی</option>
+                            </select>
+                            <input type="number" id="filterGrade" placeholder="پایه..." min="7" max="12"
+                                class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                            <select id="filterStatus"
+                                class="px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                                <option value="">همه وضعیت</option>
+                                <option value="active">فعال</option>
+                                <option value="inactive">غیرفعال</option>
+                            </select>
+                            <button onclick="loadStudents(1)"
+                                class="btn btn-primary flex items-center justify-center gap-2">
+                                <i data-lucide="search" class="icon" aria-hidden="true"></i>
+                                <span>فیلتر</span>
+                            </button>
+                            <button onclick="clearStudentFilters()"
+                                class="btn btn-secondary flex items-center justify-center gap-2">
+                                <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                                <span>پاک کردن</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Skeleton Loader -->
+                    <div id="studentsSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="w-full responsive-table">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="px-3 py-3 text-right font-medium">نام</th>
+                                    <th class="px-3 py-3 text-center font-medium">تماس / کد ملی</th>
+                                    <th class="px-3 py-3 text-center font-medium">پایه</th>
+                                    <th class="px-3 py-3 text-center font-medium">رشته</th>
+                                    <th class="px-3 py-3 text-center font-medium">حساب</th>
+                                    <th class="px-3 py-3 text-center font-medium">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="studentsPagination" class="mt-4"></div>
+
+                    <!-- Empty State -->
+                    <div id="studentsEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <i data-lucide="users" class="icon" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="empty-state__title">هیچ دانش‌آموزی یافت نشد</h3>
+                        <p class="empty-state__description">هنوز دانش‌آموزی در سیستم ثبت نشده است. برای شروع اولین
+                            دانش‌آموز را اضافه کنید.</p>
+                        <button onclick="showModal('addStudentModal')" class="empty-state__action btn btn-primary">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن دانش‌آموز</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COURSES PAGE -->
+                <div id="page-courses" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <i data-lucide="book-open" class="icon" aria-hidden="true"></i>
+                            مدیریت دوره‌ها
+                        </h1>
+                        <button onclick="showModal('addCourseModal')"
+                            class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن دوره</span>
+                        </button>
+                    </div>
+
+                    <!-- Skeleton Loader -->
+                    <div id="coursesSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="w-full responsive-table">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="px-5 py-4 text-right">ترتیب</th>
+                                    <th class="px-5 py-4 text-right">نام</th>
+                                    <th class="px-5 py-4 text-right">آیکون</th>
+                                    <th class="px-5 py-4 text-right">رنگ‌ها</th>
+                                    <th class="px-5 py-4 text-right">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="coursesPagination" class="hidden"></div>
+
+                    <!-- Empty State -->
+                    <div id="coursesEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <i data-lucide="book-open" class="icon" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="empty-state__title">هیچ دوره‌ای یافت نشد</h3>
+                        <p class="empty-state__description">هنوز دوره‌ای در سیستم ثبت نشده است. اولین دوره را اضافه
+                            کنید.</p>
+                        <button onclick="showModal('addCourseModal')" class="empty-state__action btn btn-primary">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن دوره</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- INSTRUCTORS PAGE -->
+                <div id="page-instructors" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <i data-lucide="school" class="icon" aria-hidden="true"></i>
+                            مدیریت اساتید
+                        </h1>
+                        <button onclick="showModal('addInstructorModal')"
+                            class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن استاد</span>
+                        </button>
+                    </div>
+
+                    <!-- Skeleton Loader -->
+                    <div id="instructorsSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="w-full responsive-table">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="px-5 py-4 text-right">ترتیب</th>
+                                    <th class="px-5 py-4 text-right">نام</th>
+                                    <th class="px-5 py-4 text-right">عنوان</th>
+                                    <th class="px-5 py-4 text-right">حرف اول</th>
+                                    <th class="px-5 py-4 text-right">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="instructorsTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="instructorsPagination" class="hidden"></div>
+
+                    <!-- Empty State -->
+                    <div id="instructorsEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <i data-lucide="school" class="icon" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="empty-state__title">هیچ استادی یافت نشد</h3>
+                        <p class="empty-state__description">هنوز استادی در سیستم ثبت نشده است. اولین استاد را اضافه
+                            کنید.</p>
+                        <button onclick="showModal('addInstructorModal')" class="empty-state__action btn btn-primary">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن استاد</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- EXAMS PAGE - Simplified View -->
+                <div id="page-exams" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 id="examsTitle" class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <i data-lucide="clipboard-list" class="icon" aria-hidden="true"></i>
+                            آزمون‌های برگزار شده
+                        </h1>
+                        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                            <button id="examsBackBtn" onclick="goBackFromExamDetails()"
+                                class="hidden px-4 py-2 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                                <i data-lucide="chevron-left" class="icon" aria-hidden="true"></i>
+                                <span>بازگشت</span>
+                            </button>
+                            <div class="relative">
+                                <input type="month" id="examsMonthFilter"
+                                    class="w-full sm:w-auto px-4 py-2 border-2 border-gray-200 rounded-xl modern-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                            </div>
+                            <button onclick="clearExamsFilter()"
+                                class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                                <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                                <span>پاک کردن فیلتر</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="examsLoadingState" class="hidden text-center py-16">
+                        <div
+                            class="animate-spin w-16 h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4">
+                        </div>
+                        <p class="text-gray-500">در حال بارگذاری...</p>
+                    </div>
+
+                    <!-- Exam Sessions Cards -->
+                    <div id="examsContainer" class="w-full">
+                        <!-- Cards will be dynamically inserted here -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="examsEmptyState" class="hidden text-center py-16 bg-white rounded-2xl shadow-lg w-full">
+                        <div
+                            class="bg-gradient-to-br from-gray-100 to-gray-200 w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                            <i data-lucide="clipboard-list" class="icon text-5xl text-gray-400" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-700 mb-3">هنوز آزمونی ثبت نشده</h3>
+                        <p class="text-gray-500 mb-6 max-w-md mx-auto">برای ثبت نتایج آزمون از بخش "ثبت نتایج" استفاده
+                            کنید</p>
+                        <button onclick="navigateTo('exam_entry')"
+                            class="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-[#5a779e] text-white px-6 py-3 rounded-xl hover:shadow-lg transition font-medium">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>ثبت اولین آزمون</span>
+                        </button>
+                    </div>
+
+                    <!-- Stats Summary -->
+                    <div id="examsStats" class="hidden mt-6 bg-white rounded-2xl shadow-lg p-6 w-full">
+                        <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+                            <i data-lucide="chart-column" class="icon text-primary" aria-hidden="true"></i>
+                            خلاصه آمار
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                            <div class="bg-blue-50 rounded-xl p-4 text-center">
+                                <div id="totalExamsCount" class="text-3xl font-bold text-blue-600">0</div>
+                                <div class="text-sm text-blue-500">تعداد آزمون‌ها</div>
+                            </div>
+                            <div class="bg-green-50 rounded-xl p-4 text-center">
+                                <div id="totalStudentsExamined" class="text-3xl font-bold text-green-600">0</div>
+                                <div class="text-sm text-green-500">دانش‌آموزان شرکت‌کننده</div>
+                            </div>
+                            <div class="bg-purple-50 rounded-xl p-4 text-center">
+                                <div id="avgExamScore" class="text-3xl font-bold text-purple-600">0%</div>
+                                <div class="text-sm text-purple-500">میانگین نمرات</div>
+                            </div>
+                            <div class="bg-orange-50 rounded-xl p-4 text-center">
+                                <div id="totalSubjectsExamined" class="text-3xl font-bold text-orange-600">0</div>
+                                <div class="text-sm text-orange-500">دروس آزمون شده</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- EXAM ENTRY PAGE - Enhanced with Jalali Date -->
+                <div id="page-exam_entry" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <i data-lucide="pencil" class="icon" aria-hidden="true"></i>
+                            ثبت نتایج آزمون
+                        </h1>
+                    </div>
+
+                    <!-- Step 1: Exam Info Card -->
+                    <div class="bg-white rounded-2xl shadow-lg mb-6 overflow-hidden">
+                        <div class="step-header bg-gradient-to-r from-primary to-[#5a779e]">
+                            <div class="flex items-center gap-3">
+                                <div class="step-badge">۱</div>
+                                <h2 class="text-white font-bold">اطلاعات آزمون</h2>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block mb-2 font-medium text-gray-700 text-sm">
+                                        <i data-lucide="school" class="icon ml-1 text-primary" aria-hidden="true"></i>
+                                        دانش‌آموز
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" id="examStudentSelect"
+                                            placeholder="نام دانش‌آموز را تایپ کنید..." autocomplete="off"
+                                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl modern-input text-lg keyboard-focus">
+                                        <input type="hidden" id="examStudentId" name="student_id" required>
+                                        <ul id="studentSuggestions"
+                                            class="hidden absolute z-50 w-full mt-1 bg-white border-2 border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                            <!-- Suggestions will be populated by JavaScript -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block mb-2 font-medium text-gray-700 text-sm">
+                                        <i data-lucide="calendar-days" class="icon ml-1 text-primary"
+                                            aria-hidden="true"></i>
+                                        تاریخ آزمون (شمسی)
+                                    </label>
+                                    <div id="jalaliDatePicker" class="grid grid-cols-3 gap-2">
+                                        <div>
+                                            <select id="examJalaliYear"
+                                                class="w-full px-3 py-3 border-2 border-gray-200 rounded-xl modern-input text-center keyboard-focus jalali-select">
+                                            </select>
+                                            <span class="block text-xs text-gray-400 text-center mt-1">سال</span>
+                                        </div>
+                                        <div>
+                                            <select id="examJalaliMonth"
+                                                class="w-full px-3 py-3 border-2 border-gray-200 rounded-xl modern-input text-center keyboard-focus jalali-select">
+                                            </select>
+                                            <span class="block text-xs text-gray-400 text-center mt-1">ماه</span>
+                                        </div>
+                                        <div>
+                                            <select id="examJalaliDay"
+                                                class="w-full px-3 py-3 border-2 border-gray-200 rounded-xl modern-input text-center keyboard-focus jalali-select">
+                                            </select>
+                                            <span class="block text-xs text-gray-400 text-center mt-1">روز</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="examDateInput" name="exam_date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Subjects -->
+                    <div class="bg-white rounded-2xl shadow-lg mb-6 overflow-hidden">
+                        <div class="step-header bg-gradient-to-r from-green-500 to-green-600">
+                            <div class="flex items-center gap-3">
+                                <div class="step-badge">۲</div>
+                                <h2 class="text-white font-bold">نتایج دروس</h2>
+                            </div>
+                            <button type="button" onclick="addSubjectRow()"
+                                class="inline-flex items-center gap-2 text-white text-sm font-medium px-4 py-2 rounded-xl transition"
+                                style="background-color: rgba(255,255,255,0.2);"
+                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.3)'"
+                                onmouseout="this.style.backgroundColor='rgba(255,255,255,0.2)'">
+                                <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                                <span>افزودن درس</span>
+                            </button>
+                        </div>
+                        <div class="p-4" style="padding: 1rem 1.25rem;">
+                            <form id="examEntryForm">
+                                <div id="subjectsContainer" class="space-y-4">
+                                    <!-- Subject rows will be added here -->
+                                </div>
+
+                                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                                    <button type="submit"
+                                        class="flex-1 bg-gradient-to-r from-primary to-[#5a779e] text-white px-8 py-4 rounded-xl hover:shadow-xl font-bold text-lg transition flex items-center justify-center gap-3">
+                                        <i data-lucide="save" class="icon text-xl" aria-hidden="true"></i>
+                                        <span>ثبت نتایج</span>
+                                        <kbd class="bg-white/20 px-2 py-1 rounded text-sm">Ctrl+S</kbd>
+                                    </button>
+                                    <button type="button" onclick="clearExamForm()"
+                                        class="px-6 py-4 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition flex items-center justify-center gap-2">
+                                        <i data-lucide="trash-2" class="icon" aria-hidden="true"></i>
+                                        <span>پاک کردن</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Keyboard Shortcuts Help -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                        <h3 class="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                            <i data-lucide="settings" class="icon" aria-hidden="true"></i>
+                            میانبرهای کیبورد
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-blue-700">
+                            <div><kbd class="bg-blue-100 px-2 py-1 rounded">Tab</kbd> رفتن به فیلد بعدی</div>
+                            <div><kbd class="bg-blue-100 px-2 py-1 rounded">Enter</kbd> افزودن درس جدید</div>
+                            <div><kbd class="bg-blue-100 px-2 py-1 rounded">Ctrl+S</kbd> ثبت نتایج</div>
+                            <div><kbd class="bg-blue-100 px-2 py-1 rounded">Esc</kbd> بستن مودال</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- FILES PAGE -->
+                <div id="page-files" class="page-content hidden">
+                    <div class="page-header">
+                        <h1 class="page-header-title border-b pb-2">فایل‌های آزمون</h1>
+                    </div>
+
+                    <!-- Upload Form -->
+                    <div class="filter-bar mb-6">
+                        <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-primary">
+                            <i data-lucide="upload" class="icon" aria-hidden="true"></i>
+                            آپلود فایل آزمون
+                        </h2>
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+                                <div>
+                                    <label class="block mb-1.5 text-sm font-medium text-gray-600">دانش‌آموز
+                                        (اختیاری)</label>
+                                    <select name="student_id" id="uploadStudentSelect"
+                                        class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                                        <option value="">عمومی / همه</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block mb-1.5 text-sm font-medium text-gray-600">تاریخ آزمون</label>
+                                    <input type="date" name="exam_date"
+                                        class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                                </div>
+                                <div>
+                                    <label class="block mb-1.5 text-sm font-medium text-gray-600">توضیحات</label>
+                                    <input type="text" name="description" placeholder="مثال: آزمون جامع ریاضی"
+                                        class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                                </div>
+                                <div>
+                                    <label class="block mb-1.5 text-sm font-medium text-gray-600">فایل</label>
+                                    <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required
+                                        class="w-full px-3 py-2 border-2 border-gray-200 rounded-xl modern-input text-sm">
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                <button type="submit"
+                                    class="btn btn-primary w-full sm:w-auto flex items-center justify-center gap-2">
+                                    <i data-lucide="upload" class="icon" aria-hidden="true"></i>
+                                    <span>آپلود</span>
+                                </button>
+                                <span class="text-gray-400 text-xs">فرمت‌های مجاز: PDF, JPG, PNG, DOC | حداکثر:
+                                    10MB</span>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Files Table -->
+                    <!-- Skeleton Loader -->
+                    <div id="filesSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="w-full responsive-table">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="px-5 py-4 text-right">نام فایل</th>
+                                    <th class="px-5 py-4 text-right">دانش‌آموز</th>
+                                    <th class="px-5 py-4 text-right">تاریخ آزمون</th>
+                                    <th class="px-5 py-4 text-right">حجم</th>
+                                    <th class="px-5 py-4 text-right">تاریخ آپلود</th>
+                                    <th class="px-5 py-4 text-right">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filesTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="filesPagination" class="hidden"></div>
+
+                    <!-- Empty State -->
+                    <div id="filesEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <i data-lucide="file-text" class="icon" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="empty-state__title">هیچ فایلی آپلود نشده</h3>
+                        <p class="empty-state__description">هنوز فایل آزمونی در سیستم وجود ندارد. اولین فایل را آپلود
+                            کنید.</p>
+                        <button onclick="showModal('addFileModal')" id="filesEmptyActionBtn"
+                            class="empty-state__action btn btn-primary">
+                            <i data-lucide="upload" class="icon" aria-hidden="true"></i>
+                            <span>آپلود فایل</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUPPORTERS PAGE -->
+                <div id="page-supporters" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <i data-lucide="headset" class="icon" aria-hidden="true"></i>
+                            مدیریت پشتیبان‌ها
+                        </h1>
+                        <button onclick="showModal('addSupporterModal')"
+                            class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن پشتیبان</span>
+                        </button>
+                    </div>
+
+                    <!-- Supporter Stats -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                        <div class="stat-card-modern stat-blue">
+                            <div class="stat-icon">
+                                <i data-lucide="headset" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="stat-supporters" class="stat-value">-</div>
+                                <div class="stat-label">تعداد پشتیبان‌ها</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern stat-green">
+                            <div class="stat-icon">
+                                <i data-lucide="check" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="stat-supporters-replied" class="stat-value">-</div>
+                                <div class="stat-label">گزارش‌های پاسخ‌داده شده</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern stat-warning">
+                            <div class="stat-icon">
+                                <i data-lucide="clock-3" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="stat-supporters-pending" class="stat-value">-</div>
+                                <div class="stat-label">گزارش‌های در انتظار</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Supporters Table -->
+                    <!-- Skeleton Loader -->
+                    <div id="supportersSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="w-full responsive-table">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="px-5 py-4 text-right">نام</th>
+                                    <th class="px-5 py-4 text-right">پایه</th>
+                                    <th class="px-5 py-4 text-right">رشته/درس</th>
+                                    <th class="px-5 py-4 text-right">شناسه تلگرام</th>
+                                    <th class="px-5 py-4 text-right">گزارش‌ها</th>
+                                    <th class="px-5 py-4 text-right">میانگین پاسخگویی</th>
+                                    <th class="px-5 py-4 text-right">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supportersTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="supportersPagination" class="hidden"></div>
+
+                    <!-- Empty State -->
+                    <div id="supportersEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <i data-lucide="headset" class="icon" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="empty-state__title">هیچ پشتیبانی ثبت نشده</h3>
+                        <p class="empty-state__description">هنوز پشتیبانی در سیستم وجود ندارد. اولین پشتیبان را اضافه
+                            کنید.</p>
+                        <button onclick="showModal('addSupporterModal')" class="empty-state__action btn btn-primary">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن پشتیبان</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- REPORTS PAGE -->
+                <div id="page-reports" class="page-content hidden">
+                    <div class="page-header">
+                        <h1 class="page-header-title border-b pb-2">تحلیل گزارش‌ها</h1>
+                    </div>
+
+                    <div class="filter-bar">
+                        <div class="flex flex-col sm:flex-row flex-wrap gap-3 items-stretch sm:items-center">
+                            <input type="date" id="reportDateFrom"
+                                class="flex-1 min-w-0 px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                            <span class="text-gray-500 text-center text-sm">تا</span>
+                            <input type="date" id="reportDateTo"
+                                class="flex-1 min-w-0 px-4 py-2.5 border-2 border-gray-200 rounded-xl modern-input">
+                            <button onclick="loadReports()"
+                                class="bg-primary text-white px-6 py-2.5 rounded-xl hover:bg-[#5a779e] transition font-medium flex items-center justify-center gap-2">
+                                <i data-lucide="search" class="icon" aria-hidden="true"></i>
+                                <span>فیلتر</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+                        <div class="stat-card-modern stat-blue">
+                            <div class="stat-icon">
+                                <i data-lucide="chart-column" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="report-total" class="stat-value">-</div>
+                                <div class="stat-label">کل گزارش‌ها</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern stat-warning">
+                            <div class="stat-icon">
+                                <i data-lucide="clock-3" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="report-pending" class="stat-value">-</div>
+                                <div class="stat-label">در انتظار پاسخ</div>
+                            </div>
+                        </div>
+                        <div class="stat-card-modern stat-green">
+                            <div class="stat-icon">
+                                <i data-lucide="check" class="icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div id="report-replied" class="stat-value">-</div>
+                                <div class="stat-label">پاسخ داده شده</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h2 class="chart-card-title">
+                            <i data-lucide="chart-column" class="icon text-primary" aria-hidden="true"></i>
+                            روند روزانه
+                        </h2>
+                        <div id="reportsChart" style="min-height: 280px;"></div>
+                    </div>
+                </div>
+
+                <!-- BLOG PAGE -->
+                <div id="page-blog" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <i data-lucide="newspaper" class="icon" aria-hidden="true"></i>
+                            مدیریت وبلاگ
+                        </h1>
+                        <button onclick="window.openBlogEditor()"
+                            class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5a779e] transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن پست</span>
+                        </button>
+                    </div>
+
+                    <!-- Skeleton Loader -->
+                    <div id="blogSkeleton" class="hidden">
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                        <div class="skeleton skeleton-table-row"></div>
+                    </div>
+
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="w-full responsive-table">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="px-5 py-4 text-right">عنوان</th>
+                                    <th class="px-5 py-4 text-right">دسته‌بندی</th>
+                                    <th class="px-5 py-4 text-right">اسلاغ</th>
+                                    <th class="px-5 py-4 text-right">وضعیت</th>
+                                    <th class="px-5 py-4 text-right">بازدیدها</th>
+                                    <th class="px-5 py-4 text-right">تاریخ انتشار</th>
+                                    <th class="px-5 py-4 text-right">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="blogTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="blogPagination" class="hidden"></div>
+
+                    <!-- Empty State -->
+                    <div id="blogEmptyState" class="empty-state hidden">
+                        <div class="empty-state__icon">
+                            <i data-lucide="newspaper" class="icon" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="empty-state__title">هیچ پست وبلاگی ثبت نشده</h3>
+                        <p class="empty-state__description">هنوز پستی در وبلاگ وجود ندارد. اولین پست را اضافه کنید.</p>
+                        <button onclick="window.openBlogEditor()" class="empty-state__action btn btn-primary">
+                            <i data-lucide="plus" class="icon" aria-hidden="true"></i>
+                            <span>افزودن پست</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BLOG EDITOR PAGE -->
+                <div id="page-blog-editor" class="page-content hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <h1 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <i data-lucide="newspaper" class="icon" aria-hidden="true"></i>
+                            <span id="blogEditorTitle">افزودن پست جدید</span>
+                        </h1>
+                        <button type="button" onclick="navigateTo('blog')"
+                            class="btn btn-secondary flex items-center gap-2">
+                            <i data-lucide="arrow-right" class="icon" aria-hidden="true"></i>
+                            <span>بازگشت به لیست</span>
+                        </button>
+                    </div>
+
+                    <form id="blogPostForm" class="blog-editor-card" novalidate>
+                        <input type="hidden" name="id">
+
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label>عنوان پست <span class="text-red-500">*</span></label>
+                                <input type="text" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>اسلاگ (URL) <span class="text-red-500">*</span></label>
+                                <input type="text" name="slug" required placeholder="my-blog-post" dir="ltr"
+                                    class="text-left">
+                                <p class="text-xs text-gray-500">فقط حروف انگلیسی، اعداد و خط تیره.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label>دسته‌بندی <span class="text-red-500">*</span></label>
+                                <select name="category" required>
+                                    <option value="">انتخاب کنید</option>
+                                    <option value="دانش‌آموزی">دانش‌آموزی</option>
+                                    <option value="روش مطالعه">روش مطالعه</option>
+                                    <option value="مشاوره تحصیلی">مشاوره تحصیلی</option>
+                                    <option value="اخبار">اخبار</option>
+                                    <option value="داستان نجاح">داستان نجاح</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>تصویر کاور (URL)</label>
+                                <input type="url" name="cover_image" dir="ltr" class="text-left"
+                                    placeholder="https://example.com/cover.jpg">
+                                <div id="blogCoverPreview" class="mt-2"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>خلاصه</label>
+                            <textarea name="excerpt" rows="2" class="resize-none"
+                                placeholder="خلاصه کوتاه برای پیش‌نمایش کارت..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>محتوا <span class="text-red-500">*</span></label>
+                            <div class="rte">
+                                <div class="rte-toolbar" role="toolbar" aria-label="ابزارهای ویرایش متن">
+                                    <button type="button" class="rte-btn" data-command="undo" title="واگرد"><i
+                                            data-lucide="undo-2"></i></button>
+                                    <button type="button" class="rte-btn" data-command="redo" title="ازنو"><i
+                                            data-lucide="redo-2"></i></button>
+                                    <span class="rte-sep"></span>
+                                    <button type="button" class="rte-btn" data-command="bold" title="ضخیم"><i
+                                            data-lucide="bold"></i></button>
+                                    <button type="button" class="rte-btn" data-command="italic" title="مورب"><i
+                                            data-lucide="italic"></i></button>
+                                    <button type="button" class="rte-btn" data-command="underline" title="زیرخط"><i
+                                            data-lucide="underline"></i></button>
+                                    <button type="button" class="rte-btn" data-command="strikeThrough"
+                                        title="خط‌خورده"><i data-lucide="strikethrough"></i></button>
+                                    <span class="rte-sep"></span>
+                                    <button type="button" class="rte-btn" data-command="formatBlock" data-value="h2"
+                                        title="تیتر ۲"><i data-lucide="heading-2"></i></button>
+                                    <button type="button" class="rte-btn" data-command="formatBlock" data-value="h3"
+                                        title="تیتر ۳"><i data-lucide="heading-3"></i></button>
+                                    <button type="button" class="rte-btn" data-command="formatBlock" data-value="p"
+                                        title="پاراگراف"><i data-lucide="pilcrow"></i></button>
+                                    <span class="rte-sep"></span>
+                                    <button type="button" class="rte-btn" data-command="insertUnorderedList"
+                                        title="لیست نقطه‌ای"><i data-lucide="list"></i></button>
+                                    <button type="button" class="rte-btn" data-command="insertOrderedList"
+                                        title="لیست شماره‌دار"><i data-lucide="list-ordered"></i></button>
+                                    <button type="button" class="rte-btn" data-command="formatBlock"
+                                        data-value="blockquote" title="نقل‌قول"><i data-lucide="quote"></i></button>
+                                    <button type="button" class="rte-btn" data-command="formatBlock" data-value="pre"
+                                        title="کد"><i data-lucide="code"></i></button>
+                                    <span class="rte-sep"></span>
+                                    <button type="button" class="rte-btn" data-command="createLink"
+                                        title="افزودن لینک"><i data-lucide="link"></i></button>
+                                    <button type="button" class="rte-btn" data-command="unlink" title="حذف لینک"><i
+                                            data-lucide="unlink"></i></button>
+                                    <button type="button" class="rte-btn" data-command="insertHorizontalRule"
+                                        title="خط جداکننده"><i data-lucide="minus"></i></button>
+                                    <button type="button" class="rte-btn" data-command="removeFormat"
+                                        title="پاک‌کردن قالب"><i data-lucide="remove-formatting"></i></button>
+                                </div>
+                                <div id="blogEditorContent" class="rte-content" contenteditable="true" dir="rtl"
+                                    role="textbox" aria-multiline="true"
+                                    data-placeholder="متن کامل پست را اینجا بنویسید..."></div>
+                            </div>
+                            <textarea name="content" id="blogContentInput" class="hidden" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>توضیحات متا (SEO)</label>
+                            <input type="text" name="meta_description" maxlength="300"
+                                placeholder="توضیحات برای موتورهای جستجو (حداکثر ۳۰۰ کاراکتر)">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="is_published" value="1" checked
+                                    class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2">
+                                <span class="text-sm text-gray-600">منتشر شده</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center gap-3 pt-2">
+                            <button type="submit" class="btn btn-primary flex items-center gap-2">
+                                <i data-lucide="save" class="icon" aria-hidden="true"></i>
+                                <span>ذخیره پست</span>
+                            </button>
+                            <button type="button" onclick="navigateTo('blog')"
+                                class="btn btn-secondary flex items-center gap-2">
+                                <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                                <span>انصراف</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <!-- افزودن دانش‌آموز Modal -->
+    <div id="addStudentModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="addStudentModalTitle">
+        <div class="modal modal-sm w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-primary">
+                        <i data-lucide="user-plus" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="addStudentModalTitle">افزودن دانش‌آموز</h3>
+                        <p class="modal-header-subtitle">اطلاعات دانش‌آموز جدید را وارد کنید</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('addStudentModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addStudentForm" class="modal-form">
+                    <div class="form-group">
+                        <label>نام و نام خانوادگی <span class="text-red-500">*</span></label>
+                        <input type="text" name="name" required placeholder="نام دانش‌آموز">
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>شماره موبایل <span class="text-red-500">*</span></label>
+                            <input type="tel" name="phone" required placeholder="09123456789" maxlength="11"
+                                pattern="09\d{9}" dir="ltr" class="text-left">
+                        </div>
+                        <div class="form-group">
+                            <label>کد ملی <span class="text-red-500">*</span></label>
+                            <input type="text" name="national_id" required placeholder="0012345678" maxlength="10"
+                                pattern="\d{10}" dir="ltr" class="text-left">
+                        </div>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>پایه</label>
+                            <input type="number" name="grade" min="7" max="12" required placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label>رشته</label>
+                            <select name="field" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="ریاضی">ریاضی</option>
+                                <option value="تجربی">تجربی</option>
+                                <option value="انسانی">انسانی</option>
+                                <option value="راهنمایی">راهنمایی</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-info">
+                        <p class="text-sm text-gray-600">حساب کاربری با شماره موبایل و رمز پیش‌فرض
+                            <strong>1234</strong> ساخته می‌شود.
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="addStudentForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="check" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره</span>
+                    </button>
+                    <button type="button" onclick="hideModal('addStudentModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ویرایش دانش‌آموز Modal -->
+    <div id="editStudentModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="editStudentModalTitle">
+        <div class="modal modal-sm w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-amber">
+                        <i data-lucide="pencil" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="editStudentModalTitle">ویرایش دانش‌آموز</h3>
+                        <p class="modal-header-subtitle">تغییر اطلاعات</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('editStudentModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="editStudentForm" class="modal-form">
+                    <input type="hidden" name="id">
+                    <div class="form-group">
+                        <label>نام</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>شماره موبایل</label>
+                            <input type="tel" name="phone" required maxlength="11" pattern="09\d{9}" dir="ltr"
+                                class="text-left">
+                        </div>
+                        <div class="form-group">
+                            <label>کد ملی</label>
+                            <input type="text" name="national_id" required maxlength="10" pattern="\d{10}" dir="ltr"
+                                class="text-left">
+                        </div>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>پایه</label>
+                            <input type="number" name="grade" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رشته</label>
+                            <select name="field" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="ریاضی">ریاضی</option>
+                                <option value="تجربی">تجربی</option>
+                                <option value="انسانی">انسانی</option>
+                                <option value="راهنمایی">راهنمایی</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="editStudentForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره تغییرات</span>
+                    </button>
+                    <button type="button" onclick="hideModal('editStudentModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- افزودن پشتیبان جدید Modal -->
+    <div id="addSupporterModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="addSupporterModalTitle">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-teal">
+                        <i data-lucide="headset" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="addSupporterModalTitle">افزودن پشتیبان جدید</h3>
+                        <p class="modal-header-subtitle">اطلاعات پشتیبان</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('addSupporterModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addSupporterForm" class="modal-form">
+                    <div class="form-group">
+                        <label>نام و نام خانوادگی</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>شماره موبایل</label>
+                        <input type="tel" name="phone" required placeholder="09123456789" maxlength="11"
+                            pattern="09\d{9}" dir="ltr" class="text-left">
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>پایه تحصیلی</label>
+                            <select name="grade" required>
+                                <option value="">انتخاب...</option>
+                                <option value="7">هفتم</option>
+                                <option value="8">هشتم</option>
+                                <option value="9">نهم</option>
+                                <option value="10">دهم</option>
+                                <option value="11">یازدهم</option>
+                                <option value="12">دوازدهم</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>رشته/درس</label>
+                            <select name="field" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="ریاضی">ریاضی</option>
+                                <option value="تجربی">تجربی</option>
+                                <option value="انسانی">انسانی</option>
+                                <option value="راهنمایی">راهنمایی</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>شناسه تلگرام (اختیاری)</label>
+                        <input type="text" name="chat_id" placeholder="123456789">
+                    </div>
+                    <div class="form-group">
+                        <label>نام کاربری</label>
+                        <input type="text" name="username" required placeholder="برای ورود به پنل">
+                    </div>
+                    <div class="form-group">
+                        <label>رمز عبور</label>
+                        <div class="relative">
+                            <input type="password" name="password" id="addSupporterPassword" required minlength="4"
+                                class="pl-12" placeholder="حداقل ۴ کاراکتر">
+                            <button type="button"
+                                class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
+                                onclick="togglePasswordByButton(this, 'addSupporterPassword')" title="نمایش رمز عبور">
+                                <img data-famo-asset="svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                    width="20" height="20">
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="addSupporterForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="check" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره</span>
+                    </button>
+                    <button type="button" onclick="hideModal('addSupporterModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ویرایش پشتیبان Modal -->
+    <div id="editSupporterModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="editSupporterModalTitle">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-amber">
+                        <i data-lucide="pencil" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="editSupporterModalTitle">ویرایش پشتیبان</h3>
+                        <p class="modal-header-subtitle">تغییر اطلاعات</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('editSupporterModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="editSupporterForm" class="modal-form">
+                    <input type="hidden" name="id">
+                    <div class="form-group">
+                        <label>نام و نام خانوادگی</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>پایه تحصیلی</label>
+                            <select name="grade" required>
+
+                                <option value="7">هفتم</option>
+                                <option value="8">هشتم</option>
+                                <option value="9">نهم</option>
+                                <option value="10">دهم</option>
+                                <option value="11">یازدهم</option>
+                                <option value="12">دوازدهم</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>رشته/درس</label>
+                            <select name="field" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="ریاضی">ریاضی</option>
+                                <option value="تجربی">تجربی</option>
+                                <option value="انسانی">انسانی</option>
+                                <option value="راهنمایی">راهنمایی</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>شناسه تلگرام</label>
+                        <input type="text" name="chat_id">
+                    </div>
+                    <div class="form-group">
+                        <label>رمز عبور جدید (خالی = بدون تغییر)</label>
+                        <div class="relative">
+                            <input type="password" name="new_password" id="editSupporterNewPassword" minlength="4"
+                                class="pl-12" placeholder="فقط در صورت نیاز">
+                            <button type="button"
+                                class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-1"
+                                onclick="togglePasswordByButton(this, 'editSupporterNewPassword')"
+                                title="نمایش رمز عبور">
+                                <img data-famo-asset="svg/eye-closed.svg" alt="" class="password-toggle-icon w-5 h-5"
+                                    width="20" height="20">
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="editSupporterForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره تغییرات</span>
+                    </button>
+                    <button type="button" onclick="hideModal('editSupporterModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- افزودن دوره جدید Modal -->
+    <div id="addCourseModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="addCourseModalTitle">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-purple">
+                        <i data-lucide="book-open" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="addCourseModalTitle">افزودن دوره جدید</h3>
+                        <p class="modal-header-subtitle">اطلاعات دوره آموزشی</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('addCourseModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addCourseForm" enctype="multipart/form-data" class="modal-form">
+                    <div class="form-group">
+                        <label>نام دوره</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>تصویر دوره</label>
+                        <input type="file" name="image" accept="image/*">
+                        <p class="text-xs text-gray-500">JPG, PNG, WEBP | حداکثر: 5MB</p>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>رنگ شروع</label>
+                            <input type="color" name="gradient_color_from" value="#445D84"
+                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                        </div>
+                        <div class="form-group">
+                            <label>رنگ پایان</label>
+                            <input type="color" name="gradient_color_to" value="#5a779e"
+                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>توضیحات</label>
+                        <textarea name="description" rows="3" class="resize-none"></textarea>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>قیمت</label>
+                            <input type="text" name="price" placeholder="500,000 تومان">
+                        </div>
+                        <div class="form-group">
+                            <label>ترتیب نمایش</label>
+                            <input type="number" name="display_order" value="0" min="0" class="text-center">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="addCourseForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="check" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره</span>
+                    </button>
+                    <button type="button" onclick="hideModal('addCourseModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ویرایش دوره Modal -->
+    <div id="editCourseModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="editCourseModalTitle">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-amber">
+                        <i data-lucide="pencil" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="editCourseModalTitle">ویرایش دوره</h3>
+                        <p class="modal-header-subtitle">تغییر اطلاعات دوره</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('editCourseModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="editCourseForm" enctype="multipart/form-data" class="modal-form">
+                    <input type="hidden" name="id">
+                    <div class="form-group">
+                        <label>نام دوره</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>تصویر جدید (اختیاری)</label>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>رنگ شروع</label>
+                            <input type="color" name="gradient_color_from"
+                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                        </div>
+                        <div class="form-group">
+                            <label>رنگ پایان</label>
+                            <input type="color" name="gradient_color_to"
+                                class="w-full h-12 border-2 border-gray-200 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>توضیحات</label>
+                        <textarea name="description" rows="3" class="resize-none"></textarea>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>قیمت</label>
+                            <input type="text" name="price">
+                        </div>
+                        <div class="form-group">
+                            <label>ترتیب نمایش</label>
+                            <input type="number" name="display_order" min="0" class="text-center">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="editCourseForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره تغییرات</span>
+                    </button>
+                    <button type="button" onclick="hideModal('editCourseModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- افزودن استاد جدید Modal -->
+    <div id="addInstructorModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="addInstructorModalTitle">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-indigo">
+                        <i data-lucide="school" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="addInstructorModalTitle">افزودن استاد جدید</h3>
+                        <p class="modal-header-subtitle">اطلاعات مدرس</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('addInstructorModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addInstructorForm" enctype="multipart/form-data" class="modal-form">
+                    <div class="form-group">
+                        <label>نام و نام خانوادگی</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان/سمت</label>
+                        <input type="text" name="title" required placeholder="مشاور تخصصی تحصیلی">
+                    </div>
+                    <div class="form-group">
+                        <label>تصویر</label>
+                        <input type="file" name="image" accept="image/*">
+                        <p class="text-xs text-gray-500">JPG, PNG, WEBP | حداکثر: 5MB | پیشنهادی: 400x500px</p>
+                    </div>
+                    <div class="form-group">
+                        <label>توضیحات</label>
+                        <textarea name="description" rows="3" class="resize-none"></textarea>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>حرف اول</label>
+                            <input type="text" name="initial_letter" maxlength="1" placeholder="م" class="text-center">
+                        </div>
+                        <div class="form-group">
+                            <label>ترتیب نمایش</label>
+                            <input type="number" name="display_order" value="0" min="0" class="text-center">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="addInstructorForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="check" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره</span>
+                    </button>
+                    <button type="button" onclick="hideModal('addInstructorModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ویرایش استاد Modal -->
+    <div id="editInstructorModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="editInstructorModalTitle">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-amber">
+                        <i data-lucide="pencil" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="editInstructorModalTitle">ویرایش استاد</h3>
+                        <p class="modal-header-subtitle">تغییر اطلاعات مدرس</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('editInstructorModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="editInstructorForm" enctype="multipart/form-data" class="modal-form">
+                    <input type="hidden" name="id">
+                    <div class="form-group">
+                        <label>نام و نام خانوادگی</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان/سمت</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>تصویر جدید (اختیاری)</label>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>توضیحات</label>
+                        <textarea name="description" rows="3" class="resize-none"></textarea>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>حرف اول</label>
+                            <input type="text" name="initial_letter" maxlength="1" class="text-center">
+                        </div>
+                        <div class="form-group">
+                            <label>ترتیب نمایش</label>
+                            <input type="number" name="display_order" min="0" class="text-center">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="editInstructorForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره تغییرات</span>
+                    </button>
+                    <button type="button" onclick="hideModal('editInstructorModal')"
+                        class="btn btn-secondary">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- جزئیات آزمون Modal -->
+    <div id="examDetailsModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="examDetailsModalTitle">
+        <div class="modal modal-xl w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-primary">
+                        <i data-lucide="clipboard-list" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="examDetailsModalTitle">جزئیات آزمون</h3>
+                        <p class="modal-header-subtitle" id="examDetailsDate"></p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('examDetailsModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="examDetailsContent">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="button" onclick="hideModal('examDetailsModal')"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                        <span>بستن</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="keyboardShortcutsModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true" aria-labelledby="keyboardShortcutsModalTitle">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-primary">
+                        <i data-lucide="keyboard" class="icon text-white text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="keyboardShortcutsModalTitle">کلیدهای میانبر</h3>
+                        <p class="modal-header-subtitle">راهنمای دکمه‌های سریع</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('keyboardShortcutsModal')" class="modal-close"
+                    aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                            <i data-lucide="keyboard" class="icon text-primary" aria-hidden="true"></i>
+                            کلیدهای عمومی
+                        </h4>
+                        <dl class="space-y-2">
+                            <div class="flex justify-between">
+                                <dt class="text-gray-600">بستن هر Modal</dt>
+                                <dd class="font-mono text-primary">Esc</dd>
+                            </div>
+                            <div class="flex justify-between">
+                                <dt class="text-gray-600">نمایش این راهنما</dt>
+                                <dd class="font-mono text-primary">؟</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                            <i data-lucide="clipboard-list" class="icon text-primary" aria-hidden="true"></i>
+                            ثبت نتایج آزمون
+                        </h4>
+                        <dl class="space-y-2">
+                            <div class="flex justify-between">
+                                <dt class="text-gray-600">ذخیره سریع نتایج</dt>
+                                <dd class="font-mono text-primary">Ctrl + S</dd>
+                            </div>
+                            <div class="flex justify-between">
+                                <dt class="text-gray-600">افزودن درس جدید</dt>
+                                <dd class="font-mono text-primary">Enter (در ردیف درس)</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                            <i data-lucide="search" class="icon text-primary" aria-hidden="true"></i>
+                            جستجو و فیلتر
+                        </h4>
+                        <dl class="space-y-2">
+                            <div class="flex justify-between">
+                                <dt class="text-gray-600">فوکوس بر جستجو دانش‌آموز</dt>
+                                <dd class="font-mono text-primary">/ (اسلش)</dd>
+                            </div>
+                            <div class="flex justify-between">
+                                <dt class="text-gray-600">اجرا کردن فیلتر</dt>
+                                <dd class="font-mono text-primary">Enter (در فیلد جستجو)</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <p class="text-xs text-gray-500 text-center">* میانبرها فقط زمانی کار می‌کنند که در فیلد متنی تایپ
+                        نکنید</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="button" onclick="hideModal('keyboardShortcutsModal')"
+                        class="btn btn-secondary">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subject Row Template (for exam entry - Enhanced) -->
+    <template id="subjectRowTemplate">
+        <div
+            class="subject-row bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-primary/20 transition-all duration-300">
+            <div class="flex gap-3 p-4">
+                <!-- Row number badge -->
+                <div class="flex-shrink-0 w-9 h-9 bg-gradient-to-br from-primary to-[#5a779e] rounded-xl flex items-center justify-center text-white font-bold shadow-sm subject-number"
+                    style="margin-top: 1.35rem;">1</div>
+
+                <!-- Content area -->
+                <div class="flex-1 min-w-0" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <!-- Subject + Chapter row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">نام درس *</label>
+                            <input type="text" data-field="subject" placeholder="مثلاً: ریاضی" required
+                                class="w-full px-3 py-2 border-2 border-gray-200 rounded-xl modern-input keyboard-focus"
+                                autofocus>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">مبحث (اختیاری)</label>
+                            <input type="text" data-field="chapter" placeholder="مثلاً: فصل ۳"
+                                class="w-full px-3 py-2 border-2 border-gray-200 rounded-xl modern-input keyboard-focus">
+                        </div>
+                    </div>
+
+                    <!-- Numbers row -->
+                    <div class="exam-numbers-grid">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1 text-center">کل سوالات</label>
+                            <input type="number" data-field="total_q" placeholder="0" required min="1"
+                                class="w-full px-2 py-2 border-2 border-gray-200 rounded-xl modern-input keyboard-focus text-center font-medium"
+                                oninput="calculateSkipped(this)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-green-600 mb-1 text-center">صحیح</label>
+                            <input type="number" data-field="correct" placeholder="0" required min="0"
+                                class="w-full px-2 py-2 border-2 border-green-200 rounded-xl modern-input keyboard-focus text-center font-medium text-green-700 exam-input-correct"
+                                oninput="calculateSkipped(this)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-red-600 mb-1 text-center">غلط</label>
+                            <input type="number" data-field="wrong" placeholder="0" required min="0"
+                                class="w-full px-2 py-2 border-2 border-red-200 rounded-xl modern-input keyboard-focus text-center font-medium text-red-700 exam-input-wrong"
+                                oninput="calculateSkipped(this)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1 text-center">نزده</label>
+                            <div class="w-full px-2 py-2 bg-gray-50 border-2 border-gray-200 rounded-xl text-center font-medium text-gray-600 auto-calculated"
+                                data-field="skipped" title="محاسبه خودکار">-</div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-primary mb-1 text-center">درصد</label>
+                            <div class="w-full px-2 py-2 bg-blue-50 border-2 border-blue-200 rounded-xl text-center font-bold text-primary percentage-display"
+                                data-field="percentage" title="محاسبه خودکار">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete button -->
+                <button type="button" onclick="removeSubjectRow(this)"
+                    class="flex-shrink-0 w-9 h-9 bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 rounded-xl flex items-center justify-center transition-all"
+                    style="margin-top: 1.35rem;" title="حذف درس">
+                    <i data-lucide="trash-2" class="icon" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        function togglePasswordByButton(button, inputId) {
+            const input = document.getElementById(inputId);
+            const icon = button && button.querySelector('.password-toggle-icon');
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.src = window.FAMO_ASSET('svg/eye-open.svg');
+                icon.title = 'مخفی کردن رمز عبور';
+            } else {
+                input.type = 'password';
+                icon.src = window.FAMO_ASSET('svg/eye-closed.svg');
+                icon.title = 'نمایش رمز عبور';
+            }
+        }
+    </script>
+
+
+    <!-- File Upload Modal -->
+    <div id="addFileModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-backdrop" role="dialog"
+        aria-modal="true">
+        <div class="modal modal-md w-full max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl modal-animate modal-content border border-white/20"
+            tabindex="-1">
+            <div class="modal-header">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="modal-icon modal-icon-indigo">
+                        <i data-lucide="upload" class="icon text-indigo-600 text-xl" aria-hidden="true"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="modal-header-title" id="addFileModalTitle">آپلود فایل جدید</h3>
+                        <p class="modal-header-subtitle">یک فایل آموزشی یا مدرکی را آپلود کنید</p>
+                    </div>
+                </div>
+                <button type="button" onclick="hideModal('addFileModal')" class="modal-close" aria-label="بستن">
+                    <i data-lucide="x" class="icon" aria-hidden="true"></i>
+            </div>
+
+            <div class="modal-body">
+                <form id="addFileForm" enctype="multipart/form-data" class="modal-form">
+                    <div class="form-group">
+                        <label>دانش‌آموز <span class="text-red-500">*</span></label>
+                        <select name="student_id" required>
+                            <option value="">انتخاب دانش‌آموز</option>
+                            <!-- Options populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>فایل <span class="text-red-500">*</span></label>
+                        <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                    </div>
+                    <div class="form-group">
+                        <label>توضیح</label>
+                        <textarea name="description" rows="3" placeholder="توضیحات فایل..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-footer-buttons">
+                    <button type="submit" form="addFileForm"
+                        class="modal-btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="icon" aria-hidden="true"></i>
+                        <span>ذخیره تغییرات</span>
+                    </button>
+                    <button type="button" onclick="hideModal('addFileModal')"
+                        class="modal-btn-secondary flex-1 flex items-center justify-center gap-2 ml-2">
+                        <i data-lucide="x" class="icon" aria-hidden="true"></i>
+                        <span>انصراف</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
