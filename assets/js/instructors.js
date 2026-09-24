@@ -1,0 +1,142 @@
+/**
+ * Admin Panel - Instructors CRUD (unified API)
+ */
+
+import API from '../../../shared/js/api.js';
+import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
+
+export async function loadInstructors() {
+    const skeleton = document.getElementById('instructorsSkeleton');
+    const tableWrap = document.querySelector('#instructorsTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('instructorsEmptyState');
+
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
+
+    try {
+        const res = await API.get('/instructors?perPage=100');
+        renderInstructorsTable(res.data || []);
+    } catch (error) {
+        console.error('Error loading instructors:', error);
+        showAlert('خطا در بارگذاری اساتید', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
+    }
+}
+
+function renderInstructorsTable(instructors) {
+    const tbody = document.getElementById('instructorsTable');
+    const emptyState = document.getElementById('instructorsEmptyState');
+    const tableWrap = tbody?.closest('.table-wrap');
+
+    if (!tbody) return;
+
+    if (instructors.length === 0) {
+        tbody.innerHTML = '';
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
+        return;
+    }
+
+    if (tableWrap) tableWrap.style.display = '';
+    if (emptyState) emptyState.classList.add('hidden');
+
+    tbody.innerHTML = instructors.map(i => `
+        <tr class="hover:bg-gray-50">
+            <td class="px-5 py-4">${i.display_order}</td>
+            <td class="px-5 py-4 font-medium">${escapeHtml(i.name)}</td>
+            <td class="px-5 py-4">${escapeHtml(i.title || '')}</td>
+            <td class="px-5 py-4">
+                <div class="w-11 h-11 rounded-full bg-gradient-to-br from-[#E2D9C6] to-[#d4c9b2] flex items-center justify-center text-[#445D84] font-bold text-sm">
+                    ${escapeHtml(i.initial_letter || i.name?.charAt(0) || '?')}
+                </div>
+            </td>
+            <td class="px-5 py-4">
+                <div class="flex items-center gap-1">
+                    <button onclick="window.editInstructor(${i.id})" class="p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" title="ویرایش">
+                        ${icon('edit', 'icon icon--lg')}
+                    </button>
+                    <button onclick="window.deleteInstructor(${i.id}, '${(i.name || '').replace(/'/g, "\\'")}')" class="p-2 rounded-lg text-red-600 hover:text-red-800 hover:bg-red-50" title="حذف">
+                        ${icon('trash', 'icon icon--lg')}
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+export async function handleAddInstructor(e) {
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('[type="submit"]');
+
+    await withButtonLoading(submitBtn, async () => {
+        await API.upload('/instructors', new FormData(e.target));
+        hideModal('addInstructorModal');
+        e.target.reset();
+        loadInstructors();
+        showAlert('استاد اضافه شد', 'success');
+    }, 'در حال افزودن...')
+        .catch(error => showAlert(error.message, 'error'));
+}
+
+export async function editInstructor(id) {
+    try {
+        const res = await API.get(`/instructors/${id}`);
+        const instructor = res.data;
+
+        if (!instructor) {
+            showAlert('استاد یافت نشد', 'error');
+            return;
+        }
+
+        const form = document.getElementById('editInstructorForm');
+        if (!form) return;
+
+        setFormValues(form, {
+            id: instructor.id,
+            name: instructor.name || '',
+            title: instructor.title || '',
+            description: instructor.description || '',
+            initial_letter: instructor.initial_letter || '',
+            display_order: instructor.display_order || 0
+        });
+
+        showModal('editInstructorModal');
+    } catch (error) {
+        console.error('Error in editInstructor:', error);
+        showAlert('خطا در بارگذاری اطلاعات استاد', 'error');
+    }
+}
+
+export async function handleEditInstructor(e) {
+    e.preventDefault();
+    const form = e.target;
+    const id = form.querySelector('[name="id"]')?.value;
+    const submitBtn = form.querySelector('[type="submit"]');
+
+    await withButtonLoading(submitBtn, async () => {
+        await API.upload(`/instructors/${id}`, new FormData(form), 'PUT');
+        hideModal('editInstructorModal');
+        form.reset();
+        loadInstructors();
+        showAlert('استاد به‌روزرسانی شد', 'success');
+    }, 'در حال ذخیره...')
+        .catch(error => {
+            console.error('Error in handleEditInstructor:', error);
+            showAlert(error.message || 'خطا در به‌روزرسانی استاد', 'error');
+        });
+}
+
+export async function deleteInstructor(id, name, button) {
+    if (!confirm(`آیا از حذف استاد «${name}» اطمینان دارید؟`)) return;
+
+    const btn = button || window.event?.target?.closest('button');
+
+    await withButtonLoading(btn, async () => {
+        await API.del(`/instructors/${id}`);
+        loadInstructors();
+        showAlert('استاد حذف شد', 'success');
+    }, 'در حال حذف...')
+        .catch(error => showAlert(error.message, 'error'));
+}
