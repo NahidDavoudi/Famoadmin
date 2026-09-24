@@ -1,8 +1,8 @@
 /**
- * Admin Panel - Instructors CRUD
+ * Admin Panel - Instructors CRUD (unified API)
  */
 
-import { api } from './api-client.js';
+import API from '../../../shared/js/api.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 
 export async function loadInstructors() {
@@ -15,8 +15,8 @@ export async function loadInstructors() {
     if (emptyState) emptyState.classList.add('hidden');
 
     try {
-        const instructors = await api('instructors_list');
-        renderInstructorsTable(instructors);
+        const res = await API.get('/instructors?perPage=100');
+        renderInstructorsTable(res.data || []);
     } catch (error) {
         console.error('Error loading instructors:', error);
         showAlert('خطا در بارگذاری اساتید', 'error');
@@ -71,7 +71,7 @@ export async function handleAddInstructor(e) {
     const submitBtn = e.target.querySelector('[type="submit"]');
 
     await withButtonLoading(submitBtn, async () => {
-        await api('instructors_add', new FormData(e.target), 'POST');
+        await API.upload('/instructors', new FormData(e.target));
         hideModal('addInstructorModal');
         e.target.reset();
         loadInstructors();
@@ -82,8 +82,8 @@ export async function handleAddInstructor(e) {
 
 export async function editInstructor(id) {
     try {
-        const instructors = await api('instructors_list');
-        const instructor = instructors.find(i => String(i.id) === String(id));
+        const res = await API.get(`/instructors/${id}`);
+        const instructor = res.data;
 
         if (!instructor) {
             showAlert('استاد یافت نشد', 'error');
@@ -111,12 +111,14 @@ export async function editInstructor(id) {
 
 export async function handleEditInstructor(e) {
     e.preventDefault();
-    const submitBtn = e.target.querySelector('[type="submit"]');
+    const form = e.target;
+    const id = form.querySelector('[name="id"]')?.value;
+    const submitBtn = form.querySelector('[type="submit"]');
 
     await withButtonLoading(submitBtn, async () => {
-        await api('instructors_update', new FormData(e.target), 'POST');
+        await API.upload(`/instructors/${id}`, new FormData(form), 'PUT');
         hideModal('editInstructorModal');
-        e.target.reset();
+        form.reset();
         loadInstructors();
         showAlert('استاد به‌روزرسانی شد', 'success');
     }, 'در حال ذخیره...')
@@ -129,10 +131,10 @@ export async function handleEditInstructor(e) {
 export async function deleteInstructor(id, name, button) {
     if (!confirm(`آیا از حذف استاد «${name}» اطمینان دارید؟`)) return;
 
-    const btn = button || event?.target?.closest('button');
+    const btn = button || window.event?.target?.closest('button');
 
     await withButtonLoading(btn, async () => {
-        await api('instructors_delete', { id }, 'POST');
+        await API.del(`/instructors/${id}`);
         loadInstructors();
         showAlert('استاد حذف شد', 'success');
     }, 'در حال حذف...')

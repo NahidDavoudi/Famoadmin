@@ -1,10 +1,9 @@
 /**
- * Admin Panel - Supporters CRUD
+ * Admin Panel - Supporters CRUD (unified API)
  */
 
-import { api } from './api-client.js';
-import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
-import { updateStatElement } from './utils.js';
+import API from '../../../shared/js/api.js';
+import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading, updateStatElement } from './utils.js';
 
 export async function loadSupporters() {
     const skeleton = document.getElementById('supportersSkeleton');
@@ -16,15 +15,17 @@ export async function loadSupporters() {
     if (emptyState) emptyState.classList.add('hidden');
 
     try {
-        const data = await api('get_supporters');
+        const res = await API.get('/supporters?perPage=100');
+        const supporters = res.data || [];
 
-        if (data.stats) {
-            updateStatElement('stat-supporters', data.stats.total);
-            updateStatElement('stat-supporters-replied', data.stats.replied);
-            updateStatElement('stat-supporters-pending', data.stats.pending);
-        }
+        const replied = supporters.reduce((sum, s) => sum + Number(s.replied_count || 0), 0);
+        const pending = supporters.reduce((sum, s) => sum + Number(s.pending_count || 0), 0);
 
-        renderSupportersTable(data.supporters);
+        updateStatElement('stat-supporters', res.pagination?.total ?? supporters.length);
+        updateStatElement('stat-supporters-replied', replied);
+        updateStatElement('stat-supporters-pending', pending);
+
+        renderSupportersTable(supporters);
     } catch (error) {
         console.error('Error loading supporters:', error);
         showAlert('خطا در بارگذاری پشتیبان‌ها', 'error');
@@ -55,7 +56,7 @@ function renderSupportersTable(supporters) {
             <td class="px-5 py-4 font-medium">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-[#E2D9C6] flex items-center justify-center text-[#445D84] font-bold text-sm">
-                        ${s.name.charAt(0)}
+                        ${escapeHtml((s.name || '?').charAt(0))}
                     </div>
                     ${escapeHtml(s.name)}
                 </div>
@@ -63,7 +64,7 @@ function renderSupportersTable(supporters) {
             <td class="px-5 py-4">${s.grade}</td>
             <td class="px-5 py-4">${escapeHtml(s.field)}</td>
             <td class="px-5 py-4">
-                ${s.chat_id ? `<span class="text-green-600 inline-flex items-center gap-1.5">${icon('check', 'icon icon--md')}${s.chat_id}</span>` : '<span class="text-gray-400">ثبت نشده</span>'}
+                ${s.chat_id ? `<span class="text-green-600 inline-flex items-center gap-1.5">${icon('check', 'icon icon--md')}${escapeHtml(String(s.chat_id))}</span>` : '<span class="text-gray-400">ثبت نشده</span>'}
             </td>
             <td class="px-5 py-4">
                 <span class="text-green-600">${s.replied_count || 0}</span> /
@@ -89,12 +90,19 @@ function renderSupportersTable(supporters) {
 
 export async function handleAddSupporter(e) {
     e.preventDefault();
-    const submitBtn = e.target.querySelector('[type="submit"]');
+    const form = e.target;
+    const submitBtn = form.querySelector('[type="submit"]');
 
     await withButtonLoading(submitBtn, async () => {
-        await api('add_supporter', new FormData(e.target), 'POST');
+        await API.post('/supporters', {
+            name: form.querySelector('[name="name"]').value.trim(),
+            grade: Number(form.querySelector('[name="grade"]').value),
+            field: form.querySelector('[name="field"]').value,
+            phone: form.querySelector('[name="phone"]')?.value.trim() || '',
+            chat_id: form.querySelector('[name="chat_id"]')?.value.trim() || null,
+        });
         hideModal('addSupporterModal');
-        e.target.reset();
+        form.reset();
         loadSupporters();
         showAlert('پشتیبان جدید اضافه شد', 'success');
     }, 'در حال افزودن...')
@@ -111,10 +119,21 @@ export function editSupporter(id, name, grade, field, chat_id) {
 
 export async function handleEditSupporter(e) {
     e.preventDefault();
-    const submitBtn = e.target.querySelector('[type="submit"]');
+    const form = e.target;
+    const id = form.querySelector('[name="id"]').value;
+    const submitBtn = form.querySelector('[type="submit"]');
+
+    const payload = {
+        name: form.querySelector('[name="name"]').value.trim(),
+        grade: Number(form.querySelector('[name="grade"]').value),
+        field: form.querySelector('[name="field"]').value,
+        chat_id: form.querySelector('[name="chat_id"]')?.value.trim() || null,
+    };
+    const newPassword = form.querySelector('[name="new_password"]')?.value;
+    if (newPassword) payload.password = newPassword;
 
     await withButtonLoading(submitBtn, async () => {
-        await api('update_supporter', new FormData(e.target), 'POST');
+        await API.put(`/supporters/${id}`, payload);
         hideModal('editSupporterModal');
         loadSupporters();
         showAlert('تغییرات ذخیره شد', 'success');
@@ -125,10 +144,10 @@ export async function handleEditSupporter(e) {
 export async function deleteSupporter(id, button) {
     if (!confirm('آیا مطمئن هستید؟ گزارش‌های مرتبط با این پشتیبان حذف نخواهند شد.')) return;
 
-    const btn = button || event?.target?.closest('button');
+    const btn = button || window.event?.target?.closest('button');
 
     await withButtonLoading(btn, async () => {
-        await api('delete_supporter', { id }, 'POST');
+        await API.del(`/supporters/${id}`);
         loadSupporters();
         showAlert('پشتیبان حذف شد', 'success');
     }, 'در حال حذف...')

@@ -4,7 +4,7 @@
  * Now using ApexCharts Radial Bar Stroked Gauge for each lesson result
  */
 
-import { api } from './api-client.js';
+import API from '../../../shared/js/api.js';
 import { showAlert, escapeHtml, icon } from './utils.js';
 import * as config from './config.js';
 import { formatGregorianToJalali, formatJalaliLong } from './jalali.js';
@@ -18,7 +18,8 @@ export async function loadExams() {
     config.setCurrentExamStudentId(null);
 
     try {
-        const data = await api('get_exam_dates');
+        const res = await API.get('/exams/dates?per_page=100');
+        const data = res.data?.dates || [];
         updateExamsTitle('آزمون‌های برگزار شده', icon('clipboard', 'icon ml-2'));
 
         const container = document.getElementById('examsContainer');
@@ -60,7 +61,7 @@ export async function loadExams() {
                                     </span>
                                 </td>
                                 <td class="px-5 py-4">
-                                    <button onclick="event.stopPropagation(); window.loadExamStudents('${exam.exam_date}')" class="inline-flex items-center gap-2 p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" aria-label="مشاهده dettagli">
+                                    <button onclick="event.stopPropagation(); window.loadExamStudents('${exam.exam_date}')" class="inline-flex items-center gap-2 p-2 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-50" aria-label="مشاهده جزئیات">
                                         ${icon('users', 'icon icon--lg ml-1')} مشاهده
                                     </button>
                                 </td>
@@ -83,7 +84,8 @@ export async function loadExamStudents(examDate) {
     config.setCurrentExamDate(examDate);
 
     try {
-        const data = await api('get_exam_students', { exam_date: examDate });
+        const res = await API.get(`/exams/students?exam_date=${encodeURIComponent(examDate)}&per_page=100`);
+        const data = res.data?.students || [];
         updateExamsTitle(`شرکت‌کنندگان آزمون ${formatJalaliLong(examDate)}`, icon('users', 'icon ml-2'), true);
 
         const container = document.getElementById('examsContainer');
@@ -143,7 +145,8 @@ export async function loadExamDetails(examDate, studentId) {
     config.setCurrentExamStudentId(studentId);
 
     try {
-        const data = await api('get_exam_details', { exam_date: examDate, student_id: studentId });
+        const res = await API.get(`/exams/details?exam_date=${encodeURIComponent(examDate)}&student_id=${encodeURIComponent(studentId)}`);
+        const data = res.data;
 
         if (!data || !data.student) {
             showAlert('اطلاعات یافت نشد', 'error');

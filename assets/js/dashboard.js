@@ -1,18 +1,18 @@
 /**
- * Admin Panel - Overview / Dashboard Stats
+ * Admin Panel - Overview / Dashboard Stats (unified API)
  */
 
-import { api } from './api-client.js';
-import { showAlert } from './utils.js';
-import { updateStatElement } from './utils.js';
+import API from '../../../shared/js/api.js';
+import { showAlert, updateStatElement } from './utils.js';
 import * as config from './config.js';
-import { getBaseChartOptions, CHART_COLORS } from './/chart-theme.js';
+import { getBaseChartOptions, CHART_COLORS } from './chart-theme.js';
 
 const ApexCharts = window.ApexCharts;
 
 export async function loadStats() {
     try {
-        const stats = await api('get_stats');
+        const res = await API.get('/dashboard/stats');
+        const stats = res.data || {};
 
         updateStatElement('stat-students', stats.students_count);
         updateStatElement('stat-exams', stats.exams_this_week);

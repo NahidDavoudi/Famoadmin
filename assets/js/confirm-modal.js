@@ -64,11 +64,11 @@ export function showConfirm(options = {}) {
         // Create modal container
         const modal = document.createElement('div');
         modal.style.background = 'white';
-        modal.style.borderRadius = 'var(--radius-lg)'; /* 16px */
-        modal.style.padding = 'var(--space-6)'; /* 24px */
+        modal.style.borderRadius = 'var(--ds-radius-lg)'; /* 16px */
+        modal.style.padding = 'var(--ds-space-6)'; /* 24px */
         modal.style.maxWidth = '90%';
         modal.style.width = '400px';
-        modal.style.boxShadow = 'var(--shadow-xl)';
+        modal.style.boxShadow = 'var(--ds-shadow-lg)';
         modal.style.position = 'relative';
         modal.style.direction = 'rtl';
         modal.style.zIndex = '10001';
@@ -76,35 +76,35 @@ export function showConfirm(options = {}) {
         // Close button
         const closeBtn = document.createElement('button');
         closeBtn.style.position = 'absolute';
-        closeBtn.style.top = 'var(--space-4)'; /* 16px */
-        closeBtn.style.right = 'var(--space-4)'; /* 16px */
-        closeBtn.style.width = 'var(--space-4)'; /* 16px */
-        closeBtn.style.height = 'var(--space-4)'; /* 16px */
+        closeBtn.style.top = 'var(--ds-space-4)'; /* 16px */
+        closeBtn.style.right = 'var(--ds-space-4)'; /* 16px */
+        closeBtn.style.width = 'var(--ds-space-4)'; /* 16px */
+        closeBtn.style.height = 'var(--ds-space-4)'; /* 16px */
         closeBtn.style.border = 'none';
         closeBtn.style.background = 'transparent';
-        closeBtn.style.color = 'var(--color-gray-500)';
+        closeBtn.style.color = 'var(--ds-color-neutral-500)';
         closeBtn.style.fontSize = '1.25rem';
         closeBtn.style.cursor = 'pointer';
         closeBtn.style.zIndex = '10';
-        closeBtn.setAttribute('aria-label', 'بستن modal');
+        closeBtn.setAttribute('aria-label', 'بستن');
         closeBtn.addEventListener('click', closeModal);
         modal.appendChild(closeBtn);
 
         // Title
         const modalTitle = document.createElement('h2');
-        modalTitle.style.margin = '0 0 var(--space-3)'; /* 0 vertical, 12px horizontal */
-        modalTitle.style.fontSize = 'var(--text-lg)'; /* 18px */
-        modalTitle.style.fontWeight = 'var(--font-semibold)';
-        modalTitle.style.color = 'var(--color-primary-dark)';
+        modalTitle.style.margin = '0 0 var(--ds-space-3)'; /* 0 vertical, 12px horizontal */
+        modalTitle.style.fontSize = 'var(--ds-text-lg)'; /* 18px */
+        modalTitle.style.fontWeight = 'var(--ds-weight-semibold)';
+        modalTitle.style.color = 'var(--ds-color-primary-800)';
         modalTitle.style.textAlign = 'center';
         modalTitle.innerHTML = title || 'تأیید_action';
         modal.appendChild(modalTitle);
 
         // Message
         const modalMessage = document.createElement('p');
-        modalMessage.style.margin = '0 0 var(--space-4)'; /* 0 vertical, 16px horizontal */
-        modalMessage.style.fontSize = 'var(--text-sm)'; /* 14px */
-        modalMessage.style.color = 'var(--color-gray-600)';
+        modalMessage.style.margin = '0 0 var(--ds-space-4)'; /* 0 vertical, 16px horizontal */
+        modalMessage.style.fontSize = 'var(--ds-text-sm)'; /* 14px */
+        modalMessage.style.color = 'var(--ds-color-neutral-600)';
         modalMessage.style.textAlign = 'center';
         modalMessage.innerHTML = message;
         modal.appendChild(modalMessage);
@@ -112,21 +112,21 @@ export function showConfirm(options = {}) {
         // Buttons container
         const buttonsContainer = document.createElement('div');
         buttonsContainer.style.display = 'flex';
-        buttonsContainer.style.gap = 'var(--space-3)'; /* 12px */
+        buttonsContainer.style.gap = 'var(--ds-space-3)'; /* 12px */
         buttonsContainer.style.justifyContent = 'center';
-        buttonsContainer.style.marginTop = 'var(--space-4)'; /* 16px */
+        buttonsContainer.style.marginTop = 'var(--ds-space-4)'; /* 16px */
         modal.appendChild(buttonsContainer);
 
         // Cancel button
         const cancelBtn = document.createElement('button');
         cancelBtn.style.flex = '1';
-        cancelBtn.style.padding = 'var(--space-3) var(--space-4)'; /* 12px vertical, 16px horizontal */
-        cancelBtn.style.borderRadius = 'var(--radius-md)'; /* 8px */
-        cancelBtn.style.border = '1px solid var(--color-gray-200)';
-        cancelBtn.style.background = 'var(--color-gray-50)';
-        cancelBtn.style.color = 'var(--color-gray-700)';
-        cancelBtn.style.fontSize = 'var(--text-sm)';
-        cancelBtn.style.fontWeight = 'var(--font-medium)';
+        cancelBtn.style.padding = 'var(--ds-space-3) var(--ds-space-4)'; /* 12px vertical, 16px horizontal */
+        cancelBtn.style.borderRadius = 'var(--ds-radius-md)'; /* 8px */
+        cancelBtn.style.border = '1px solid var(--ds-color-neutral-200)';
+        cancelBtn.style.background = 'var(--ds-color-neutral-50)';
+        cancelBtn.style.color = 'var(--ds-color-neutral-700)';
+        cancelBtn.style.fontSize = 'var(--ds-text-sm)';
+        cancelBtn.style.fontWeight = 'var(--ds-weight-medium)';
         cancelBtn.style.cursor = 'pointer';
         cancelBtn.style.transition = 'background 0.2s ease';
         cancelBtn.setAttribute('aria-label', cancelAriaLabel);
@@ -142,12 +142,12 @@ export function showConfirm(options = {}) {
         // Confirm button
         const confirmBtn = document.createElement('button');
         confirmBtn.style.flex = '1';
-        confirmBtn.style.padding = 'var(--space-3) var(--space-4)'; /* 12px vertical, 16px horizontal */
-        confirmBtn.style.borderRadius = 'var(--radius-md)'; /* 8px */
-        confirmBtn.style.background = 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))';
-        confirmBtn.style.color = 'var(--color-primary-dark)';
-        confirmBtn.style.fontSize = 'var(--text-sm)';
-        confirmBtn.style.fontWeight = 'var(--font-medium)';
+        confirmBtn.style.padding = 'var(--ds-space-3) var(--ds-space-4)'; /* 12px vertical, 16px horizontal */
+        confirmBtn.style.borderRadius = 'var(--ds-radius-md)'; /* 8px */
+        confirmBtn.style.background = 'linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-light-200))';
+        confirmBtn.style.color = 'var(--ds-color-primary-800)';
+        confirmBtn.style.fontSize = 'var(--ds-text-sm)';
+        confirmBtn.style.fontWeight = 'var(--ds-weight-medium)';
         confirmBtn.style.cursor = 'pointer';
         confirmBtn.style.transition = 'background 0.2s ease, transform 0.1s ease';
         confirmBtn.setAttribute('aria-label', confirmAriaLabel);

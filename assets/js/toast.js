@@ -44,11 +44,11 @@ class ToastContainer {
         this.container = document.createElement('div');
         this.container.id = 'toast-container';
         this.container.style.position = 'fixed';
-        this.container.style.bottom = 'var(--space-4)'; /* 16px */
-        this.container.style.right = 'var(--space-4)'; /* 16px */
+        this.container.style.bottom = 'var(--ds-space-4)'; /* 16px */
+        this.container.style.right = 'var(--ds-space-4)'; /* 16px */
         this.container.style.display = 'flex';
         this.container.style.flexDirection = 'column';
-        this.container.style.gap = 'var(--space-3)'; /* 12px */
+        this.container.style.gap = 'var(--ds-space-3)'; /* 12px */
         this.container.style.zIndex = '9999';
         this.container.style.alignItems = 'flex-end';
         this.container.style.fontFamily = '"Vazirmatn", sans-serif';
@@ -74,16 +74,16 @@ class ToastContainer {
         const toast = document.createElement('div');
         toast.style.background = this.getBackgroundColor(type);
         toast.style.color = this.getTextColor(type);
-        toast.style.padding = 'var(--space-4) var(--space-5)'; /* 16px vertical, 20px horizontal */
-        toast.style.borderRadius = 'var(--radius-md)'; /* 8px */
-        toast.style.boxShadow = 'var(--shadow-lg)';
+        toast.style.padding = 'var(--ds-space-4) var(--ds-space-5)'; /* 16px vertical, 20px horizontal */
+        toast.style.borderRadius = 'var(--ds-radius-md)'; /* 8px */
+        toast.style.boxShadow = 'var(--ds-shadow-lg)';
         toast.style.minWidth = '200px';
         toast.style.maxWidth = '80vw';
         toast.style.width = 'fit-content';
         toast.style.zIndex = '9999';
         toast.style.direction = 'rtl';
-        toast.style.fontSize = 'var(--text-sm)';
-        toast.style.fontWeight = 'var(--font-medium)';
+        toast.style.fontSize = 'var(--ds-text-sm)';
+        toast.style.fontWeight = 'var(--ds-weight-medium)';
         toast.style.lineHeight = '1.5';
         toast.style.position = 'relative';
         toast.style.transform = 'translateY(100%)';
@@ -91,25 +91,25 @@ class ToastContainer {
 
         // Icon
         const iconSpan = document.createElement('span');
-        iconSpan.style.marginRight = 'var(--space-3)'; /* 12px */
-        iconSpan.style.fontSize = 'var(--text-lg)';
+        iconSpan.style.marginRight = 'var(--ds-space-3)'; /* 12px */
+        iconSpan.style.fontSize = 'var(--ds-text-lg)';
         iconSpan.innerHTML = this.getIcon(type);
         toast.appendChild(iconSpan);
 
         // Message
         const messageSpan = document.createElement('span');
         messageSpan.style.wordBreak = 'break-word';
-        messageSpan.innerHTML = message;
+        messageSpan.textContent = message;
         toast.appendChild(messageSpan);
 
         // Close button
         if (showCloseButton) {
             const closeBtn = document.createElement('button');
             closeBtn.style.position = 'absolute';
-            closeBtn.style.top = 'var(--space-1)'; /* 4px */
-            closeBtn.style.right = 'var(--space-1)'; /* 4px */
-            closeBtn.style.width = 'var(--space-3)'; /* 12px */
-            closeBtn.style.height = 'var(--space-3)'; /* 12px */
+            closeBtn.style.top = 'var(--ds-space-1)'; /* 4px */
+            closeBtn.style.right = 'var(--ds-space-1)'; /* 4px */
+            closeBtn.style.width = 'var(--ds-space-3)'; /* 12px */
+            closeBtn.style.height = 'var(--ds-space-3)'; /* 12px */
             closeBtn.style.border = 'none';
             closeBtn.style.background = 'transparent';
             closeBtn.style.color = 'currentColor';
@@ -124,13 +124,13 @@ class ToastContainer {
         // Action button
         if (actionText && onAction) {
             const actionBtn = document.createElement('button');
-            actionBtn.style.marginTop = 'var(--space-2)'; /* 8px */
-            actionBtn.style.padding = 'var(--space-2) var(--space-3)'; /* 8px vertical, 12px horizontal */
-            actionBtn.style.borderRadius = 'var(--radius-sm)'; /* 6px */
+            actionBtn.style.marginTop = 'var(--ds-space-2)'; /* 8px */
+            actionBtn.style.padding = 'var(--ds-space-2) var(--ds-space-3)'; /* 8px vertical, 12px horizontal */
+            actionBtn.style.borderRadius = 'var(--ds-radius-sm)'; /* 6px */
             actionBtn.style.background = 'transparent';
             actionBtn.style.color = this.getTextColor(type);
             actionBtn.style.border = '1px solid currentColor';
-            actionBtn.style.fontSize = 'var(--text-xs)';
+            actionBtn.style.fontSize = 'var(--ds-text-xs)';
             actionBtn.style.cursor = 'pointer';
             actionBtn.setAttribute('aria-label', 'عملیات additional');
             actionBtn.innerHTML = actionText;
@@ -197,14 +197,14 @@ class ToastContainer {
     getBackgroundColor(type) {
         switch (type) {
             case ToastType.SUCCESS:
-                return 'color-mix(in srgb, var(--color-success), var(--color-gray-50))';
+                return 'color-mix(in srgb, var(--ds-color-success), var(--ds-color-neutral-50))';
             case ToastType.ERROR:
-                return 'color-mix(in srgb, var(--color-danger), var(--color-gray-50))';
+                return 'color-mix(in srgb, var(--ds-color-danger), var(--ds-color-neutral-50))';
             case ToastType.WARNING:
-                return 'color-mix(in srgb, var(--color-warning), var(--color-gray-50))';
+                return 'color-mix(in srgb, var(--ds-color-warning), var(--ds-color-neutral-50))';
             case ToastType.INFO:
             default:
-                return 'var(--color-gray-100)';
+                return 'var(--ds-color-neutral-100)';
         }
     }
 
@@ -216,14 +216,14 @@ class ToastContainer {
     getTextColor(type) {
         switch (type) {
             case ToastType.SUCCESS:
-                return 'var(--color-success)';
+                return 'var(--ds-color-success)';
             case ToastType.ERROR:
-                return 'var(--color-danger)';
+                return 'var(--ds-color-danger)';
             case ToastType.WARNING:
-                return 'var(--color-warning)';
+                return 'var(--ds-color-warning)';
             case ToastType.INFO:
             default:
-                return 'var(--color-gray-700)';
+                return 'var(--ds-color-neutral-700)';
         }
     }
 
@@ -235,14 +235,14 @@ class ToastContainer {
     getIcon(type) {
         switch (type) {
             case ToastType.SUCCESS:
-                return '<svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"/></svg>';
+                return '<i data-lucide="check" class="icon" aria-hidden="true"></i>';
             case ToastType.ERROR:
-                return '<svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"/></svg>';
+                return '<i data-lucide="x" class="icon" aria-hidden="true"></i>';
             case ToastType.WARNING:
-                return '<svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert"/></svg>';
+                return '<i data-lucide="triangle-alert" class="icon" aria-hidden="true"></i>';
             case ToastType.INFO:
             default:
-                return '<svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-info"/></svg>';
+                return '<i data-lucide="info" class="icon" aria-hidden="true"></i>';
         }
     }
 

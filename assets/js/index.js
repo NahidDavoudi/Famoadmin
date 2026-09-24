@@ -14,7 +14,7 @@ import { editCourse, deleteCourse } from './courses.js';
 import { editInstructor, deleteInstructor } from './instructors.js';
 import { navigateTo } from './nav.js';
 import { loadReports } from './reports.js';
-import { loadBlogPosts, handleAddBlogPost, handleEditBlogPost, editBlogPost, deleteBlogPost } from './blog.js';
+import { loadBlogPosts, handleBlogSubmit, openBlogEditor, editBlogPost, deleteBlogPost } from './blog.js';
 
 // Expose for HTML onclick and inline handlers
 window.showModal = showModal;
@@ -44,6 +44,8 @@ window.deleteInstructor = deleteInstructor;
 window.navigateTo = navigateTo;
 window.loadReports = loadReports;
 window.loadBlogPosts = loadBlogPosts;
+window.openBlogEditor = openBlogEditor;
+window.handleBlogSubmit = handleBlogSubmit;
 window.editBlogPost = editBlogPost;
 window.deleteBlogPost = deleteBlogPost;
 

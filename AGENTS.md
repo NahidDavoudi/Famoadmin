@@ -1,61 +1,44 @@
 # Famo Admin Panel - Agent Instructions
 
 ## Project Overview
-PHP + Vanilla JS admin panel (Persian/Farsi, RTL). Single-page `index.html` with SPA-like navigation via hash routing.
+Static frontend SPA (Persian/Farsi, RTL) for the Famo admin panel. `index.html` holds all views; navigation is hash-free, driven by `navigateTo(page)`. There is no local backend — everything talks to the unified API at `http://localhost:8080/api/v1`.
 
 ## Stack
-- **Backend**: PHP 8+ (PDO MySQL), Composer (`vlucas/phpdotenv`)
-- **Frontend**: Tailwind CSS v4 (`@tailwindcss/cli`), Vanilla JS modules
-- **Database**: MySQL (auto-migration on first API call)
-
-## Key Commands
-```bash
-# Frontend (run from repo root)
-npm run build:css    # Build Tailwind CSS once
-npm run watch        # Watch & rebuild CSS
-
-# Backend
-composer install     # Install PHP deps
-```
+- **Frontend**: Tailwind CSS v4 (shared build), Vanilla JS ES modules
+- **Backend**: unified API project at `../api` (Slim + JWT), served at `/api/v1`
+- **Auth**: unified login page at `../login/index.php` (JWT in `localStorage.famo_jwt`)
 
 ## Architecture
 | Path | Purpose |
 |------|---------|
-| `index.html` | Single entry point, all views inline |
-| `api/api.php` | Main API router (switch on `action` param), auth, DB |
-| `api/config.php` | DB connection singleton, constants, upload paths |
-| `api/Env.php` | Lightweight `.env` loader |
-| `assets/css/input.css` | Tailwind v4 entry + custom theme |
-| `assets/js/*.js` | Feature modules (students, exams, supporters, etc.) |
-| `uploads/` | File uploads (gitignored) |
+| `index.html` | Single entry point, all views + modals inline |
+| `assets/js/index.js` | Module entry point |
+| `assets/js/auth.js` | Auth guard; redirects unauthenticated users to shared login |
+| `assets/js/students.js` / `supporters.js` / `courses.js` / `instructors.js` | CRUD modules |
+| `assets/js/exams.js` / `exam-entry.js` | Exam results + entry |
+| `assets/js/files.js` / `blog.js` | File uploads + blog CRUD |
+| `assets/js/dashboard.js` / `reports.js` | Overview stats + reports chart |
+| `assets/js/chart-theme.js` | Shared ApexCharts theme for admin charts |
+| `assets/css/admin.css` | Admin-specific styles |
 
-## Environment
-- Copy `api/.env.example` → `api/.env` (not in repo)
-- Required vars: `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`
-- Timezone: `Asia/Tehran`
+## Shared Assets
+- API client: `../../../shared/js/api.js` (imported from `assets/js/*.js`)
+- Libraries: `../shared/js/libs/` (ApexCharts, Lucide)
+- Icons: Lucide via `../shared/js/libs/lucide.min.js` + `../shared/js/lucide-adapter.js`. Static markup uses `data-lucide="..."`; dynamic markup uses the `icon(name)` helper in `assets/js/utils.js`.
+- Styles/fonts: `../shared/css/output.css`, `../shared/css/fonts.css`
+- Images/SVG: `../shared/images/`, `../shared/svg/`
 
 ## API Conventions
-- All endpoints: `api/api.php?action=<name>` (GET or POST)
-- Auth: `requireAuth()` checks `$_SESSION['admin_id']`
-- Roles: `admin` | `supporter` (check via `$_SESSION['admin_role']`)
-- Response: `jsonResponse($data, $status)` → `application/json; charset=utf-8`
-- Tables auto-created on first request (see `ensureWeeklyPlanTablesExist`)
+- All calls go through the shared `API` client (`API.get/post/put/del/upload`).
+- Endpoints: `/students`, `/students/list`, `/courses`, `/instructors`, `/supporters`, `/exams/*`, `/files/*`, `/blog/posts`, `/reports/*`, `/dashboard/stats`.
+- Response envelope: `{ success, data, pagination, error }`.
+- File uploads use `API.upload(path, formData)` (multipart); the API merges `$_POST` for multipart fields.
+- `admin` and `supporter` roles may access the panel; others are redirected to login.
 
-## Frontend Conventions
-- JS modules in `assets/js/` imported in `assets/js/index.js`
-- Functions exposed on `window` for inline `onclick` handlers
-- Hash-based navigation: `navigateTo('students')` → `#students`
-- RTL, Persian labels throughout
+## CSS Build
+- Tailwind source: `../shared/css/input.css` (scans `admin/**/*.html` and `admin/**/*.js`).
+- Build from `../shared`: `npm run build:css`. Never edit `output.css` directly.
 
 ## Gotchas
-- No test/lint/typecheck tooling configured
-- `.env` is gitignored — must exist locally
-- `api/api.php` is monolithic (~1600 lines); routes are a giant `switch`
-- DB errors logged to `error.log` in repo root
-- File uploads go to `uploads/exams/` (10MB max, pdf/jpg/png/doc/docx)
-
-## Dev Workflow
-1. `composer install` once
-2. `npm run watch` for CSS during development
-3. Serve via Apache/Nginx (PHP required) — no dev server
-4. Edit `api/api.php` for new endpoints; add JS module in `assets/js/` for frontend
+- No test/lint/typecheck tooling configured; validate JS with `node --input-type=module --check < file.js`.
+- The old local API (`admin/api/`) and its `api-client.js`/sprite assets were removed — do not recreate them.

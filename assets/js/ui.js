@@ -2,7 +2,7 @@
  * Admin Panel - UI Helpers, Mobile Menu, Dates, Student List
  */
 
-import { api } from './api-client.js';
+import API from '../../../shared/js/api.js';
 import { setElementValue } from './utils.js';
 
 export function addNoSpinnerStyles() {
@@ -102,7 +102,8 @@ export function setDefaultDates() {
 
 export async function loadStudentList(selectId) {
     try {
-        const students = await api('get_student_list');
+        const res = await API.get('/students/list');
+        const students = res.data || [];
         const select = document.getElementById(selectId);
         if (!select) return;
 
@@ -181,7 +182,7 @@ export function createPagination({ data, pageSize = 50, renderFn, containerId, c
                 <button class="btn btn-sm btn-secondary" ${page === 1 ? 'disabled' : ''}
                         onclick="window.pagination_${containerId}.goToPage(${page - 1})"
                         aria-label="صفحه قبلی">
-                    <svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-right" /></svg>
+                    <i data-lucide="chevron-right" class="icon" aria-hidden="true"></i>
                 </button>
                 <span class="pagination-info text-sm text-gray-600">
                     صفحه ${page} از ${totalPages}
@@ -189,7 +190,7 @@ export function createPagination({ data, pageSize = 50, renderFn, containerId, c
                 <button class="btn btn-sm btn-secondary" ${page === totalPages ? 'disabled' : ''}
                         onclick="window.pagination_${containerId}.goToPage(${page + 1})"
                         aria-label="صفحه بعدی">
-                    <svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-left" /></svg>
+                    <i data-lucide="chevron-left" class="icon" aria-hidden="true"></i>
                 </button>
             </nav>
         `;

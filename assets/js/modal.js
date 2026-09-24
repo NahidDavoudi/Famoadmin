@@ -70,19 +70,19 @@ export function createModal(triggerElement, options = {}) {
     // Get variant-specific styles
     const variantStyles = {
         [ModalVariant.PRIMARY]: {
-            headerGradient: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))',
-            headerTextColor: 'var(--color-primary-dark)',
-            iconBg: 'var(--color-primary)',
+            headerGradient: 'linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-light-200))',
+            headerTextColor: 'var(--ds-color-primary-800)',
+            iconBg: 'var(--ds-color-primary)',
         },
         [ModalVariant.SECONDARY]: {
-            headerGradient: 'linear-gradient(135deg, var(--color-gray-500), var(--color-gray-400))',
-            headerTextColor: 'var(--color-gray-100)',
-            iconBg: 'var(--color-gray-500)',
+            headerGradient: 'linear-gradient(135deg, var(--ds-color-neutral-500), var(--ds-color-neutral-400))',
+            headerTextColor: 'var(--ds-color-neutral-100)',
+            iconBg: 'var(--ds-color-neutral-500)',
         },
         [ModalVariant.DANGER]: {
-            headerGradient: 'linear-gradient(135deg, var(--color-danger), #f87171)',
-            headerTextColor: 'var(--color-gray-100)',
-            iconBg: 'var(--color-danger)',
+            headerGradient: 'linear-gradient(135deg, var(--ds-color-danger), #f87171)',
+            headerTextColor: 'var(--ds-color-neutral-100)',
+            iconBg: 'var(--ds-color-danger)',
         },
     };
 
@@ -135,7 +135,7 @@ export function createModal(triggerElement, options = {}) {
     };
 
     // Set up close button if modal has one
-    const closeBtn = modalElement.querySelector('[aria-label="بستن modal"], [aria-label="Close"]');
+    const closeBtn = modalElement.querySelector('[aria-label="بستن"], [aria-label="Close"]');
     if (closeBtn) {
         closeBtn.addEventListener('click', close);
     }
@@ -279,15 +279,15 @@ export function initFocusTrap(modalId, options = {}) {
 const modalSizes = {
     [ModalSize.SM]: {
         maxWidth: '24rem', /* 384px */
-        padding: 'var(--space-4) var(--space-5)', /* 16px vertical, 20px horizontal */
+        padding: 'var(--ds-space-4) var(--ds-space-5)', /* 16px vertical, 20px horizontal */
     },
     [ModalSize.MD]: {
         maxWidth: '32rem', /* 512px */
-        padding: 'var(--space-5) var(--space-6)', /* 20px vertical, 24px horizontal */
+        padding: 'var(--ds-space-5) var(--ds-space-6)', /* 20px vertical, 24px horizontal */
     },
     [ModalSize.LG]: {
         maxWidth: '48rem', /* 768px */
-        padding: 'var(--space-8) var(--space-6)', /* 32px vertical, 24px horizontal */
+        padding: 'var(--ds-space-8) var(--ds-space-6)', /* 32px vertical, 24px horizontal */
     },
 };
 
@@ -297,18 +297,18 @@ const modalSizes = {
  */
 const modalVariants = {
     [ModalVariant.PRIMARY]: {
-        headerGradient: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))',
-        headerTextColor: 'var(--color-primary-dark)',
-        borderColor: 'var(--color-primary)',
+        headerGradient: 'linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-light-200))',
+        headerTextColor: 'var(--ds-color-primary-800)',
+        borderColor: 'var(--ds-color-primary)',
     },
     [ModalVariant.SECONDARY]: {
-        headerGradient: 'linear-gradient(135deg, var(--color-gray-500), var(--color-gray-400))',
-        headerTextColor: 'var(--color-gray-100)',
-        borderColor: 'var(--color-gray-400)',
+        headerGradient: 'linear-gradient(135deg, var(--ds-color-neutral-500), var(--ds-color-neutral-400))',
+        headerTextColor: 'var(--ds-color-neutral-100)',
+        borderColor: 'var(--ds-color-neutral-400)',
     },
     [ModalVariant.DANGER]: {
-        headerGradient: 'linear-gradient(135deg, var(--color-danger), #f87171)',
-        headerTextColor: 'var(--color-gray-100)',
-        borderColor: 'var(--color-danger)',
+        headerGradient: 'linear-gradient(135deg, var(--ds-color-danger), #f87171)',
+        headerTextColor: 'var(--ds-color-neutral-100)',
+        borderColor: 'var(--ds-color-danger)',
     },
 };

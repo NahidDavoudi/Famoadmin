@@ -1,22 +1,32 @@
 /**
- * Admin Panel - Auth & Login
+ * Admin Panel - Auth guard (unified JWT auth via shared API)
+ * پنل مدیریت - احراز هویت یکپارچه
  */
 
-import { api } from './api-client.js';
+import API from '../../../shared/js/api.js';
 import { toggleElement } from './utils.js';
 import { navigateTo } from './nav.js';
 
-export function showLoginPage() {
-    toggleElement('loginPage', true);
-    toggleElement('mainPanel', false);
-    toggleMobileElements(false);
+const ALLOWED_ROLES = ['admin', 'supporter'];
+
+function loginUrl() {
+    const returnUrl = window.location.pathname.replace(/index\.html$/, '');
+    return `../login/index.php?return_url=${encodeURIComponent(returnUrl)}`;
 }
 
-export function showMainPanel(username) {
-    toggleElement('loginPage', false);
-    toggleElement('mainPanel', true);
+export function showLoginPage() {
+    window.location.assign(loginUrl());
+}
+
+export function showMainPanel(username, role) {
+    const panel = document.getElementById('mainPanel');
+    if (panel) {
+        panel.classList.remove('hidden');
+        panel.classList.add('flex');
+    }
     toggleMobileElements(true);
     updateUsername(username);
+    applyRoleVisibility(role);
     navigateTo('overview');
 }
 
@@ -43,53 +53,26 @@ function updateUsername(username) {
     if (mobileUsername) mobileUsername.textContent = username;
 }
 
-export async function checkAuth() {
-    try {
-        const result = await api('check_auth');
-        if (result.authenticated) {
-            showMainPanel(result.username);
-        } else {
-            showLoginPage();
-        }
-    } catch {
-        showLoginPage();
-    }
+function applyRoleVisibility(role) {
+    document.querySelectorAll('[data-role]').forEach((el) => {
+        const roles = (el.dataset.role || '').split(',').map((r) => r.trim());
+        if (roles.length === 0) return;
+        const visible = roles.includes(role);
+        el.classList.toggle('hidden', !visible);
+    });
 }
 
-export async function handleLogin(e) {
-    e.preventDefault();
-    const form = e.target;
-    const btn = form.querySelector('button[type="submit"]');
-    const loading = document.getElementById('loginLoading');
-    const errorBox = document.getElementById('loginError');
-
-    if (loading) loading.classList.add('show');
-    if (btn) btn.disabled = true;
-    if (errorBox) errorBox.classList.add('hidden');
-
-    try {
-        const formData = new FormData(form);
-        const result = await api('login', formData, 'POST');
-
-        if (result.success) {
-            showMainPanel(result.username);
-        }
-    } catch (error) {
-        if (errorBox) {
-            errorBox.textContent = error.message || 'خطا در ورود';
-            errorBox.classList.remove('hidden');
-        }
-    } finally {
-        if (loading) loading.classList.remove('show');
-        if (btn) btn.disabled = false;
+export async function checkAuth() {
+    const user = await API.getMe();
+    if (!user || !ALLOWED_ROLES.includes(user.role)) {
+        showLoginPage();
+        return;
     }
+    showMainPanel(user.username, user.role);
 }
 
 export async function handleLogout(e) {
-    e.preventDefault();
-    try {
-        await api('logout');
-    } finally {
-        showLoginPage();
-    }
+    if (e) e.preventDefault();
+    await API.logout();
+    showLoginPage();
 }

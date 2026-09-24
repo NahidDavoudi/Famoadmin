@@ -1,8 +1,8 @@
 /**
- * Admin Panel - Courses CRUD
+ * Admin Panel - Courses CRUD (unified API)
  */
 
-import { api } from './api-client.js';
+import API from '../../../shared/js/api.js';
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 
 const ICON_MAP = {
@@ -33,6 +33,19 @@ function mapCourseIcon(iconClass) {
     return 'book';
 }
 
+function buildCourseFormData(form) {
+    const fd = new FormData();
+    fd.append('name', form.querySelector('[name="name"]')?.value ?? '');
+    fd.append('gradient_color_from', form.querySelector('[name="gradient_color_from"]')?.value ?? '');
+    fd.append('gradient_color_to', form.querySelector('[name="gradient_color_to"]')?.value ?? '');
+    fd.append('description', form.querySelector('[name="description"]')?.value ?? '');
+    fd.append('price', form.querySelector('[name="price"]')?.value ?? '0');
+    fd.append('display_order', form.querySelector('[name="display_order"]')?.value ?? '0');
+    const file = form.querySelector('[name="image"]')?.files?.[0];
+    if (file) fd.append('background_image', file);
+    return fd;
+}
+
 export async function loadCourses() {
     const skeleton = document.getElementById('coursesSkeleton');
     const tableWrap = document.querySelector('#coursesTable')?.closest('.table-wrap');
@@ -43,8 +56,8 @@ export async function loadCourses() {
     if (emptyState) emptyState.classList.add('hidden');
 
     try {
-        const courses = await api('courses_list');
-        renderCoursesTable(courses);
+        const res = await API.get('/courses?perPage=100');
+        renderCoursesTable(res.data || []);
     } catch (error) {
         console.error('Error loading courses:', error);
         showAlert('خطا در بارگذاری دوره‌ها', 'error');
@@ -99,7 +112,7 @@ export async function handleAddCourse(e) {
     const submitBtn = e.target.querySelector('[type="submit"]');
 
     await withButtonLoading(submitBtn, async () => {
-        await api('courses_add', new FormData(e.target), 'POST');
+        await API.upload('/courses', buildCourseFormData(e.target));
         hideModal('addCourseModal');
         e.target.reset();
         loadCourses();
@@ -110,8 +123,8 @@ export async function handleAddCourse(e) {
 
 export async function editCourse(id) {
     try {
-        const courses = await api('courses_list');
-        const course = courses.find(c => String(c.id) === String(id));
+        const res = await API.get(`/courses/${id}`);
+        const course = res.data;
 
         if (!course) {
             showAlert('دوره یافت نشد', 'error');
@@ -140,12 +153,14 @@ export async function editCourse(id) {
 
 export async function handleEditCourse(e) {
     e.preventDefault();
-    const submitBtn = e.target.querySelector('[type="submit"]');
+    const form = e.target;
+    const id = form.querySelector('[name="id"]')?.value;
+    const submitBtn = form.querySelector('[type="submit"]');
 
     await withButtonLoading(submitBtn, async () => {
-        await api('courses_update', new FormData(e.target), 'POST');
+        await API.upload(`/courses/${id}`, buildCourseFormData(form), 'PUT');
         hideModal('editCourseModal');
-        e.target.reset();
+        form.reset();
         loadCourses();
         showAlert('دوره به‌روزرسانی شد', 'success');
     }, 'در حال ذخیره...')
@@ -158,10 +173,10 @@ export async function handleEditCourse(e) {
 export async function deleteCourse(id, name, button) {
     if (!confirm(`آیا از حذف دوره «${name}» اطمینان دارید؟`)) return;
 
-    const btn = button || event?.target?.closest('button');
+    const btn = button || window.event?.target?.closest('button');
 
     await withButtonLoading(btn, async () => {
-        await api('courses_delete', { id }, 'POST');
+        await API.del(`/courses/${id}`);
         loadCourses();
         showAlert('دوره حذف شد', 'success');
     }, 'در حال حذف...')

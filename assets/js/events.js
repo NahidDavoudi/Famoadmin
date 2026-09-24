@@ -4,7 +4,7 @@
 
 import * as config from './config.js';
 import { hideModal } from './utils.js';
-import { checkAuth, handleLogin, handleLogout } from './auth.js';
+import { checkAuth, handleLogout } from './auth.js';
 import { navigateTo } from './nav.js';
 import { loadStudents } from './students.js';
 import { handleAddStudent, handleEditStudent } from './students.js';
@@ -13,7 +13,7 @@ import { handleFileUpload } from './files.js';
 import { handleAddCourse, handleEditCourse } from './courses.js';
 import { handleAddInstructor, handleEditInstructor } from './instructors.js';
 import { handleExamEntry, addSubjectRow } from './exam-entry.js';
-import { handleAddBlogPost, handleEditBlogPost } from './blog.js';
+import { handleBlogSubmit } from './blog.js';
 import { addNoSpinnerStyles, initMobileMenu, setupTableResponsive, setDefaultDates } from './ui.js';
 
 const forms = {
@@ -22,12 +22,12 @@ const forms = {
     addSupporterForm: handleAddSupporter,
     editSupporterForm: handleEditSupporter,
     uploadForm: handleFileUpload,
+    addFileForm: handleFileUpload,
     addCourseForm: handleAddCourse,
     editCourseForm: handleEditCourse,
     addInstructorForm: handleAddInstructor,
     editInstructorForm: handleEditInstructor,
-    addBlogPostForm: handleAddBlogPost,
-    editBlogPostForm: handleEditBlogPost
+    blogPostForm: handleBlogSubmit
 };
 
 function setupFormListeners() {
@@ -119,9 +119,6 @@ function setupModalClosers() {
 }
 
 export function setupEventListeners() {
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) loginForm.addEventListener('submit', handleLogin);
-
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
 

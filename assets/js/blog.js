@@ -1,30 +1,12 @@
 /**
- * Admin Panel - Blog Posts CRUD
- * پنل مدیریت - مدیریت پست‌های وبلاگ
+ * Admin Panel - Blog Posts (unified API)
+ * Dedicated page + lightweight WYSIWYG editor
  */
 
-import { api } from './api-client.js';
-import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading, updateStatElement } from './utils.js';
+import API from '../../../shared/js/api.js';
+import { showAlert, escapeHtml, icon, withButtonLoading } from './utils.js';
 
-export async function loadBlogPosts() {
-    const skeleton = document.getElementById('blogSkeleton');
-    const tableWrap = document.querySelector('#blogTable')?.closest('.table-wrap');
-    const emptyState = document.getElementById('blogEmptyState');
-
-    if (skeleton) skeleton.classList.remove('hidden');
-    if (tableWrap) tableWrap.style.display = 'none';
-    if (emptyState) emptyState.classList.add('hidden');
-
-    try {
-        const posts = await api('get_blog_posts');
-        renderBlogTable(posts);
-    } catch (error) {
-        console.error('Error loading blog posts:', error);
-        showAlert('خطا در بارگذاری پست‌های وبلاگ', 'error');
-    } finally {
-        if (skeleton) skeleton.classList.add('hidden');
-    }
-}
+let editorReady = false;
 
 function renderBlogTable(posts) {
     const tbody = document.getElementById('blogTable');
@@ -48,9 +30,7 @@ function renderBlogTable(posts) {
             <td class="px-5 py-4 font-medium">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-[#E2D9C6] flex items-center justify-center flex-shrink-0 shadow-md">
-                        <svg class="icon text-primary" aria-hidden="true">
-                            <use href="assets/icons/sprite.svg#icon-newspaper" />
-                        </svg>
+                        ${icon('newspaper', 'icon text-primary')}
                     </div>
                     <div class="max-w-xs truncate">
                         <div class="font-medium text-gray-800">${escapeHtml(p.title)}</div>
@@ -60,7 +40,7 @@ function renderBlogTable(posts) {
             </td>
             <td class="px-5 py-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                    ${escapeHtml(p.category)}
+                    ${escapeHtml(p.category || '')}
                 </span>
             </td>
             <td class="px-5 py-4">
@@ -93,97 +73,175 @@ function renderBlogTable(posts) {
     `).join('');
 }
 
-export async function handleAddBlogPost(e) {
-    e.preventDefault();
-    const form = e.target;
-    const submitBtn = form.querySelector('[type="submit"]');
+export async function loadBlogPosts() {
+    const skeleton = document.getElementById('blogSkeleton');
+    const tableWrap = document.querySelector('#blogTable')?.closest('.table-wrap');
+    const emptyState = document.getElementById('blogEmptyState');
 
-    await withButtonLoading(submitBtn, async () => {
-        const formData = new FormData(form);
-        await api('add_blog_post', formData, 'POST');
-        hideModal('addBlogPostModal');
-        form.reset();
-        loadBlogPosts();
-        showAlert('پست جدید با موفقیت اضافه شد', 'success');
-    }, 'در حال افزودن...')
-        .catch(error => showAlert(error.message, 'error'));
-}
-
-export async function editBlogPost(id) {
-    const form = document.getElementById('editBlogPostForm');
-    if (!form) return;
+    if (skeleton) skeleton.classList.remove('hidden');
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (emptyState) emptyState.classList.add('hidden');
 
     try {
-        const post = await api('get_blog_post', { id });
-
-        setFormValues(form, {
-            id: post.id,
-            title: post.title,
-            slug: post.slug,
-            category: post.category,
-            excerpt: post.excerpt || '',
-            content: post.content || '',
-            meta_description: post.meta_description || '',
-            is_published: post.is_published ? '1' : ''
-        });
-
-        // Handle checkbox
-        const isPublishedCheckbox = form.querySelector('[name="is_published"]');
-        if (isPublishedCheckbox) {
-            isPublishedCheckbox.checked = !!post.is_published;
-        }
-
-        // Show current cover image
-        const currentImageDiv = document.getElementById('editBlogPostCurrentImage');
-        const currentImageInput = form.querySelector('[name="current_cover_image"]');
-        if (currentImageDiv && post.cover_image) {
-            currentImageDiv.innerHTML = `
-                <div class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
-                    <img src="/famo/v3.10.1/admin/uploads/blog/${escapeHtml(post.cover_image)}" alt="Current cover" class="w-16 h-10 object-cover rounded-lg">
-                    <span class="text-sm text-gray-600">${escapeHtml(post.cover_image)}</span>
-                </div>
-            `;
-        } else if (currentImageDiv) {
-            currentImageDiv.innerHTML = '<p class="text-sm text-gray-500">تصویر کاور تنظیم نشده است</p>';
-        }
-        if (currentImageInput) currentImageInput.value = post.cover_image || '';
-
-        showModal('editBlogPostModal');
+        const res = await API.get('/blog/posts?per_page=100');
+        renderBlogTable(res.data?.posts || []);
     } catch (error) {
-        console.error('Error fetching blog post:', error);
-        showAlert('خطا در دریافت اطلاعات پست', 'error');
+        console.error('Error loading blog posts:', error);
+        showAlert('خطا در بارگذاری پست‌های وبلاگ', 'error');
+    } finally {
+        if (skeleton) skeleton.classList.add('hidden');
     }
 }
 
-export async function handleEditBlogPost(e) {
+// ── Rich text editor ──
+
+function syncContent() {
+    const editor = document.getElementById('blogEditorContent');
+    const input = document.getElementById('blogContentInput');
+    if (editor && input) input.value = editor.innerHTML.trim();
+}
+
+function initBlogEditor() {
+    if (editorReady) return;
+    const toolbar = document.querySelector('#page-blog-editor .rte-toolbar');
+    const editor = document.getElementById('blogEditorContent');
+    if (!toolbar || !editor) return;
+
+    toolbar.querySelectorAll('.rte-btn').forEach((btn) => {
+        btn.addEventListener('mousedown', (e) => e.preventDefault());
+        btn.addEventListener('click', () => {
+            const command = btn.dataset.command;
+            const value = btn.dataset.value || null;
+            editor.focus();
+            if (command === 'createLink') {
+                const url = window.prompt('نشانی لینک را وارد کنید (https://...)');
+                if (!url) return;
+                document.execCommand('createLink', false, url);
+            } else if (value !== null) {
+                document.execCommand('formatBlock', false, `<${value}>`);
+            } else {
+                document.execCommand(command, false, null);
+            }
+            syncContent();
+        });
+    });
+
+    editor.addEventListener('input', syncContent);
+    editor.addEventListener('blur', syncContent);
+    editorReady = true;
+}
+
+function renderCoverPreview(url) {
+    const box = document.getElementById('blogCoverPreview');
+    if (!box) return;
+    if (!url) { box.innerHTML = ''; return; }
+    box.innerHTML = `<img src="${escapeHtml(url)}" alt="cover" class="w-40 h-24 object-cover rounded-lg border border-gray-200" onerror="this.style.display='none'">`;
+}
+
+export async function openBlogEditor(id = null) {
+    const form = document.getElementById('blogPostForm');
+    if (!form) return;
+
+    form.reset();
+    initBlogEditor();
+
+    const editor = document.getElementById('blogEditorContent');
+    const input = document.getElementById('blogContentInput');
+    const titleEl = document.getElementById('blogEditorTitle');
+
+    form.querySelector('[name="id"]').value = '';
+    if (editor) editor.innerHTML = '';
+    if (input) input.value = '';
+    renderCoverPreview('');
+
+    const coverInput = form.querySelector('[name="cover_image"]');
+    if (coverInput && !coverInput.dataset.bound) {
+        coverInput.addEventListener('input', () => renderCoverPreview(coverInput.value));
+        coverInput.dataset.bound = '1';
+    }
+
+    if (id) {
+        if (titleEl) titleEl.textContent = 'ویرایش پست';
+        try {
+            const res = await API.get(`/blog/posts/${id}`);
+            const post = res.data?.post;
+            if (!post) {
+                showAlert('پست یافت نشد', 'error');
+                return;
+            }
+            form.querySelector('[name="id"]').value = post.id;
+            form.querySelector('[name="title"]').value = post.title || '';
+            form.querySelector('[name="slug"]').value = post.slug || '';
+            form.querySelector('[name="category"]').value = post.category || '';
+            form.querySelector('[name="cover_image"]').value = post.cover_image || '';
+            form.querySelector('[name="excerpt"]').value = post.excerpt || '';
+            form.querySelector('[name="meta_description"]').value = post.meta_description || '';
+            form.querySelector('[name="is_published"]').checked = !!post.is_published;
+            if (editor) editor.innerHTML = post.content || '';
+            if (input) input.value = post.content || '';
+            renderCoverPreview(post.cover_image);
+        } catch (error) {
+            console.error('Error fetching blog post:', error);
+            showAlert('خطا در دریافت اطلاعات پست', 'error');
+            return;
+        }
+    } else {
+        if (titleEl) titleEl.textContent = 'افزودن پست جدید';
+    }
+
+    if (typeof window.navigateTo === 'function') window.navigateTo('blog-editor');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+export const editBlogPost = openBlogEditor;
+
+export async function handleBlogSubmit(e) {
     e.preventDefault();
     const form = e.target;
-    const submitBtn = form.querySelector('[type="submit"]');
+    syncContent();
 
+    const input = document.getElementById('blogContentInput');
+    if (!input || !input.value.trim()) {
+        showAlert('محتوای پست الزامی است', 'error');
+        return;
+    }
+
+    const id = form.querySelector('[name="id"]').value;
+    const published = !!form.querySelector('[name="is_published"]').checked;
+
+    const payload = {
+        title: form.querySelector('[name="title"]').value.trim(),
+        slug: form.querySelector('[name="slug"]').value.trim(),
+        category: form.querySelector('[name="category"]').value,
+        cover_image: form.querySelector('[name="cover_image"]').value.trim() || null,
+        excerpt: form.querySelector('[name="excerpt"]').value.trim(),
+        content: input.value,
+        meta_description: form.querySelector('[name="meta_description"]').value.trim(),
+        is_published: published ? 1 : 0,
+    };
+
+    const submitBtn = form.querySelector('[type="submit"]');
     await withButtonLoading(submitBtn, async () => {
-        const formData = new FormData(form);
-        await api('update_blog_post', formData, 'POST');
-        hideModal('editBlogPostModal');
-        loadBlogPosts();
-        showAlert('تغییرات با موفقیت ذخیره شد', 'success');
-    }, 'در حال ذخیره...')
-        .catch(error => showAlert(error.message, 'error'));
+        if (id) await API.put(`/blog/posts/${id}`, payload);
+        else await API.post('/blog/posts', payload);
+        if (typeof window.navigateTo === 'function') window.navigateTo('blog');
+        showAlert(id ? 'پست به‌روزرسانی شد' : 'پست جدید اضافه شد', 'success');
+    }, 'در حال ذخیره...').catch(error => showAlert(error.message, 'error'));
 }
 
 export async function deleteBlogPost(id, button) {
     if (!confirm('آیا مطمئن هستید؟ این پست به طور دائم حذف خواهد شد.')) return;
 
-    const btn = button || event?.target?.closest('button');
+    const btn = button || window.event?.target?.closest('button');
 
     await withButtonLoading(btn, async () => {
-        await api('delete_blog_post', { id }, 'POST');
+        await API.del(`/blog/posts/${id}`);
         loadBlogPosts();
         showAlert('پست حذف شد', 'success');
     }, 'در حال حذف...')
         .catch(error => showAlert(error.message, 'error'));
 }
 
-// Helper function for date formatting (if not imported)
 function formatDate(dateStr) {
     if (!dateStr) return '-';
     const date = new Date(dateStr);

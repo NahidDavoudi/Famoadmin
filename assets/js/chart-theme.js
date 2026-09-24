@@ -30,7 +30,7 @@ export const CHART_SERIES_COLORS = [
 export function getBaseChartOptions(overrides = {}) {
     return {
         chart: {
-            fontFamily: 'Vazir, Tahoma, sans-serif',
+            fontFamily: 'Vazirmatn, Tahoma, sans-serif',
             toolbar: { show: false },
             zoom: { enabled: false },
             animations: {
@@ -62,7 +62,7 @@ export function getBaseChartOptions(overrides = {}) {
             }
         },
         legend: {
-            fontFamily: 'Vazir',
+            fontFamily: 'Vazirmatn',
             fontSize: '12px',
             labels: { colors: CHART_COLORS.text }
         },

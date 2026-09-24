@@ -3,7 +3,7 @@
  * Enhanced with Jalali (Shamsi) date picker & percentage preview
  */
 
-import { api } from './api-client.js';
+import API from '../../../shared/js/api.js';
 import { showAlert } from './utils.js';
 import { loadStudentList } from './ui.js';
 import * as config from './config.js';
@@ -40,7 +40,8 @@ async function fetchStudentsWithCache() {
 
         // Cache expired or missing, fetch from API
         console.log('Fetching fresh students list from API');
-        const students = await api('get_student_list');
+        const res = await API.get('/students/list');
+        const students = res.data || [];
 
         // Save to cache
         localStorage.setItem(CACHE_KEY, JSON.stringify({
@@ -397,7 +398,7 @@ export async function handleExamEntry(e) {
             throw new Error('عملیات توسط کاربر لغو شد');
         }
 
-        await api('save_exam', { student_id, exam_date, subjects }, 'POST');
+        await API.post('/exams', { student_id: Number(student_id), exam_date, subjects });
 
         resetExamForm();
         showAlert('نتایج با موفقیت ثبت شد', 'success');

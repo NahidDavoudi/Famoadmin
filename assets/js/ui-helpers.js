@@ -33,7 +33,7 @@ export function showAlert(message, type = 'success', duration = 5000) {
         info: 'info',
     };
 
-    const toastType = typeMap[type] || ToastType.INFO;
+    const toastType = typeMap[type] || 'info';
     return toastContainer.show(message, { type: toastType, duration });
 }
 

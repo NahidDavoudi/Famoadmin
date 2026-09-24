@@ -38,7 +38,8 @@ export function toggleElement(id, show) {
 }
 
 export function icon(name, className = 'icon') {
-    return `<svg class="${className}" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-${name}"/></svg>`;
+    const lucide = window.famoLucideName ? window.famoLucideName(`icon-${name}`) : name;
+    return `<i data-lucide="${lucide}" class="${className}" aria-hidden="true"></i>`;
 }
 
 /**
