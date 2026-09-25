@@ -49,7 +49,7 @@ window.handleBlogSubmit = handleBlogSubmit;
 window.editBlogPost = editBlogPost;
 window.deleteBlogPost = deleteBlogPost;
 
-document.addEventListener('DOMContentLoaded', () => {
+const initializeAdmin = () => {
     init();
 
     // First subject row on exam entry page
@@ -57,4 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (subjectsContainer && subjectsContainer.children.length === 0) {
         addSubjectRow();
     }
-});
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAdmin, { once: true });
+} else {
+    initializeAdmin();
+}
