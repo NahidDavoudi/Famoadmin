@@ -11,11 +11,29 @@
     <meta name="theme-color" content="#445D84">
     <title>پنل مدیریت - آموزشگاه فامو</title>
     <?= famo_config_script() ?>
-    <link rel="stylesheet" href="<?= famo_asset('css/output.css', '') ?>">
-    <link rel="stylesheet" href="<?= famo_asset('css/fonts.css', '') ?>">
-    <script src="<?= famo_asset('js/libs/apexcharts.min.js', '') ?>"></script>
-    <script src="<?= famo_asset('js/libs/lucide.min.js', '') ?>"></script>
+
+    <!-- Google Fonts: Vazirmatn (CDN in dev, local in prod) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="<?= famo_google_fonts() ?>">
+
+    <!-- Tailwind CSS (CDN in dev, built in prod) -->
+    <?php if (famo_is_dev()): ?>
+        <script src="<?= famo_cdn_tailwind() ?>"></script>
+    <?php else: ?>
+        <link rel="stylesheet" href="<?= famo_cdn_tailwind() ?>">
+    <?php endif; ?>
+
+    <!-- Libraries (CDN in dev, local in prod) -->
+    <script src="<?= famo_cdn_lib('apexcharts') ?>"></script>
+    <?php if (famo_is_dev()): ?>
+        <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <?php else: ?>
+        <script src="<?= famo_cdn_lib('lucide') ?>"></script>
+    <?php endif; ?>
     <script src="<?= famo_asset('js/lucide-adapter.js', '') ?>"></script>
+
+    <!-- Local styles -->
     <link rel="stylesheet" href="assets/css/admin.css">
     <script type="module" src="assets/js/index.js"></script>
 
