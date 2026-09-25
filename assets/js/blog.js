@@ -3,7 +3,7 @@
  * Dedicated page + lightweight WYSIWYG editor
  */
 
-import API from '../../../shared/js/api.js';
+const { default: API } = await import(`${window.APP_CONFIG.assetUrl}/js/api.js`);
 import { showAlert, escapeHtml, icon, withButtonLoading } from './utils.js';
 
 let editorReady = false;

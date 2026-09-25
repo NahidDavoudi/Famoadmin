@@ -4,7 +4,7 @@
  * Now using ApexCharts Radial Bar Stroked Gauge for each lesson result
  */
 
-import API from '../../../shared/js/api.js';
+const { default: API } = await import(`${window.APP_CONFIG.assetUrl}/js/api.js`);
 import { showAlert, escapeHtml, icon } from './utils.js';
 import * as config from './config.js';
 import { formatGregorianToJalali, formatJalaliLong } from './jalali.js';

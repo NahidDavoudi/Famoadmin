@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/config.php'; ?>
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -9,9 +10,12 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#445D84">
     <title>پنل مدیریت - آموزشگاه فامو</title>
-    <!-- Static environment config: must load before every other script. -->
-    <script src="config.js"
-        data-assets="css/output.css,css/fonts.css,js/libs/apexcharts.min.js,js/libs/lucide.min.js,js/lucide-adapter.js"></script>
+    <?= famo_config_script() ?>
+    <link rel="stylesheet" href="<?= famo_asset('css/output.css', '') ?>">
+    <link rel="stylesheet" href="<?= famo_asset('css/fonts.css', '') ?>">
+    <script src="<?= famo_asset('js/libs/apexcharts.min.js', '') ?>"></script>
+    <script src="<?= famo_asset('js/libs/lucide.min.js', '') ?>"></script>
+    <script src="<?= famo_asset('js/lucide-adapter.js', '') ?>"></script>
     <link rel="stylesheet" href="assets/css/admin.css">
     <script type="module" src="assets/js/index.js"></script>
 

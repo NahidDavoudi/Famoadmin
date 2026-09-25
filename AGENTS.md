@@ -1,17 +1,17 @@
 # Famo Admin Panel - Agent Instructions
 
 ## Project Overview
-Static frontend SPA (Persian/Farsi, RTL) for the Famo admin panel. `index.html` holds all views; navigation is hash-free, driven by `navigateTo(page)`. There is no local backend — everything talks to the unified API at `http://localhost:8080/api/v1`.
+PHP-served frontend SPA (Persian/Farsi, RTL) for the Famo admin panel. `index.php` holds all views; navigation is hash-free, driven by `navigateTo(page)`. There is no local backend — everything talks to the unified API configured through `.env`.
 
 ## Stack
 - **Frontend**: Tailwind CSS v4 (shared build), Vanilla JS ES modules
-- **Backend**: unified API project at `../api` (Slim + JWT), served at `/api/v1`
-- **Auth**: unified login page at `../login/index.php` (JWT in `localStorage.famo_jwt`)
+- **Backend**: unified API project at `../api` (Slim + JWT), configured by `API_URL`
+- **Auth**: unified login page configured by `LOGIN_URL` (JWT in `localStorage.famo_jwt`)
 
 ## Architecture
 | Path | Purpose |
 |------|---------|
-| `index.html` | Single entry point, all views + modals inline |
+| `index.php` | Single entry point, all views + modals inline |
 | `assets/js/index.js` | Module entry point |
 | `assets/js/auth.js` | Auth guard; redirects unauthenticated users to shared login |
 | `assets/js/students.js` / `supporters.js` / `courses.js` / `instructors.js` | CRUD modules |
@@ -22,11 +22,10 @@ Static frontend SPA (Persian/Farsi, RTL) for the Famo admin panel. `index.html` 
 | `assets/css/admin.css` | Admin-specific styles |
 
 ## Shared Assets
-- API client: `../../../shared/js/api.js` (imported from `assets/js/*.js`)
-- Libraries: `../shared/js/libs/` (ApexCharts, Lucide)
-- Icons: Lucide via `../shared/js/libs/lucide.min.js` + `../shared/js/lucide-adapter.js`. Static markup uses `data-lucide="..."`; dynamic markup uses the `icon(name)` helper in `assets/js/utils.js`.
-- Styles/fonts: `../shared/css/output.css`, `../shared/css/fonts.css`
-- Images/SVG: `../shared/images/`, `../shared/svg/`
+- API client: `shared/js/api.js`, imported via the `ASSET_URL` from `.env`
+- Libraries: `shared/js/libs/` (ApexCharts, Lucide), loaded via `ASSET_URL`
+- Icons: Lucide via `ASSET_URL/js/libs/lucide.min.js` + `ASSET_URL/js/lucide-adapter.js`. Static markup uses `data-lucide="..."`; dynamic markup uses the `icon(name)` helper in `assets/js/utils.js`.
+- Styles/fonts and images/SVG are loaded via `ASSET_URL`
 
 ## API Conventions
 - All calls go through the shared `API` client (`API.get/post/put/del/upload`).
@@ -36,7 +35,7 @@ Static frontend SPA (Persian/Farsi, RTL) for the Famo admin panel. `index.html` 
 - `admin` and `supporter` roles may access the panel; others are redirected to login.
 
 ## CSS Build
-- Tailwind source: `../shared/css/input.css` (scans `admin/**/*.html` and `admin/**/*.js`).
+- Tailwind source: `../shared/css/input.css` (scans `admin/**/*.php` and `admin/**/*.js`).
 - Build from `../shared`: `npm run build:css`. Never edit `output.css` directly.
 
 ## Gotchas

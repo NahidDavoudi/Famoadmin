@@ -2,7 +2,7 @@
  * Admin Panel - Instructors CRUD (unified API)
  */
 
-import API from '../../../shared/js/api.js';
+const { default: API } = await import(`${window.APP_CONFIG.assetUrl}/js/api.js`);
 import { showAlert, showModal, hideModal, escapeHtml, setFormValues, icon, withButtonLoading } from './utils.js';
 
 export async function loadInstructors() {

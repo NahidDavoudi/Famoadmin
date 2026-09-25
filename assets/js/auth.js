@@ -3,7 +3,7 @@
  * پنل مدیریت - احراز هویت یکپارچه
  */
 
-import API from '../../../shared/js/api.js';
+const { default: API } = await import(`${window.APP_CONFIG.assetUrl}/js/api.js`);
 import { toggleElement } from './utils.js';
 import { navigateTo } from './nav.js';
 
@@ -11,7 +11,8 @@ const ALLOWED_ROLES = ['admin', 'supporter'];
 
 function loginUrl() {
     const returnUrl = window.location.pathname.replace(/index\.html$/, '');
-    return `../login/index.php?return_url=${encodeURIComponent(returnUrl)}`;
+    const loginBase = window.APP_CONFIG && window.APP_CONFIG.loginUrl;
+    return `${loginBase}/?return_url=${encodeURIComponent(returnUrl)}`;
 }
 
 export function showLoginPage() {
