@@ -16,6 +16,8 @@ import { navigateTo } from './nav.js';
 import { loadReports } from './reports.js';
 import { loadBlogPosts, handleBlogSubmit, openBlogEditor, editBlogPost, deleteBlogPost } from './blog.js';
 
+const { onReady } = await import(`${window.APP_CONFIG.assetUrl}/js/api.js`);
+
 // Expose for HTML onclick and inline handlers
 window.showModal = showModal;
 window.hideModal = hideModal;
@@ -49,7 +51,11 @@ window.handleBlogSubmit = handleBlogSubmit;
 window.editBlogPost = editBlogPost;
 window.deleteBlogPost = deleteBlogPost;
 
+let adminInitialized = false;
 const initializeAdmin = () => {
+    if (adminInitialized) return;
+    adminInitialized = true;
+
     init();
 
     // First subject row on exam entry page
@@ -59,8 +65,4 @@ const initializeAdmin = () => {
     }
 };
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeAdmin, { once: true });
-} else {
-    initializeAdmin();
-}
+onReady(initializeAdmin);

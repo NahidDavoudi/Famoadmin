@@ -40,4 +40,5 @@ PHP-served frontend SPA (Persian/Farsi, RTL) for the Famo admin panel. `index.ph
 
 ## Gotchas
 - No test/lint/typecheck tooling configured; validate JS with `node --input-type=module --check < file.js`.
+- To run code after the DOM is ready, use `onReady()` from `api.js`, not `document.addEventListener('DOMContentLoaded', ...)` directly.
 - The old local API (`admin/api/`) and its `api-client.js`/sprite assets were removed — do not recreate them.
